@@ -9,7 +9,7 @@ namespace GraphDB.IO
 {
     public interface IfIOStrategy//文件读写算法接口
     {
-        Graph ReadFile(string sPath);
-        void SaveFile(XmlDocument doc, string sPath);
+        Graph ReadFile(string sPath, ref ErrorCode err);
+        void SaveFile(XmlDocument doc, string sPath, ref ErrorCode err);
     }
 }

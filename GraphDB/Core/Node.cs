@@ -6,6 +6,7 @@ using System.Collections;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Xml;
+using System.Text.RegularExpressions;
 
 namespace GraphDB.Core
 {
@@ -84,7 +85,7 @@ namespace GraphDB.Core
         }
         //方法///////////////////////////////
         //节点类Node构造函数
-        public Node (string newName, string newType)    
+        public Node(string newName, string newType, string sProperities = "")    
         {
             this.intNodeNum = intMaxNodeNum;
             this.nodeName = newName;
@@ -93,6 +94,10 @@ namespace GraphDB.Core
             Attribute = new List<NodeProperty>();
             OutLink = new List<Edge>();
             InLink = new List<Edge>();
+            if(sProperities != "")
+            {
+                AddProperty(sProperities);
+            }
             intMaxNodeNum++;
         }
 
@@ -147,10 +152,51 @@ namespace GraphDB.Core
         }
 
         //增加自定义属性对
-        public bool AddProperty(string sKey, string sValue)
+        void AddProperty(string sProperities)
         {
+            const string strKeyPairPattern = @"[\w]+=[\w]+";  //匹配目标"名称+取值"组合
+            MatchCollection matches;
+            Regex regObj;
+            NodeProperty newProperty;
 
-            return true;
+            regObj = new Regex(strKeyPairPattern);//正则表达式初始化，载入匹配模式
+            matches = regObj.Matches(sProperities);//正则表达式对分词结果进行匹配
+            if (matches.Count == 0)
+            {
+                return;
+            }
+            foreach (Match match in matches)//遍历匹配列表
+            {
+                newProperty = null;
+                newProperty = BuildProperty(match.Value);
+                if (newProperty != null && IsPropertyExist(newProperty) == false)
+                {
+                    this.Attribute.Add(newProperty);
+                }
+            }
+            return;
+        }
+        //构造属性对
+        NodeProperty BuildProperty(string sProperty)
+        {
+            string[] strSeg;
+            NodeProperty newProperty = null;
+
+            strSeg = sProperty.Split(new char[]{'='});
+            newProperty = new NodeProperty(strSeg[0], strSeg[1]);
+            return newProperty;
+        }
+        //检查属性对的key是否已经存在
+        bool IsPropertyExist(NodeProperty sProperty)
+        {
+            foreach (NodeProperty tP in Attribute)
+            {
+                if (tP.Key == sProperty.Key)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         //增加连边
@@ -338,5 +384,37 @@ namespace GraphDB.Core
             curNode.AppendChild(curProperties);     
             return curNode;
         }
+    
+        //查找连边
+        public Edge GetEdge(string sType, string opt)
+        {
+            if (opt == "In")
+            {
+                foreach (Edge edge in InBound)
+                {
+                    if (edge.Type == sType)
+                    {
+                        return edge;
+                    }
+                }
+                return null;
+            }
+            else if (opt == "Out")
+            {
+                foreach (Edge edge in OutBound)
+                {
+                    if (edge.Type == sType)
+                    {
+                        return edge;
+                    }
+                }
+                return null;
+            }
+            else
+            {
+                return null;
+            }
+        }
+    
     }
 }

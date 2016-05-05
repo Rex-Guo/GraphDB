@@ -45,7 +45,7 @@ namespace GraphDB.Core
             }
         }
         //方法///////////////////////
-        //构造函数
+        //构造函数（接口）
         public Graph()
         {
             NodeList = new List<Node>();
@@ -53,15 +53,36 @@ namespace GraphDB.Core
         }
         
         //加入节点
-        public bool AddNode(Node newNode)
+        bool AddNode(Node newNode)
         {
             //节点加入节点列表
             NodeList.Add(newNode);
             return true;
         }
-        
+
+        //加入节点（接口）
+        public void AddNode(string sName, string sType, ref ErrorCode err, string sProperities = "1")
+        {
+            Node newNode = null;
+
+            //检查节点是否已经存在“名称+类型一致”
+            if (GetNodesByNameAndType(sName, sType) != null)
+            {
+                err = ErrorCode.NodeExists;
+                return;
+            }
+            //构造新的节点
+            newNode = new Node(sName, sType, sProperities);
+            if (newNode == null)
+            {
+                err = ErrorCode.CreateNodeFailed;
+                return;
+            }
+            AddNode(newNode);
+        }
+
         //删除节点
-        public bool RemoveNode(Node curNode)
+        bool RemoveNode(Node curNode)
         {
             //清除节点所有连边
             ClearUnusedEdge(curNode.ClearEdge());
@@ -69,21 +90,14 @@ namespace GraphDB.Core
             NodeList.Remove(curNode);
             return true;
         }
+        
         //加入连边
-        public bool AddEdge(Node curNode, Node tarNode, Edge newEdge)
+        bool AddEdge(Node curNode, Node tarNode, Edge newEdge)
         {
-            try
-            {
-                //连边的头指针指向起节点
-                newEdge.Start = curNode;
-                //连边的尾指针指向目标节点
-                newEdge.End = tarNode;
-            }
-            catch (Exception e)
-            {//如果连边和起始/目标节点类型不匹配则会报错
-                MessageBox.Show(e.Message, "警告", MessageBoxButtons.OK);
-                return false;
-            }
+            //连边的头指针指向起节点
+            newEdge.Start = curNode;
+            //连边的尾指针指向目标节点
+            newEdge.End = tarNode;
             //将新连边加入起始节点的outbound
             if (curNode.AddEdge(newEdge) == false)
             {
@@ -98,9 +112,47 @@ namespace GraphDB.Core
             EdgeList.Add(newEdge);
             return true;
         }
-        
+
+        //加入连边（接口）
+        public void AddEdge(string sStartName, string sStartType,
+                                        string sEndName, string sEndType,
+                                        string sType, ref ErrorCode err, string sValue = "1")
+        {
+            Node startNode, endNode;
+            Edge newEdge;
+            //获取起始节点，不存在报错
+            startNode = GetNodesByNameAndType(sStartName, sStartType);
+            if (startNode == null)
+            {
+                err = ErrorCode.NodeNotExists;
+                return;
+            }
+            //获取终止节点，不存在报错
+            endNode = GetNodesByNameAndType(sEndName, sEndType);
+            if (endNode == null)
+            {
+                err = ErrorCode.NodeNotExists;
+                return;
+            }
+            //查找两点间是否存在相同类型关系，存在报错
+            if (GetEdgeByType(startNode, endNode, sType) != null)
+            {
+                err = ErrorCode.EdgeExists;
+                return;
+            }
+            //创建新连边
+            newEdge = new Edge(sType, sValue);
+            if (newEdge == null)
+            {
+                err = ErrorCode.CreateEdgeFailed;
+                return;
+            }
+            //在两点间加入新边
+            AddEdge(startNode, endNode, newEdge);
+        }
+
         //移除连边
-        public bool RemoveEdge(Node curNode, Node tarNode)
+        bool RemoveEdge(Node curNode, Node tarNode)
         {
             Edge curEdge = null;
             //从起始节点的出边中遍历
@@ -126,7 +178,7 @@ namespace GraphDB.Core
         }
         
         //删除所有被解除绑定的连边
-        public bool ClearUnusedEdge(List<Edge> UnusedList)
+        bool ClearUnusedEdge(List<Edge> UnusedList)
         {
             //将入参列表中所有连边从总连边列表中删除
             foreach (Edge edge in UnusedList)
@@ -137,9 +189,9 @@ namespace GraphDB.Core
             UnusedList.Clear();
             return true;
         }
-        
-        //将xml文件转化为网络
-        public Graph(XmlDocument doc)
+
+        //将xml文件转化为网络（接口）
+        public Graph(XmlDocument doc, ref ErrorCode err)
         {
             XmlNode xmlroot, xmlNodes, xmlEdges;
             Node newNode;
@@ -148,9 +200,12 @@ namespace GraphDB.Core
             xmlroot = doc.GetElementsByTagName("Graph").Item(0);
             if (xmlroot == null)
             {
+                err = ErrorCode.NoXmlRoot;
                 return;
             }
             xmlNodes = xmlEdges = null;
+            NodeList = new List<Node>();
+            EdgeList = new List<Edge>();
             foreach (XmlElement xNode in xmlroot.ChildNodes)
             {
                 if (xNode.Name == "Nodes")
@@ -164,10 +219,9 @@ namespace GraphDB.Core
             }
             if (xmlNodes == null)
             {
+                err = ErrorCode.NoError;
                 return;
             }
-            NodeList = new List<Node>();
-            EdgeList = new List<Edge>();
             foreach (XmlElement xNode in xmlNodes.ChildNodes)                                      //遍历节点列表
             {
                 //生成新节点
@@ -178,6 +232,7 @@ namespace GraphDB.Core
             //如果没有边也可以返回OK
             if (xmlEdges == null)
             {
+                err = ErrorCode.NoError;
                 return;
             }
             Edge newEdge;
@@ -190,10 +245,20 @@ namespace GraphDB.Core
                 //获取连边的起始和终止节点编号
                 strStart = GetText(xNode, "Start");
                 strEnd = GetText(xNode, "End");
+                nodeStart = nodeEnd = null;
                 nodeStart = this.GetNodeAtIndex(Convert.ToInt32(strStart));
                 nodeEnd = this.GetNodeAtIndex(Convert.ToInt32(strEnd));
+                if (nodeStart == null || nodeEnd == null)
+                {
+                    err = ErrorCode.InvaildIndex;
+                    continue;
+                }
                 //加入图
-                this.AddEdge(nodeStart, nodeEnd, newEdge);
+                if (this.AddEdge(nodeStart, nodeEnd, newEdge) == false)
+                {
+                    err = ErrorCode.AddEdgeFailed;
+                    continue;
+                }
             }
             return;
         }
@@ -214,9 +279,9 @@ namespace GraphDB.Core
             }
             return "";
         }
-        
-        //将数据保存为XML文件
-        public XmlDocument ToXML()
+
+        //将数据保存为XML文件（接口）
+        public XmlDocument ToXML(ref ErrorCode err)
         {
             XmlDocument doc = new XmlDocument();
             //所有网络数据都保存为xml格式
@@ -254,13 +319,27 @@ namespace GraphDB.Core
         }
         
         //查询函数，返回指定索引处的节点
-        public Node GetNodeAtIndex(int index)
+        Node GetNodeAtIndex(int index)
         {
             return NodeList.ElementAt(index);
         }
-        
+
+        //查询函数，返回节点列表中指定名称和类型的节点
+        Node GetNodesByNameAndType(string sName, string type)
+        {
+            //遍历节点列表
+            foreach (Node curNode in NodeList)
+            {
+                if (curNode.Name == sName && curNode.Type == type)
+                {//将符合Name和type要求的节点返回
+                    return curNode;
+                }
+            }
+            return null;
+        }
+
         //查询函数，返回节点列表中指定类型的所有节点
-        public List<Node> GetNodesOfType(string type)
+        List<Node> GetNodesOfType(string type)
         {
             List<Node> ResultList = new List<Node>();
             //遍历节点列表
@@ -274,5 +353,20 @@ namespace GraphDB.Core
             return ResultList;
         }
 
+        //查找两点之间指定Type的连边
+        Edge GetEdgeByType(Node start, Node end, string sType)
+        {
+            Edge res;
+
+            res = start.GetEdge(sType, "Out");
+            if (res != null)
+            {
+                if (res.End == end)
+                {
+                    return res;
+                }
+            }
+            return null;
+        }
     }
 }

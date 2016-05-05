@@ -43,7 +43,7 @@ namespace GraphDB.IO
     public class XMLStrategy:IfIOStrategy//XML文件读写算法
     {
        //XMLStrategy算法读取函数
-        Graph IfIOStrategy.ReadFile(string sPath)
+        Graph IfIOStrategy.ReadFile(string sPath, ref ErrorCode err)
         {
             FileStream stream = null;
             XmlDocument doc = new XmlDocument();
@@ -62,11 +62,12 @@ namespace GraphDB.IO
                     ex.ToString();
                     stream.Dispose();
                 }
+                err = ErrorCode.OpenFileFailed;
                 return null;
             }
             stream.Dispose();
             //创建网络
-            NewGraph = new Graph(doc);
+            NewGraph = new Graph(doc, ref err);
             if (NewGraph == null)
             {
                 return null;
@@ -75,7 +76,7 @@ namespace GraphDB.IO
         }
 
         //XMLStrategy算法保存函数
-        void IfIOStrategy.SaveFile(XmlDocument doc, string sPath)
+        void IfIOStrategy.SaveFile(XmlDocument doc, string sPath, ref ErrorCode err)
         {
             FileStream stream = null;
 
@@ -92,6 +93,7 @@ namespace GraphDB.IO
                     ex.ToString();
                     stream.Dispose();
                 }
+                err = ErrorCode.SaveFileFailed;
             }
             stream.Dispose();
         }

@@ -6,15 +6,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Xml;
-using GraphDB.Core;
-using GraphDB.IO;
 
 namespace GraphDB
 {
     public partial class Form1 : Form
     {
-        Graph empire;
+        GraphDataBase gdb;
         public Form1()
         {
             InitializeComponent();
@@ -22,11 +19,13 @@ namespace GraphDB
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            IfIOStrategy IOhandler = new XMLStrategy();
-            empire = IOhandler.ReadFile("0.xml");
-            XmlDocument doc;
-            doc = empire.ToXML();
-            IOhandler.SaveFile(doc, "1.xml");
+            ErrorCode err = ErrorCode.NoError;
+            gdb = new GraphDataBase();
+            gdb.OpenDataBase("0.xml", ref err);
+
+            gdb.AddNodeData("秦国", "国家", ref err, "King=YingZheng");
+            gdb.AddNodeData("关中", "地区", ref err, "Population=1000000");
+            gdb.AddEdgeData("秦国", "国家", "关中", "地区", "统治", ref err);
         }
     }
 }
