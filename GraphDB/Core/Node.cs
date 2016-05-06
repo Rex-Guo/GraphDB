@@ -100,7 +100,6 @@ namespace GraphDB.Core
             }
             intMaxNodeNum++;
         }
-
         //xml构造函数
         public Node(XmlElement xNode)
         {
@@ -126,9 +125,8 @@ namespace GraphDB.Core
                 Attribute.Add(new NodeProperty(curNode));
             }
         }
-        
         //工具函数，从xml节点中读取某个标签的InnerText
-        protected string GetText(XmlElement curNode, string sLabel)
+        string GetText(XmlElement curNode, string sLabel)
         {
             if (curNode == null)
             {
@@ -144,7 +142,34 @@ namespace GraphDB.Core
             }
             return "";
         }
+        //将节点数据保存为xml格式
+        public virtual XmlElement ToXML(ref XmlDocument doc)
+        {
+            XmlElement curNode = doc.CreateElement("Node");
+            XmlElement curProperties = doc.CreateElement("Properties");
+            XmlElement type_xml, name_xml;
+            XmlText type_txt, name_txt;
 
+            curNode.SetAttribute("num", this.SaveIndex.ToString());                   //创建各属性的Tag元素
+            //节点类型
+            name_xml = doc.CreateElement("Name");
+            type_xml = doc.CreateElement("Type");
+            //创建各属性的文本元素
+            name_txt = doc.CreateTextNode(this.Name);
+            type_txt = doc.CreateTextNode(this.Type);
+            //将标题元素赋予文本内容
+            name_xml.AppendChild(name_txt);
+            type_xml.AppendChild(type_txt);
+            foreach (NodeProperty np in Attribute)
+            {
+                curProperties.AppendChild(np.ToXML(ref doc));
+            }
+            //向当前节点中加入各属性节点
+            curNode.AppendChild(name_xml);
+            curNode.AppendChild(type_xml);
+            curNode.AppendChild(curProperties);
+            return curNode;
+        }
         //工具函数，重置节点计数
         public static void ResetIndex()
         {
@@ -152,13 +177,17 @@ namespace GraphDB.Core
         }
 
         //增加自定义属性对
-        void AddProperty(string sProperities)
+        public void AddProperty(string sProperities, ModifyOperation opt = ModifyOperation.Append)
         {
             const string strKeyPairPattern = @"[\w]+=[\w]+";  //匹配目标"名称+取值"组合
             MatchCollection matches;
             Regex regObj;
             NodeProperty newProperty;
 
+            if (opt == ModifyOperation.ReplaceAll)
+            {
+                Attribute.Clear();
+            }
             regObj = new Regex(strKeyPairPattern);//正则表达式初始化，载入匹配模式
             matches = regObj.Matches(sProperities);//正则表达式对分词结果进行匹配
             if (matches.Count == 0)
@@ -169,9 +198,22 @@ namespace GraphDB.Core
             {
                 newProperty = null;
                 newProperty = BuildProperty(match.Value);
-                if (newProperty != null && IsPropertyExist(newProperty) == false)
+                if (newProperty != null)
                 {
-                    this.Attribute.Add(newProperty);
+                    if (GetProperty(newProperty.Key) == null)
+                    {
+                        if (opt != ModifyOperation.Replace)
+                        {
+                            this.Attribute.Add(newProperty);
+                        }
+                    }
+                    else
+                    {
+                        if (opt == ModifyOperation.Replace)
+                        {
+                            ModifyProperty(newProperty);
+                        }
+                    }
                 }
             }
             return;
@@ -187,16 +229,51 @@ namespace GraphDB.Core
             return newProperty;
         }
         //检查属性对的key是否已经存在
-        bool IsPropertyExist(NodeProperty sProperty)
+        NodeProperty GetProperty(string sKey)
+        {
+            foreach (NodeProperty tP in Attribute)
+            {
+                if (tP.Key == sKey)
+                {
+                    return tP;
+                }
+            }
+            return null;
+        }
+        //修改指定key的属性
+        void ModifyProperty(NodeProperty sProperty)
         {
             foreach (NodeProperty tP in Attribute)
             {
                 if (tP.Key == sProperty.Key)
                 {
-                    return true;
+                    tP.Value = sProperty.Value;
                 }
             }
-            return false;
+        }
+        //删除属性对
+        public void RemoveProperty(string sProperities)
+        {
+            const string strKeyPairPattern = @"[\w]+";  //匹配目标"名称"组合
+            MatchCollection matches;
+            Regex regObj;
+            NodeProperty tp;
+
+            regObj = new Regex(strKeyPairPattern);//正则表达式初始化，载入匹配模式
+            matches = regObj.Matches(sProperities);//正则表达式对分词结果进行匹配
+            if (matches.Count == 0)
+            {
+                return;
+            }
+            foreach (Match match in matches)//遍历匹配列表
+            {
+                tp = GetProperty(match.Value);
+                if (tp != null)
+                {
+                    this.Attribute.Remove(tp);
+                }
+            }
+            return;
         }
 
         //增加连边
@@ -220,7 +297,6 @@ namespace GraphDB.Core
             OutLink.Add(newEdge);   
             return true;
         }
-
         //Inbound边注册
         public bool RegisterInbound(Edge newEdge)
         {
@@ -242,7 +318,6 @@ namespace GraphDB.Core
             InLink.Add(newEdge);
             return true;
         }
-
         //去除连边
         public bool RemoveEdge(Edge curEdge)
         {
@@ -263,7 +338,6 @@ namespace GraphDB.Core
             OutLink.Remove(curEdge);
             return true;
         }
-
         //清除所有连边,返回被清除的边列表
         public List<Edge> ClearEdge()
         {
@@ -293,7 +367,6 @@ namespace GraphDB.Core
             //返回本节点涉及的连边列表
             return EdgeList;
         }
-
         //Inbound注销
         public bool UnRegisterInbound(Edge curEdge)
         {
@@ -315,7 +388,6 @@ namespace GraphDB.Core
             return true;
 
         }
-
         //返回OutBound是否包含和目标节点间的连边
         bool OutBoundContainsEdge(Edge newEdge)
         {
@@ -335,7 +407,6 @@ namespace GraphDB.Core
             }
             return false;
         }
-
         //返回InBound是否包含和目标节点间的连边
         bool InBoundContainsEdge(Edge newEdge)
         {
@@ -356,35 +427,7 @@ namespace GraphDB.Core
             return false;
         }
 
-        //将节点数据保存为xml格式
-        public virtual XmlElement ToXML(ref XmlDocument doc)
-        {
-            XmlElement curNode = doc.CreateElement("Node");
-            XmlElement curProperties = doc.CreateElement("Properties");
-            XmlElement type_xml, name_xml;
-            XmlText type_txt, name_txt;
 
-            curNode.SetAttribute("num", this.SaveIndex.ToString());                   //创建各属性的Tag元素
-            //节点类型
-            name_xml = doc.CreateElement("Name");
-            type_xml = doc.CreateElement("Type");
-            //创建各属性的文本元素
-            name_txt = doc.CreateTextNode(this.Name); 
-            type_txt = doc.CreateTextNode(this.Type);
-            //将标题元素赋予文本内容
-            name_xml.AppendChild(name_txt); 
-            type_xml.AppendChild(type_txt);
-            foreach (NodeProperty np in Attribute)
-            {
-                curProperties.AppendChild(np.ToXML(ref doc));
-            }
-            //向当前节点中加入各属性节点
-            curNode.AppendChild(name_xml);
-            curNode.AppendChild(type_xml);
-            curNode.AppendChild(curProperties);     
-            return curNode;
-        }
-    
         //查找连边
         public Edge GetEdge(string sType, string opt)
         {

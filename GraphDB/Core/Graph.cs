@@ -51,145 +51,6 @@ namespace GraphDB.Core
             NodeList = new List<Node>();
             EdgeList = new List<Edge>();
         }
-        
-        //加入节点
-        bool AddNode(Node newNode)
-        {
-            //节点加入节点列表
-            NodeList.Add(newNode);
-            return true;
-        }
-
-        //加入节点（接口）
-        public void AddNode(string sName, string sType, ref ErrorCode err, string sProperities = "1")
-        {
-            Node newNode = null;
-
-            //检查节点是否已经存在“名称+类型一致”
-            if (GetNodesByNameAndType(sName, sType) != null)
-            {
-                err = ErrorCode.NodeExists;
-                return;
-            }
-            //构造新的节点
-            newNode = new Node(sName, sType, sProperities);
-            if (newNode == null)
-            {
-                err = ErrorCode.CreateNodeFailed;
-                return;
-            }
-            AddNode(newNode);
-        }
-
-        //删除节点
-        bool RemoveNode(Node curNode)
-        {
-            //清除节点所有连边
-            ClearUnusedEdge(curNode.ClearEdge());
-            //从节点列表中移除节点
-            NodeList.Remove(curNode);
-            return true;
-        }
-        
-        //加入连边
-        bool AddEdge(Node curNode, Node tarNode, Edge newEdge)
-        {
-            //连边的头指针指向起节点
-            newEdge.Start = curNode;
-            //连边的尾指针指向目标节点
-            newEdge.End = tarNode;
-            //将新连边加入起始节点的outbound
-            if (curNode.AddEdge(newEdge) == false)
-            {
-                return false;
-            }
-            //将新连边加入目标节点的Inbound
-            if (tarNode.RegisterInbound(newEdge) == false)
-            {
-                return false;
-            }
-            //全部完成后将连边加入网络连边列表
-            EdgeList.Add(newEdge);
-            return true;
-        }
-
-        //加入连边（接口）
-        public void AddEdge(string sStartName, string sStartType,
-                                        string sEndName, string sEndType,
-                                        string sType, ref ErrorCode err, string sValue = "1")
-        {
-            Node startNode, endNode;
-            Edge newEdge;
-            //获取起始节点，不存在报错
-            startNode = GetNodesByNameAndType(sStartName, sStartType);
-            if (startNode == null)
-            {
-                err = ErrorCode.NodeNotExists;
-                return;
-            }
-            //获取终止节点，不存在报错
-            endNode = GetNodesByNameAndType(sEndName, sEndType);
-            if (endNode == null)
-            {
-                err = ErrorCode.NodeNotExists;
-                return;
-            }
-            //查找两点间是否存在相同类型关系，存在报错
-            if (GetEdgeByType(startNode, endNode, sType) != null)
-            {
-                err = ErrorCode.EdgeExists;
-                return;
-            }
-            //创建新连边
-            newEdge = new Edge(sType, sValue);
-            if (newEdge == null)
-            {
-                err = ErrorCode.CreateEdgeFailed;
-                return;
-            }
-            //在两点间加入新边
-            AddEdge(startNode, endNode, newEdge);
-        }
-
-        //移除连边
-        bool RemoveEdge(Node curNode, Node tarNode)
-        {
-            Edge curEdge = null;
-            //从起始节点的出边中遍历
-            foreach (Edge edge in curNode.OutBound)
-            {//查找终止节点编号和目标节点编号一致的连边
-                if (edge.End.Number == tarNode.Number)
-                {//找到则返回，本图数据库不支持两点间多连边
-                    curEdge = edge;
-                    break;
-                }
-            }
-            if (curEdge == null)
-            {//没找到直接返回
-                return false;
-            }
-            //起始节点Outbound中移除连边
-            curNode.RemoveEdge(curEdge);
-            //从终止节点InBound中注销连边
-            tarNode.UnRegisterInbound(curEdge);
-            //全部完成后，从总连边列表中移除该边
-            EdgeList.Remove(curEdge);
-            return true;
-        }
-        
-        //删除所有被解除绑定的连边
-        bool ClearUnusedEdge(List<Edge> UnusedList)
-        {
-            //将入参列表中所有连边从总连边列表中删除
-            foreach (Edge edge in UnusedList)
-            {
-                EdgeList.Remove(edge);
-            }
-            //清空入参列表本身内容
-            UnusedList.Clear();
-            return true;
-        }
-
         //将xml文件转化为网络（接口）
         public Graph(XmlDocument doc, ref ErrorCode err)
         {
@@ -262,7 +123,7 @@ namespace GraphDB.Core
             }
             return;
         }
-        
+
         //工具函数，从xml节点中读取某个标签的InnerText
         string GetText(XmlElement curNode, string sLabel)
         {
@@ -306,7 +167,7 @@ namespace GraphDB.Core
             doc.AppendChild(root);
             return doc;
         }
-        
+
         //调整节点实际索引(用于保存，和编号不完全相同)
         void AdjustNodeIndex()
         {
@@ -318,6 +179,83 @@ namespace GraphDB.Core
             }
         }
         
+        //加入节点
+        void AddNode(Node newNode)
+        {
+            //节点加入节点列表
+            NodeList.Add(newNode);
+        }
+
+        //删除节点
+        void RemoveNode(Node curNode)
+        {
+            //清除节点所有连边
+            ClearUnusedEdge(curNode.ClearEdge());
+            //从节点列表中移除节点
+            NodeList.Remove(curNode);
+        }
+        
+        //加入连边
+        bool AddEdge(Node curNode, Node tarNode, Edge newEdge)
+        {
+            //连边的头指针指向起节点
+            newEdge.Start = curNode;
+            //连边的尾指针指向目标节点
+            newEdge.End = tarNode;
+            //将新连边加入起始节点的outbound
+            if (curNode.AddEdge(newEdge) == false)
+            {
+                return false;
+            }
+            //将新连边加入目标节点的Inbound
+            if (tarNode.RegisterInbound(newEdge) == false)
+            {
+                return false;
+            }
+            //全部完成后将连边加入网络连边列表
+            EdgeList.Add(newEdge);
+            return true;
+        }
+
+        //移除连边
+        bool RemoveEdge(Node curNode, Node tarNode)
+        {
+            Edge curEdge = null;
+            //从起始节点的出边中遍历
+            foreach (Edge edge in curNode.OutBound)
+            {//查找终止节点编号和目标节点编号一致的连边
+                if (edge.End.Number == tarNode.Number)
+                {//找到则返回，本图数据库不支持两点间多连边
+                    curEdge = edge;
+                    break;
+                }
+            }
+            if (curEdge == null)
+            {//没找到直接返回
+                return false;
+            }
+            //起始节点Outbound中移除连边
+            curNode.RemoveEdge(curEdge);
+            //从终止节点InBound中注销连边
+            tarNode.UnRegisterInbound(curEdge);
+            //全部完成后，从总连边列表中移除该边
+            EdgeList.Remove(curEdge);
+            return true;
+        }
+        
+        //删除所有被解除绑定的连边
+        bool ClearUnusedEdge(List<Edge> UnusedList)
+        {
+            //将入参列表中所有连边从总连边列表中删除
+            foreach (Edge edge in UnusedList)
+            {
+                EdgeList.Remove(edge);
+            }
+            //清空入参列表本身内容
+            UnusedList.Clear();
+            return true;
+        }
+
         //查询函数，返回指定索引处的节点
         Node GetNodeAtIndex(int index)
         {
@@ -368,5 +306,182 @@ namespace GraphDB.Core
             }
             return null;
         }
+
+        //加入节点（接口）
+        public void AddNode(string sName, string sType, ref ErrorCode err, string sProperities = "1")
+        {
+            Node newNode = null;
+
+            //检查节点是否已经存在“名称+类型一致”
+            if (GetNodesByNameAndType(sName, sType) != null)
+            {
+                err = ErrorCode.NodeExists;
+                return;
+            }
+            //构造新的节点
+            newNode = new Node(sName, sType, sProperities);
+            if (newNode == null)
+            {
+                err = ErrorCode.CreateNodeFailed;
+                return;
+            }
+            AddNode(newNode);
+            err = ErrorCode.NoError;
+            return;
+        }
+
+        //加入连边（接口）
+        public void AddEdge(string sStartName, string sStartType,
+                                        string sEndName, string sEndType,
+                                        string sType, ref ErrorCode err, string sValue = "1")
+        {
+            Node startNode, endNode;
+            Edge newEdge;
+            //获取起始节点，不存在报错
+            startNode = GetNodesByNameAndType(sStartName, sStartType);
+            if (startNode == null)
+            {
+                err = ErrorCode.NodeNotExists;
+                return;
+            }
+            //获取终止节点，不存在报错
+            endNode = GetNodesByNameAndType(sEndName, sEndType);
+            if (endNode == null)
+            {
+                err = ErrorCode.NodeNotExists;
+                return;
+            }
+            //查找两点间是否存在相同类型关系，存在报错
+            if (GetEdgeByType(startNode, endNode, sType) != null)
+            {
+                err = ErrorCode.EdgeExists;
+                return;
+            }
+            //创建新连边
+            newEdge = new Edge(sType, sValue);
+            if (newEdge == null)
+            {
+                err = ErrorCode.CreateEdgeFailed;
+                return;
+            }
+            //在两点间加入新边
+            AddEdge(startNode, endNode, newEdge);
+            err = ErrorCode.NoError;
+            return;
+        }
+
+        //修改节点内部数据（接口）
+        public void ModifyNode(string sName, string sType,
+                                                     ModifyOperation opt, string sProperities, ref ErrorCode err)
+        {
+            Node tarNode;
+
+            tarNode = GetNodesByNameAndType(sName, sType);
+            //检查节点是否已经存在“名称+类型一致”
+            if (tarNode == null)
+            {
+                err = ErrorCode.NodeNotExists;
+                return;
+            }
+            if (opt == ModifyOperation.Delete)
+            {
+                tarNode.RemoveProperty(sProperities);
+            }
+            else
+            {
+                tarNode.AddProperty(sProperities, opt);
+            }
+            err = ErrorCode.NoError;
+            return;
+        }
+
+        //修改连边取值（接口）
+        public void ModifyEdge(string sStartName, string sStartType,
+                                            string sEndName, string sEndType,
+                                            string sType, string sValue, ref ErrorCode err)
+        {
+            Node startNode, endNode;
+            Edge tarEdge;
+            //获取起始节点，不存在报错
+            startNode = GetNodesByNameAndType(sStartName, sStartType);
+            if (startNode == null)
+            {
+                err = ErrorCode.NodeNotExists;
+                return;
+            }
+            //获取终止节点，不存在报错
+            endNode = GetNodesByNameAndType(sEndName, sEndType);
+            if (endNode == null)
+            {
+                err = ErrorCode.NodeNotExists;
+                return;
+            }
+            //查找两点间是否存在相同类型关系，存在报错
+            tarEdge = GetEdgeByType(startNode, endNode, sType);
+            if (tarEdge == null)
+            {
+                err = ErrorCode.EdgeNotExists;
+                return;
+            }
+            tarEdge.Value = sValue;
+            err = ErrorCode.NoError;
+            return;
+        }
+    
+        //删除节点（接口）
+        public void RemoveNode(string sName, string sType, ref ErrorCode err)
+        {
+            Node tarNode;
+
+            tarNode = GetNodesByNameAndType(sName, sType);
+            //检查节点是否已经存在“名称+类型一致”
+            if (tarNode == null)
+            {
+                err = ErrorCode.NodeNotExists;
+                return;
+            }
+            RemoveNode(tarNode);
+            err = ErrorCode.NoError;
+            return;
+        }
+
+        //删除连边（接口）
+        public void RemoveEdge(string sStartName, string sStartType,
+                                string sEndName, string sEndType,
+                                string sType, ref ErrorCode err)
+        {
+            Node startNode, endNode;
+            Edge tarEdge;
+            //获取起始节点，不存在报错
+            startNode = GetNodesByNameAndType(sStartName, sStartType);
+            if (startNode == null)
+            {
+                err = ErrorCode.NodeNotExists;
+                return;
+            }
+            //获取终止节点，不存在报错
+            endNode = GetNodesByNameAndType(sEndName, sEndType);
+            if (endNode == null)
+            {
+                err = ErrorCode.NodeNotExists;
+                return;
+            }
+            //查找两点间是否存在相同类型关系，存在报错
+            tarEdge = GetEdgeByType(startNode, endNode, sType);
+            if (tarEdge == null)
+            {
+                err = ErrorCode.EdgeNotExists;
+                return;
+            }
+            //起始节点Outbound中移除连边
+            startNode.RemoveEdge(tarEdge);
+            //从终止节点InBound中注销连边
+            endNode.UnRegisterInbound(tarEdge);
+            //全部完成后，从总连边列表中移除该边
+            EdgeList.Remove(tarEdge);
+            err = ErrorCode.NoError;
+            return;
+        }
+    
     }
 }

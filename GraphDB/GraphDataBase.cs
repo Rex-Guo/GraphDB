@@ -30,7 +30,8 @@ namespace GraphDB
     {
         Append = 0,
         Replace = 1,
-        Delete = 2,
+        ReplaceAll = 2,
+        Delete = 3,
     }
     //数据库类
     public class GraphDataBase
@@ -101,26 +102,26 @@ namespace GraphDB
         public void ModifyNodeData(string sName, string sType,
                                                      ModifyOperation opt, string sProperities, ref ErrorCode err)
         {
-
+            graph.ModifyNode(sName, sType, opt, sProperities, ref err);
         }
         //修改连边取值
         public void ModifyEdgeData(string sStartName, string sStartType,
                                                     string sEndName, string sEndType,
                                                     string sType, string sValue, ref ErrorCode err)
         {
-
+            graph.ModifyEdge(sStartName, sStartType, sEndName, sEndType, sType, sValue, ref err);
         }
         //删除数据节点
-        public void ModifyNodeData(string sName, string sType, ref ErrorCode err)
+        public void RemoveNodeData(string sName, string sType, ref ErrorCode err)
         {
-
+            graph.RemoveNode(sName, sType, ref err);
         }
         //删除关系连边
-        public void ModifyEdgeData(string sStartName, string sStartType,
+        public void RemoveEdgeData(string sStartName, string sStartType,
                                                     string sEndName, string sEndType,
                                                     string sType, ref ErrorCode err)
         {
-
+            graph.RemoveEdge(sStartName, sStartType, sEndName, sEndType, sType, ref err);
         }
     }
 }
