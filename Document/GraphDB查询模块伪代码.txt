@@ -1,0 +1,157 @@
+TreeNode Search(MatchRule ruleArray[],int level,int len)
+{
+	List<Node> SearchList;
+	TreeNode CurrentTN, ChildTN;
+	
+	CurrentTN = new TreeNode(this.intNodeNum.toString());
+	if(level == len)
+	{//到底
+		return CurrentTN;
+	}
+	if(Rule[level].direction == "IN")
+	{
+		SearchList = this.Inbound;
+	}
+	else
+	{
+		SearchList = this.OutBound;
+	}
+	foreach(Edge edge in SearchList)
+	{
+		if(rullArray[level].MatchType(Edge.Type) == true)
+		{
+			ChildTN = edge.End.Search(ruleArray[], level+1, len);
+			if(ChildTN != null)
+			{
+				CurrentTN.Nodes.Add(newTN);
+			}
+		}
+	}
+	if(Rule[level].MatchCount(CurrentTN.Nodes.Count) == true)
+	{
+		return CurrentTN;
+	}
+	return null;
+}
+
+public class StartRule
+{
+	string strMode;//"Index", "NameType"
+	bool isAll;
+	List<string> subRule;//子规则
+	
+	public StartRule(string strSub)
+	{
+		//1.正则表达式提取“”,没有则为Index，有则为NameType
+		
+		//2.对于Index场景，只有一个*就是全部节点 isAll = true;
+		//在子句中匹配非负整数“\d+”和非负整数段“\d+\.\.\d+”
+		
+		//3.对于NameType场景，通配符格式为“[\w]+-[\w]+”，“*-[\w]+”，“[\w]+-*”
+	}
+	
+	public bool Match(Node tarNode)
+	{
+		if(isAll == true)
+		{
+			return true;
+		}
+		if(strMode == "Index")
+		{
+			foreach(string sRule in subRule)
+			{
+				if(MatchNumber(sRule, Node.Number)== true)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		else
+		{
+			foreach(string sRule in subRule)
+			{
+				if(MatchNameType(sRule, Node.Name + "-" + Node.Type)== true)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	
+	bool MatchNumber(string strRule, int index)
+	{
+	}
+	
+	bool MatchNameType(string strRule, string strNameType)
+	{
+	
+	}
+	
+}
+
+
+public class MidResult
+{
+	string strName;//名称，由MATCH语句指定
+	int level;//层次，处于树状图的深度，由MATCH语句指定
+	bool IsFinalResult;//由RETURN语句指定，如果为true，则strProperty被初始化
+	List<string> strProperty;//由RETURN语句指定，待输出的内容标签
+}
+
+
+public class MatchRule
+{
+	string direction; //"IN","OUT"
+	bool isAll;
+	List<string> labels;//:label1|:label2
+	bool NumLimit;//
+	int uplimit;
+	int downlimit;
+	
+	public MatchRule(string )
+	{
+		//确定方向<在头为in，>在尾为out
+		direction = "IN","OUT";
+		//查找*，找到则label
+		isAll = true, false;
+		//提取":[\w]+",去除：就是规则标签，加入List
+		
+		//提取"\d+\.\.\d+"分别设置上下限
+		NumLimit = true, false;
+	}
+	
+	bool MatchType(string sType)
+	{	
+		if(labels.Count == 0)
+		{//没有设置匹配类型，则直接返回true
+			return true;
+
+		}
+		foreach(string strLabel in labels)
+		{//只要有一个相同为True
+			if(strLabel == sType)
+			{
+				return true;
+			}
+		}
+		//完全没有匹配上的返回false
+		return false;
+	}
+	
+	bool MatchCount(int iNodes)
+	{
+		//默认>0为true
+		return true;
+	}
+}
+
+public class FilterRule
+{
+	string strName；
+	int level；
+	string strProperty;
+	string op;
+	string strValue;
+}
