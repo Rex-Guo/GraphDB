@@ -5,40 +5,17 @@ using System.Text;
 using System.Xml;
 using GraphDB.Core;
 using GraphDB.IO;
+using GraphDB.Parser;
 
 namespace GraphDB
 {
-    //系统错误码
-    public enum ErrorCode
-    {
-        NoError = 0,
-        OpenFileFailed = 1,
-        SaveFileFailed = 2,
-        NoXmlRoot = 3,
-        InvaildIndex =10,
-        NodeExists = 11,
-        CreateNodeFailed = 12,
-        NodeNotExists = 13,
-        EdgeExists = 15,
-        CreateEdgeFailed = 16,
-        EdgeNotExists = 17,
-        AddEdgeFailed  = 18,
-        
-    }
-    //修改操作选项
-    public enum ModifyOperation
-    {
-        Append = 0,
-        Replace = 1,
-        ReplaceAll = 2,
-        Delete = 3,
-    }
-    //数据库类
+    //图数据库类
     public class GraphDataBase
     {
         Graph graph;
         IfIOStrategy IOhandler;
         string strPath;
+        CypherParser parser;
 
         //属性
         public string Path
@@ -49,12 +26,16 @@ namespace GraphDB
             }
         }
         //函数
+        public GraphDataBase()
+        {
+            graph = new Graph();
+            parser = new CypherParser();
+        }
         //创建数据库，输入文件保存路径
         public void CreateDataBase(string sPath, ref ErrorCode err)
         {
             strPath = sPath;
             IOhandler = new XMLStrategy();
-            graph = new Graph();
             DataExport(strPath, ref err);
         }
         //打开数据库，输入当前文件路径
@@ -122,6 +103,12 @@ namespace GraphDB
                                                     string sType, ref ErrorCode err)
         {
             graph.RemoveEdge(sStartName, sStartType, sEndName, sEndType, sType, ref err);
+        }
+        //执行查询语句
+        public void DataQueryExecute(string strCypher, ref ErrorCode err)
+        {
+            //查询语句传入解析器
+            parser.QueryExecute(ref graph, strCypher, ref err);
         }
     }
 }

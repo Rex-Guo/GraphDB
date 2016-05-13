@@ -62,8 +62,14 @@
     <Compile Include="GraphDataBase.cs" />
     <Compile Include="IO\IfIOStrategy.cs" />
     <Compile Include="IO\XMLStrategy.cs" />
+    <Compile Include="Parser\CypherParser.cs" />
+    <Compile Include="Parser\FilterRule.cs" />
+    <Compile Include="Parser\MatchRule.cs" />
+    <Compile Include="Parser\MidResult.cs" />
+    <Compile Include="Parser\StartRule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="System.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

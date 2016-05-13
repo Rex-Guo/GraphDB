@@ -37,7 +37,8 @@ namespace GraphDB
             //gdb.ModifyNodeData("关中", "地区", ModifyOperation.Delete, "Population=2000000, Army=20000", ref err);
             //gdb.ModifyEdgeData("秦国", "国家", "关中", "地区", "统治", "0.8", ref err);
             //gdb.RemoveEdgeData("秦国", "国家", "关中", "地区", "统治", ref err);
-            gdb.RemoveNodeData("关中", "地区", ref err);
+            //gdb.RemoveNodeData("关中", "地区", ref err);
+            gdb.DataQueryExecute("START node('A1-*, A2-B2, *-B3') MATCH a-[:Rule]->b<-[:Connect 5..5]-c WHERE * RETURN b.Name", ref err);
         }
     }
 }
