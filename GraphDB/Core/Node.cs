@@ -7,6 +7,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Xml;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using GraphDB.Parser;
 
 namespace GraphDB.Core
 {
@@ -427,6 +429,84 @@ namespace GraphDB.Core
             return false;
         }
 
+        public string FieldOutputAll()
+        {
+            string strResult = "";
+
+            strResult += "Name\t";
+            strResult += "Type\t";
+            foreach (NodeProperty sProperty in this.Attribute)
+            {
+                strResult += sProperty.Key + "\t";
+            }
+            return strResult + "\n";
+        }
+
+        public string FieldOutput(List<string> labels)
+        {
+            string strResult = "";
+
+            foreach (string label in labels)
+            {
+                if (label == "Name")
+                {
+                    strResult += "Name\t";
+                }
+                else if (label == "Type")
+                {
+                    strResult += "Type\t";
+                }
+                foreach (NodeProperty sProperty in this.Attribute)
+                {
+                    if (sProperty.Key != label)
+                    {
+                        break;
+                    }
+                    strResult += sProperty.Key + "\t";
+                }
+            }
+            return strResult + "\n";
+        }
+
+        public string DataOutputAll()
+        {
+            string strResult = "";
+
+            strResult += this.Name+"\t";
+            strResult += this.Type + "\t";
+            foreach (NodeProperty sProperty in this.Attribute)
+            {
+                strResult += sProperty.Value + "\t";
+            }
+            return strResult + "\n";
+        }
+
+        public string DataOutput(List<string> labels)
+        {
+            string strResult = "";
+
+            foreach (string label in labels)
+            {
+                if (label == "Name")
+                {
+                    strResult += this.Name + "\t";
+                }
+                else if (label == "Type")
+                {
+                    strResult += this.Type + "\t";
+                }
+                foreach (NodeProperty sProperty in this.Attribute)
+                {
+                    if (sProperty.Key != label)
+                    {
+                        break;
+                    }
+                    strResult += sProperty.Value + "\t";
+                }
+            }
+            return strResult + "\n";
+        }
+
 
         //≤È’“¡¨±ﬂ
         public Edge GetEdge(string sType, string opt)
@@ -458,6 +538,41 @@ namespace GraphDB.Core
                 return null;
             }
         }
-    
+
+        public TreeNode Search(List<MatchRule> mRule, int level)
+        {
+            List<Edge> SearchList;
+	        TreeNode CurrentTN, ChildTN;
+	
+	        CurrentTN = new TreeNode(this.intNodeNum.ToString());
+	        if(level == mRule.Count)
+	        {//µΩµ◊
+		        return CurrentTN;
+	        }
+	        if(mRule[level].Direction == "IN")
+	        {
+		        SearchList = this.InBound;
+	        }
+	        else
+	        {
+		        SearchList = this.OutBound;
+	        }
+	        foreach(Edge edge in SearchList)
+	        {
+		        if(mRule[level].MatchType(edge.Type) == true)
+		        {
+                    ChildTN = edge.End.Search(mRule, level+1);
+			        if(ChildTN != null)
+			        {
+                        CurrentTN.Nodes.Add(ChildTN);
+			        }
+		        }
+	        }
+            if (mRule[level].MatchCount(CurrentTN.Nodes.Count) == true)
+	        {
+		        return CurrentTN;
+	        }
+	        return null;
+        }
     }
 }

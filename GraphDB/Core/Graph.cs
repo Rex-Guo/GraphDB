@@ -257,13 +257,13 @@ namespace GraphDB.Core
         }
 
         //查询函数，返回指定索引处的节点
-        Node GetNodeAtIndex(int index)
+        public Node GetNodeAtIndex(int index)
         {
             return NodeList.ElementAt(index);
         }
 
         //查询函数，返回节点列表中指定名称和类型的节点
-        Node GetNodesByNameAndType(string sName, string type)
+        public Node GetNodesByNameAndType(string sName, string type)
         {
             //遍历节点列表
             foreach (Node curNode in NodeList)
@@ -277,7 +277,7 @@ namespace GraphDB.Core
         }
 
         //查询函数，返回节点列表中指定类型的所有节点
-        List<Node> GetNodesOfType(string type)
+        public List<Node> GetNodesOfType(string type)
         {
             List<Node> ResultList = new List<Node>();
             //遍历节点列表

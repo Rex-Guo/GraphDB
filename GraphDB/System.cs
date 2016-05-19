@@ -20,11 +20,12 @@ namespace GraphDB
         CreateEdgeFailed = 16,
         EdgeNotExists = 17,
         AddEdgeFailed = 18,
-        CypherInvalid = 50,
-        StartSegInvalid = 51,
-        MatchSegInvalid = 52,
-        WhereSegInvalid = 53,
-        ReturnSegInvalid = 54,
+        CypherInvalid = 40,
+        StartSegInvalid = 41,
+        MatchSegInvalid = 42,
+        WhereSegInvalid = 43,
+        ReturnSegInvalid = 44,
+        NoStartNode = 60,
     }
     //修改操作选项
     public enum ModifyOperation
