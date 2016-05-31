@@ -17,7 +17,7 @@ namespace GraphDB
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void FrmMain_Load(object sender, EventArgs e)
         {
             ErrorCode err = ErrorCode.NoError;
             gdb = new GraphDataBase();

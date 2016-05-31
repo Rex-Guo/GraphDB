@@ -113,8 +113,8 @@ namespace GraphDB.Parser
         }
 	
 	    public bool MatchType(string sType)
-	    {	
-		    if(labels.Count == 0)
+	    {
+            if (this.isAll == true)
 		    {//没有设置匹配类型，则直接返回true
 			    return true;
 		    }
