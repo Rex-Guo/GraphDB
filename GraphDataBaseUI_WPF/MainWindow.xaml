@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="468" Width="775" xmlns:my="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" WindowStyle="ThreeDBorderWindow">
     <DockPanel Name="dockPanel1" LastChildFill="True">
-        <ListBox Name="groupBox1" Width="260">
+        <ListBox Name="groupBox1" Width="258">
             <StackPanel Width="250">
                 <Button Content="Button" Height="30" HorizontalAlignment="Left" Name="button1" VerticalAlignment="Top" Width="112">
                     <Button.LayoutTransform>
@@ -30,19 +30,45 @@
                 </Button>
             </StackPanel>
         </ListBox>
-        <TabControl Name="tabControl1" Width="176" DockPanel.Dock="Right">
-            <TabItem Header="tabItem1" Name="tabItem1">
-                <Grid>
-                    <RichTextBox HorizontalAlignment="Left" Margin="6,9,0,0" Name="richTextBox1" VerticalAlignment="Top" />
-                </Grid>
-            </TabItem>
-            <TabItem Header="tabItem2" Name="tabItem2">
-                <Grid>
-                    <ScrollViewer Height="120" HorizontalAlignment="Left" Margin="9,8,0,0" Name="scrollViewer1" VerticalAlignment="Top" Width="233" />
-                </Grid>
-            </TabItem>
-        </TabControl>
-        <StackPanel Height="422">
+        <Grid Background="LightBlue" DockPanel.Dock="Right" Width="274">
+
+            <!-- Define four rows: -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!-- Define two columns: -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Arrange the children: -->
+            <Label    Grid.Row="0" Grid.Column="0" Background="Blue" Foreground="White"
+            HorizontalContentAlignment="Center" Grid.ColumnSpan="2">Start Page</Label>
+            
+            <GroupBox Grid.Row="1" Grid.Column="0" Background="White"
+            Header="Recent Projects">...</GroupBox>
+            <GroupBox Grid.Row="2" Grid.Column="0" Background="White"
+            Header="Getting Started">...</GroupBox>
+            <GroupBox Grid.Row="3" Grid.Column="0" Background="White"
+            Header="Headlines">...</GroupBox>
+            <GridSplitter Grid.Row="1" Grid.Column="0" Width="5" Grid.RowSpan="3" />
+            <GroupBox Grid.Row="1" Grid.Column="1" Background="White"
+            Header="Online Articles" Grid.RowSpan="3">
+                <ListBox>
+                    <ListBoxItem>Article #1</ListBoxItem>
+                    <ListBoxItem>Article #2</ListBoxItem>
+                    <ListBoxItem>Article #3</ListBoxItem>
+                    <ListBoxItem>Article #4</ListBoxItem>
+                </ListBox>
+            </GroupBox>
+        </Grid>
+        <Viewbox Stretch="UniformToFill">
+        <StackPanel Height="422" Width="217" DockPanel.Dock="Top">
             <!-- 1 value: The same padding on all four sides: -->
             <Label Padding="0" Background="Orange">0</Label>
             <Label Padding="10" Background="Orange">10</Label>
@@ -68,5 +94,6 @@
                 <Label Margin="0,10,20,30" Background="Aqua">0,10,20,30</Label>
             </Border>
         </StackPanel>
+        </Viewbox>
     </DockPanel>
 </Window>
