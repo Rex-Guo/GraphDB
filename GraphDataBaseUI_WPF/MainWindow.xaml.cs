@@ -24,6 +24,5 @@ namespace GraphDataBaseUI_WPF
         {
             InitializeComponent();
         }
-
     }
 }
