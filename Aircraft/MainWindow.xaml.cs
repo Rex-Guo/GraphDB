@@ -11,10 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Drawing;
-using System.Windows.Media.Animation;
 
-namespace GraphDataBaseUI_WPF
+namespace Aircraft
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
@@ -24,6 +22,11 @@ namespace GraphDataBaseUI_WPF
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void InitializeComponent()
+        {
+            throw new NotImplementedException();
         }
     }
 }

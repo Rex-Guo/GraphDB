@@ -11,10 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Drawing;
-using System.Windows.Media.Animation;
 
-namespace GraphDataBaseUI_WPF
+namespace WPF_3D
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑

@@ -4,6 +4,36 @@
         Title="MainWindow" Height="520" Width="775" xmlns:my="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" WindowStyle="ThreeDBorderWindow" xmlns:my1="clr-namespace:System;assembly=mscorlib">
     <Window.Resources>
         <SolidColorBrush x:Key="PreussenBlue" Color="{Binding RelativeSource={RelativeSource Self}, Path=Color}"></SolidColorBrush>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="VerticalAlignment" Value="Bottom"></Setter>
+            <Setter Property="LayoutTransform">
+                <Setter.Value>
+                    <ScaleTransform/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Button.MouseEnter">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleX" To="2" Duration="0:0:0.25"/>
+                                <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleY" To="2" Duration="0:0:0.25"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="Button.MouseLeave">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleX" To="1" Duration="0:0:0.25"/>
+                                <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleY" To="1" Duration="0:0:0.25"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <DockPanel Name="dockPanel1" LastChildFill="True" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window, AncestorLevel=1}}">
         <ListBox Name="groupBox1" Width="258">
@@ -68,72 +98,15 @@
                 </Polyline>
             </StackPanel>
         </ListBox>
-        <Grid Background="LightBlue" DockPanel.Dock="Right" Width="274" Name="Grid1">
-            <!-- Define four rows: -->
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-
-            <!-- Define two columns: -->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" MinWidth="100" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="4*" MinWidth="100"/>
-            </Grid.ColumnDefinitions>
-
-            <!-- Arrange the children: -->
-            <Label    Grid.Row="0" Grid.Column="0" Background="Blue" Foreground="White"
-            HorizontalContentAlignment="Center" Grid.ColumnSpan="3" Panel.ZIndex="1">Start Page</Label>
-            
-            <GroupBox Grid.Row="1" Grid.Column="0" Background="White"
-            Header="Recent Projects">...</GroupBox>
-            <GroupBox Grid.Row="2" Grid.Column="0" Background="White"
-            Header="Getting Started">...</GroupBox>
-            <GroupBox Grid.Row="3" Grid.Column="0" Background="White"
-            Header="Headlines">...</GroupBox>
-            <GridSplitter Grid.Column="1" Width="3" Grid.RowSpan="4" HorizontalAlignment="Center" />
-            <GroupBox Grid.Row="1" Grid.Column="2" Background="White"
-            Header="Online Articles" Grid.RowSpan="3">
-                <ListBox DataContext="{Binding}" ItemsSource="{Binding}">
-                    <ListBoxItem>Article #1</ListBoxItem>
-                    <ListBoxItem>Article #2</ListBoxItem>
-                    <ListBoxItem>Article #3</ListBoxItem>
-                    <ListBoxItem>Article #4</ListBoxItem>
-                </ListBox>
-            </GroupBox>
-        </Grid>
-        <Image >
-            <Image.Source>
-                <DrawingImage>
-                    <DrawingImage.Drawing>
-                        <GeometryDrawing Brush="Navy">
-                            <GeometryDrawing.Pen>
-                                <Pen Brush="Aqua" Thickness="3" DashStyle="{x:Static DashStyles.Dash}">
-                                </Pen>
-                            </GeometryDrawing.Pen>
-                            <GeometryDrawing.Geometry>
-                                <CombinedGeometry GeometryCombineMode="Xor">
-                                    <CombinedGeometry.Geometry1>
-                                        <PathGeometry >
-                                            <PathFigure>
-                                                <LineSegment Point="0,100" IsSmoothJoin="True"></LineSegment>
-                                                <LineSegment Point="100,100" IsSmoothJoin="True"></LineSegment>
-                                                <LineSegment Point="100,200" IsSmoothJoin="True"></LineSegment>
-                                            </PathFigure>
-                                        </PathGeometry>
-                                    </CombinedGeometry.Geometry1>
-                                    <CombinedGeometry.Geometry2>
-                                        <EllipseGeometry Center="50,100" RadiusX="50" RadiusY="50"/>
-                                    </CombinedGeometry.Geometry2>
-                                </CombinedGeometry>
-                            </GeometryDrawing.Geometry>
-                        </GeometryDrawing>
-                    </DrawingImage.Drawing>
-                </DrawingImage>
-            </Image.Source>
-        </Image>
+        <StackPanel Orientation="Horizontal" >
+            <Button >1</Button>
+            <Button >2</Button>
+            <Button >3</Button>
+            <Button >4</Button>
+            <Button >5</Button>
+            <Button >6</Button>
+            <Button >7</Button>
+            <Button >8</Button>
+        </StackPanel>
     </DockPanel>
 </Window>
