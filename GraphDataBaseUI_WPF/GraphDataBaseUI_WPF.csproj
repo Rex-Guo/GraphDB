@@ -96,6 +96,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -108,6 +109,47 @@
       <Project>{FE3FF803-3314-4205-B03C-3F31C187BCD6}</Project>
       <Name>GraphDB</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Network.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\window.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\Network.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\FilePrint.png" />
+    <Resource Include="images\FilePrintPreview.png" />
+    <Resource Include="images\FilePrintQuick.png" />
+    <Resource Include="images\FileProperties.png" />
+    <Resource Include="images\FileSave.png" />
+    <Resource Include="images\FileSaveAs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\FileClose.png" />
+    <Resource Include="images\FileNew.png" />
+    <Resource Include="images\FileOpen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\Exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\FileNew_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\FileOpen_small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\File_close_small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\FileSave_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\EditRedo_16x16.png" />
+    <Resource Include="images\EditUndo_16x16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
