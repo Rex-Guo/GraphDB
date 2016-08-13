@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:r="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary"
-        Title="Graph Database" Height="520" Width="775"
+        Title="Graph Database" Height="550" Width="800"
         WindowStyle="ThreeDBorderWindow"
         Icon="/GraphDataBaseUI_WPF;component/images/Network.ico">
     <r:RibbonWindow.Resources>
@@ -17,8 +17,19 @@
             <RoutedUICommand x:Key="ExitCommand" Text="Exit" />
         </ResourceDictionary>
     </r:RibbonWindow.Resources>
-    <DockPanel Name="MainDockPanel" LastChildFill="True" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window, AncestorLevel=1}}">
-        <r:Ribbon DockPanel.Dock="Top"  Name="MainRibbon">
+    <Grid Name="MainLayout" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window, AncestorLevel=1}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="400*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="200*"/>
+        </Grid.ColumnDefinitions>
+        <r:Ribbon Name="MainRibbon" Grid.ColumnSpan="4">
             <r:Ribbon.Resources>
                 <r:RibbonGroupSizeDefinitionBaseCollection x:Key="RibbonLayout">
                     <r:RibbonGroupSizeDefinition>
@@ -95,26 +106,12 @@
                         </r:RibbonSplitButton.Items>
                     </r:RibbonSplitButton>
                 </r:RibbonGroup>
-                <r:RibbonGroup Header="File1" GroupSizeDefinitions="{StaticResource RibbonLayout}">
-                    <r:RibbonButton Label="New" Command="{StaticResource NewCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileNew.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileNew_16x16.png" ToolTipTitle="New" ToolTipImageSource="/GraphDataBaseUI_WPF;component/images/FileNew.png" ToolTipDescription="Create a new graph database. It's a wisdom choose to save the original database at first."></r:RibbonButton>
-                    <r:RibbonButton Label="Open" Command ="{StaticResource OpenCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileOpen.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileOpen_small.png"></r:RibbonButton>
-                    <r:RibbonButton Label="Close" Command="{StaticResource CloseCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileClose.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/File_close_small.png"></r:RibbonButton>
-                    <r:RibbonSplitButton Label="Save" Command="{StaticResource SaveCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileSave.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png" IsDropDownOpen="False" CanAddToQuickAccessToolBarDirectly="False">
-                        <r:RibbonSplitButton.Items>
-                            <r:RibbonButton Label="Save" Command="{StaticResource SaveCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileSave.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png" ></r:RibbonButton>
-                            <r:RibbonButton Label="SaveAs" Command="{StaticResource SaveAsCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileSaveAs.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png"></r:RibbonButton>
-                        </r:RibbonSplitButton.Items>
+                <r:RibbonGroup Header="Node Filter">
+                    <r:RibbonSplitButton Label="Node Fliter" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AutoFilterClassic.png">
+                        
                     </r:RibbonSplitButton>
-                </r:RibbonGroup>
-                <r:RibbonGroup Header="File2" GroupSizeDefinitions="{StaticResource RibbonLayout}">
-                    <r:RibbonButton Label="New" Command="{StaticResource NewCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileNew.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileNew_16x16.png" ToolTipTitle="New" ToolTipImageSource="/GraphDataBaseUI_WPF;component/images/FileNew.png" ToolTipDescription="Create a new graph database. It's a wisdom choose to save the original database at first."></r:RibbonButton>
-                    <r:RibbonButton Label="Open" Command ="{StaticResource OpenCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileOpen.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileOpen_small.png"></r:RibbonButton>
-                    <r:RibbonButton Label="Close" Command="{StaticResource CloseCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileClose.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/File_close_small.png"></r:RibbonButton>
-                    <r:RibbonSplitButton Label="Save" Command="{StaticResource SaveCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileSave.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png" IsDropDownOpen="False" CanAddToQuickAccessToolBarDirectly="False">
-                        <r:RibbonSplitButton.Items>
-                            <r:RibbonButton Label="Save" Command="{StaticResource SaveCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileSave.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png" ></r:RibbonButton>
-                            <r:RibbonButton Label="SaveAs" Command="{StaticResource SaveAsCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileSaveAs.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png"></r:RibbonButton>
-                        </r:RibbonSplitButton.Items>
+                    <r:RibbonSplitButton Label="Edge Fliter" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AutoFilterClassic.png">
+
                     </r:RibbonSplitButton>
                 </r:RibbonGroup>
             </r:RibbonTab>
@@ -127,42 +124,37 @@
             <r:RibbonTab Name = "ribModTab" Header="Modify">
             </r:RibbonTab>
         </r:Ribbon>
-        <Grid Background="LightBlue" DockPanel.Dock="Right" Width="274" Name="Grid1">
-
+        <StatusBar Name="MainStatus" Grid.ColumnSpan="4" Grid.Row="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100*"/>
+                    <ColumnDefinition Width="100*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Slider  Width="150" HorizontalAlignment="Right" SmallChange="1" Grid.Column="2"></Slider>
+            </Grid>
+        </StatusBar>
+        <DockPanel MinWidth="150" Background="{Binding ElementName=MainRibbon, Path=Background}" Grid.Row="1">
+            <Label DockPanel.Dock="Top">Node List:</Label>
+            <ListBox Name="NodeListBox" Margin="3,3,3,3">
+                
+            </ListBox>
+        </DockPanel>
+        <Grid Background="{Binding ElementName=MainRibbon, Path=Background}" MinWidth="200" Grid.Column="3" Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="150*"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="200*"/>
             </Grid.RowDefinitions>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" MinWidth="100" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="4*" MinWidth="100"/>
-            </Grid.ColumnDefinitions>
-
-            <Label    Grid.Row="0" Grid.Column="0" Background="Blue" Foreground="White"
-            HorizontalContentAlignment="Center" Grid.ColumnSpan="3" Panel.ZIndex="1">Start Page</Label>
-            
-            <GroupBox Grid.Row="1" Grid.Column="0" Background="White"
-            Header="Recent Projects">...</GroupBox>
-            <GroupBox Grid.Row="2" Grid.Column="0" Background="White"
-            Header="Getting Started">...</GroupBox>
-            <GroupBox Grid.Row="3" Grid.Column="0" Background="White"
-            Header="Headlines">...</GroupBox>
-            <GridSplitter Grid.Column="1" Width="3" Grid.RowSpan="4" HorizontalAlignment="Center" />
-            <GroupBox Grid.Row="1" Grid.Column="2" Background="White"
-            Header="Online Articles" Grid.RowSpan="3">
-                <ListBox DataContext="{Binding}" ItemsSource="{Binding}">
-                    <ListBoxItem>Article #1</ListBoxItem>
-                    <ListBoxItem>Article #2</ListBoxItem>
-                    <ListBoxItem>Article #3</ListBoxItem>
-                    <ListBoxItem>Article #4</ListBoxItem>
-                </ListBox>
+            <GroupBox Header="Command Line:">
+                <RichTextBox Name="CommandBox"></RichTextBox>
+            </GroupBox>
+            <Button Name="ExecuteButton" Height="30" Width="100" Grid.Row="1" HorizontalAlignment="Right" Margin="3,3,5,3">Execute</Button>
+            <GroupBox Header="Result:" Grid.Row="2">
+                <RichTextBox Name="ResultBox"></RichTextBox>
             </GroupBox>
         </Grid>
-        <Image >
+        <Image Grid.Column="1" Grid.Row="1">
             <Image.Source>
                 <DrawingImage>
                     <DrawingImage.Drawing>
@@ -192,5 +184,6 @@
                 </DrawingImage>
             </Image.Source>
         </Image>
-    </DockPanel>
+        <GridSplitter HorizontalAlignment="Center" Grid.Column="2" Grid.Row="1" Width="3"></GridSplitter>
+    </Grid>
 </r:RibbonWindow>
