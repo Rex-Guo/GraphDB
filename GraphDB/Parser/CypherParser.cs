@@ -30,19 +30,19 @@ namespace GraphDB.Parser
         List<TreeNode> ResultTree;
 
         //构造函数
-        public void QueryExecute(ref Graph graph, string sCypher, ref ErrorCode err)
+        public string QueryExecute(ref Graph graph, string sCypher, ref ErrorCode err)
         {
             string strResult;
             CypherInit(sCypher, ref err);
             if (err != ErrorCode.NoError)
             {
-                return;
+                return "";
             }
             //从图中选取节点，startRule
             SelectStarter(graph, ref err);
             if (err != ErrorCode.NoError)
             {
-                return;
+                return "";
             }
             //根据matchRule查找，将返回数据存入记录树
             Query();
@@ -50,6 +50,7 @@ namespace GraphDB.Parser
 
             //返回结果。依据midResult中的标记
             strResult = ResultOutput(graph);
+            return strResult;
         }
         //数据结构初始化
         void CypherInit(string sCypher, ref ErrorCode err)
@@ -428,7 +429,7 @@ namespace GraphDB.Parser
             }
             foreach (int iNum in IndexList)
             {
-                resList.Add(graph.GetNodeAtIndex(iNum));
+                resList.Add(graph.GetNodeByIndex(iNum));
             }
             return resList;
         }

@@ -14,17 +14,42 @@ namespace GraphDB
     {
         Graph graph;
         IfIOStrategy IOhandler;
-        string strPath;
         CypherParser parser;
 
         //属性
+        //获取文件存放路径
         public string Path
         {
             get
             {
-                return strPath;
+                return IOhandler.Path;
             }
         }
+        //获取数据库节点总数
+        public int NodeNum
+        {
+            get
+            {
+                return graph.NodeNum;
+            }
+        }
+        //获取数据库连边总数
+        public int EdgeNum
+        {
+            get
+            {
+                return graph.EdgeNum;
+            }
+        }
+        //获取节点列表
+        public List<Node> Nodes
+        {
+            get
+            {
+                return graph.Nodes;
+            }
+        }
+        
         //函数
         public GraphDataBase()
         {
@@ -34,28 +59,26 @@ namespace GraphDB
         //创建数据库，输入文件保存路径
         public void CreateDataBase(string sPath, ref ErrorCode err)
         {
-            strPath = sPath;
-            IOhandler = new XMLStrategy();
-            DataExport(strPath, ref err);
+            IOhandler = new XMLStrategy(sPath);
+            DataExport(ref err);
         }
         //打开数据库，输入当前文件路径
         public void OpenDataBase(string sPath, ref ErrorCode err)
         {
-            strPath = sPath;
-            IOhandler = new XMLStrategy();
-            DataImport(sPath, ref err);
+            IOhandler = new XMLStrategy(sPath);
+            DataImport(ref err);
         }
         //XML批量数据导入
-        public void DataImport(string sPath, ref ErrorCode err)
+        public void DataImport(ref ErrorCode err)
         {
-            graph = IOhandler.ReadFile(sPath, ref err);
+            graph = IOhandler.ReadFile(ref err);
             if (err != ErrorCode.NoError)
             {
                 graph = null;
             }
         }
         //XML批量数据导出
-        public void DataExport(string sPath, ref ErrorCode err)
+        public void DataExport(ref ErrorCode err)
         {
             XmlDocument doc;
 
@@ -64,7 +87,14 @@ namespace GraphDB
             {
                 return;
             }
-            IOhandler.SaveFile(doc, sPath, ref err);
+            IOhandler.SaveFile(doc, ref err);
+        }
+
+        //数据库另存为
+        public void DataBaseSaveAs(string newPath, ref ErrorCode err)
+        {
+            this.IOhandler.Path = newPath;
+            DataExport(ref err);
         }
 
         //插入数据节点
@@ -105,10 +135,21 @@ namespace GraphDB
             graph.RemoveEdge(sStartName, sStartType, sEndName, sEndType, sType, ref err);
         }
         //执行查询语句
-        public void DataQueryExecute(string strCypher, ref ErrorCode err)
+        public string DataQueryExecute(string strCypher, ref ErrorCode err)
         {
             //查询语句传入解析器
-            parser.QueryExecute(ref graph, strCypher, ref err);
+            return parser.QueryExecute(ref graph, strCypher, ref err);
         }
+        //查询函数，返回指定索引处的节点
+        public Node GetNodeByIndex(int index)
+        {
+            return graph.GetNodeByIndex(index);
+        }
+        //查询函数，返回节点列表中指定名称和类型的节点
+        public Node GetNodeByName(string sName, string sType)
+        {
+            return graph.GetNodesByNameAndType(sName, sType);
+        }
+        
     }
 }

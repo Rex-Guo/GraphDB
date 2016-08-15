@@ -107,8 +107,8 @@ namespace GraphDB.Core
                 strStart = GetText(xNode, "Start");
                 strEnd = GetText(xNode, "End");
                 nodeStart = nodeEnd = null;
-                nodeStart = this.GetNodeAtIndex(Convert.ToInt32(strStart));
-                nodeEnd = this.GetNodeAtIndex(Convert.ToInt32(strEnd));
+                nodeStart = this.GetNodeByIndex(Convert.ToInt32(strStart));
+                nodeEnd = this.GetNodeByIndex(Convert.ToInt32(strEnd));
                 if (nodeStart == null || nodeEnd == null)
                 {
                     err = ErrorCode.InvaildIndex;
@@ -257,7 +257,7 @@ namespace GraphDB.Core
         }
 
         //查询函数，返回指定索引处的节点
-        public Node GetNodeAtIndex(int index)
+        public Node GetNodeByIndex(int index)
         {
             return NodeList.ElementAt(index);
         }

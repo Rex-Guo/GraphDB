@@ -42,8 +42,27 @@ namespace GraphDB.IO
 
     public class XMLStrategy:IfIOStrategy//XML文件读写算法
     {
+        string strPath;
+
+        string IfIOStrategy.Path
+        {
+            get
+            {
+                return strPath;
+            }
+            set
+            {
+                strPath = value;
+            }
+        }
+
+        public XMLStrategy(string sPath)
+        {
+            strPath = sPath;
+        }
+
        //XMLStrategy算法读取函数
-        Graph IfIOStrategy.ReadFile(string sPath, ref ErrorCode err)
+        Graph IfIOStrategy.ReadFile(ref ErrorCode err)
         {
             FileStream stream = null;
             XmlDocument doc = new XmlDocument();
@@ -51,7 +70,7 @@ namespace GraphDB.IO
 
             try
             {
-                stream = new FileStream(sPath, FileMode.Open);
+                stream = new FileStream(strPath, FileMode.Open);
                 doc.Load(stream);               //从流文件读入xml文档
                 stream.Close();
             }
@@ -76,13 +95,12 @@ namespace GraphDB.IO
         }
 
         //XMLStrategy算法保存函数
-        void IfIOStrategy.SaveFile(XmlDocument doc, string sPath, ref ErrorCode err)
+        void IfIOStrategy.SaveFile(XmlDocument doc, ref ErrorCode err)
         {
             FileStream stream = null;
-
             try
             {
-                stream = new FileStream(sPath, FileMode.Create);
+                stream = new FileStream(strPath, FileMode.Create);
                 doc.Save(stream);               //保存xml文档到流
                 stream.Close();
             }

@@ -2,21 +2,30 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:r="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary"
-        Title="Graph Database" Height="550" Width="800"
+        xmlns:local="clr-namespace:GraphDataBaseUI_WPF"
+        Title="Graph Database" Height="550" Width="850"
         WindowStyle="ThreeDBorderWindow"
-        Icon="/GraphDataBaseUI_WPF;component/images/Network.ico">
+        Icon="/GraphDataBaseUI_WPF;component/images/Network.ico" Loaded="RibbonWindow_Loaded">
     <r:RibbonWindow.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ToolTipResource.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="CommandResource.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush x:Key="PreussenBlue" Color="{Binding RelativeSource={RelativeSource Self}, Path=Color}"/>
-            <RoutedUICommand x:Key="NewCommand" Text="New" />
-            <RoutedUICommand x:Key="OpenCommand" Text="Open" />
-            <RoutedUICommand x:Key="SaveCommand" Text="Save" />
-            <RoutedUICommand x:Key="SaveAsCommand" Text="SaveAs" />
-            <RoutedUICommand x:Key="PrintCommand" Text="Print" />
-            <RoutedUICommand x:Key="CloseCommand" Text="Close" />
-            <RoutedUICommand x:Key="ExitCommand" Text="Exit" />
         </ResourceDictionary>
     </r:RibbonWindow.Resources>
+    <r:RibbonWindow.CommandBindings>
+        <CommandBinding x:Name="NewCommand" Command="{StaticResource NewCommand}" Executed="NewCommand_Executed"></CommandBinding>
+        <CommandBinding x:Name="OpenCommand" Command="{StaticResource OpenCommand}" Executed="OpenCommand_Executed"></CommandBinding>
+        <CommandBinding x:Name="SaveCommand" Command="{StaticResource SaveCommand}" Executed="SaveCommand_Executed" CanExecute="SaveCommand_CanExecute"></CommandBinding>
+        <CommandBinding x:Name="SaveAsCommand" Command="{StaticResource SaveAsCommand}" Executed="SaveAsCommand_Executed" CanExecute="SaveAsCommand_CanExecute"></CommandBinding>
+        <CommandBinding x:Name="QuickPrintCommand" Command="{StaticResource QuickPrintCommand}" Executed="QuickPrintCommand_Executed" CanExecute="QuickPrintCommand_CanExecute"></CommandBinding>
+        <CommandBinding x:Name="PrintPreviewCommand" Command="{StaticResource PrintPreviewCommand}" Executed="PrintPreviewCommand_Executed" CanExecute="PrintPreviewCommand_CanExecute"></CommandBinding>
+        <CommandBinding x:Name="PrintCommand" Command="{StaticResource PrintCommand}" Executed="PrintCommand_Executed" CanExecute="PrintCommand_CanExecute"></CommandBinding>
+        <CommandBinding x:Name="CloseCommand" Command="{StaticResource CloseCommand}" Executed="CloseCommand_Executed" CanExecute="CloseCommand_CanExecute"></CommandBinding>
+        <CommandBinding x:Name="ExitCommand" Command="{StaticResource ExitCommand}" Executed="ExitCommand_Executed"></CommandBinding>
+    </r:RibbonWindow.CommandBindings>
     <Grid Name="MainLayout" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window, AncestorLevel=1}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -24,10 +33,10 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="400*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="200*" MinWidth="200"/>
         </Grid.ColumnDefinitions>
         <r:Ribbon Name="MainRibbon" Grid.ColumnSpan="4">
             <r:Ribbon.Resources>
@@ -67,44 +76,47 @@
             </r:Ribbon.Resources>
             <r:Ribbon.ApplicationMenu>
                 <r:RibbonApplicationMenu SmallImageSource="/GraphDataBaseUI_WPF;component/images/window.png">
-                    <r:RibbonApplicationMenuItem Header="New" Command="{StaticResource NewCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FileNew.png">
+                    <r:RibbonApplicationMenuItem Header="New" Command="{StaticResource NewCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FileNew.png" ToolTipTitle="New" ToolTipDescription="{StaticResource NewTip}">
                     </r:RibbonApplicationMenuItem>
-                    <r:RibbonApplicationMenuItem Header="Open" Command="{StaticResource OpenCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FileOpen.png">
+                    <r:RibbonApplicationMenuItem Header="Open" Command="{StaticResource OpenCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FileOpen.png" ToolTipTitle="Open" ToolTipDescription="{StaticResource OpenTip}">
                     </r:RibbonApplicationMenuItem>
-                    <r:RibbonApplicationMenuItem Header="Save" Command="{StaticResource SaveCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FileSave.png">
+                    <r:RibbonApplicationMenuItem Header="Save" Command="{StaticResource SaveCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FileSave.png" ToolTipTitle="Save" ToolTipDescription="{StaticResource SaveTip}">
                     </r:RibbonApplicationMenuItem>
-                    <r:RibbonApplicationMenuItem Header="SaveAs" Command="{StaticResource SaveAsCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FileSaveAs.png">
+                    <r:RibbonApplicationMenuItem Header="SaveAs" Command="{StaticResource SaveAsCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FileSaveAs.png" ToolTipTitle="Save As" ToolTipDescription="{StaticResource SaveAsTip}">
                     </r:RibbonApplicationMenuItem>
                     <r:RibbonApplicationMenuItem Header="Print" ImageSource="/GraphDataBaseUI_WPF;component/images/FilePrint.png">
-                        <r:RibbonApplicationMenuItem Header="QuickPrint" ImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintQuick.png"></r:RibbonApplicationMenuItem>
-                        <r:RibbonApplicationMenuItem Header="PrintPreview" ImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintPreview.png"></r:RibbonApplicationMenuItem>
-                        <r:RibbonApplicationMenuItem Header="Print" Command="{StaticResource PrintCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FilePrint.png"></r:RibbonApplicationMenuItem>
+                        <r:RibbonApplicationMenuItem Header="Quick Print" Command="{StaticResource QuickPrintCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintQuick.png" ToolTipTitle="Quick Print" ToolTipDescription="{StaticResource QuickPrintTip}"></r:RibbonApplicationMenuItem>
+                        <r:RibbonApplicationMenuItem Header="Print Preview" Command="{StaticResource PrintPreviewCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintPreview.png" ToolTipTitle="Print Preview" ToolTipDescription="{StaticResource PrintPreviewTip}"></r:RibbonApplicationMenuItem>
+                        <r:RibbonApplicationMenuItem Header="Print" Command="{StaticResource PrintCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FilePrint.png" ToolTipTitle="Print" ToolTipDescription="{StaticResource PrintTip}"></r:RibbonApplicationMenuItem>
                     </r:RibbonApplicationMenuItem>
-                    <r:RibbonApplicationMenuItem Header="Close Database" Command="{StaticResource CloseCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FileClose.png">
+                    <r:RibbonApplicationMenuItem Header="Close Database" Command="{StaticResource CloseCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FileClose.png" ToolTipTitle="Close Database" ToolTipDescription="{StaticResource CloseDbTip}">
                     </r:RibbonApplicationMenuItem>
                     <r:RibbonSeparator></r:RibbonSeparator>
-                    <r:RibbonApplicationMenuItem Header="Exit" Command="{StaticResource ExitCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/Exit.png">
+                    <r:RibbonApplicationMenuItem Header="Exit" Command="{StaticResource ExitCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/Exit.png" ToolTipTitle="Exit" ToolTipDescription="{StaticResource ExitTip}">
                     </r:RibbonApplicationMenuItem>
                 </r:RibbonApplicationMenu>
             </r:Ribbon.ApplicationMenu>
             <r:Ribbon.QuickAccessToolBar>
                 <r:RibbonQuickAccessToolBar>
-                    <r:RibbonButton Label="Undo" SmallImageSource="/GraphDataBaseUI_WPF;component/images/EditUndo_16x16.png"></r:RibbonButton>
-                    <r:RibbonButton Label="Redo" SmallImageSource="/GraphDataBaseUI_WPF;component/images/EditRedo_16x16.png"></r:RibbonButton>
                     <r:RibbonButton Label="Save" Command="{StaticResource SaveCommand}" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png"></r:RibbonButton>
                 </r:RibbonQuickAccessToolBar>
             </r:Ribbon.QuickAccessToolBar>
             <r:RibbonTab Name = "ribHomeTab" Header="Home" >
                 <r:RibbonGroup Header="File" GroupSizeDefinitions="{StaticResource RibbonLayout}">
-                    <r:RibbonButton Label="New" Command="{StaticResource NewCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileNew.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileNew_16x16.png" ToolTipTitle="New" ToolTipImageSource="/GraphDataBaseUI_WPF;component/images/FileNew.png" ToolTipDescription="Create a new graph database. It's a wisdom choose to save the original database at first."></r:RibbonButton>
-                    <r:RibbonButton Label="Open" Command ="{StaticResource OpenCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileOpen.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileOpen_small.png"></r:RibbonButton>
-                    <r:RibbonButton Label="Close" Command="{StaticResource CloseCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileClose.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/File_close_small.png"></r:RibbonButton>
+                    <r:RibbonButton Label="New" Command="{StaticResource NewCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileNew.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileNew_16x16.png" ToolTipTitle="New" ToolTipDescription="{StaticResource NewTip}"></r:RibbonButton>
+                    <r:RibbonButton Label="Open" Command ="{StaticResource OpenCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileOpen.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileOpen_small.png" ToolTipTitle="Open" ToolTipDescription="{StaticResource OpenTip}"></r:RibbonButton>
+                    <r:RibbonButton Label="Close" Command="{StaticResource CloseCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileClose.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/File_close_small.png" ToolTipTitle="Close Database" ToolTipDescription="{StaticResource CloseDbTip}"></r:RibbonButton>
                     <r:RibbonSplitButton Label="Save" Command="{StaticResource SaveCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileSave.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png" IsDropDownOpen="False" CanAddToQuickAccessToolBarDirectly="False">
                         <r:RibbonSplitButton.Items>
-                            <r:RibbonButton Label="Save" Command="{StaticResource SaveCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileSave.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png" ></r:RibbonButton>
-                            <r:RibbonButton Label="SaveAs" Command="{StaticResource SaveAsCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileSaveAs.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png"></r:RibbonButton>
+                            <r:RibbonButton Label="Save" Command="{StaticResource SaveCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileSave.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png" ToolTipTitle="Save" ToolTipDescription="{StaticResource SaveTip}"></r:RibbonButton>
+                            <r:RibbonButton Label="Save As" Command="{StaticResource SaveAsCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileSaveAs.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png" ToolTipTitle="Save As" ToolTipDescription="{StaticResource SaveAsTip}"></r:RibbonButton>
                         </r:RibbonSplitButton.Items>
                     </r:RibbonSplitButton>
+                </r:RibbonGroup>
+                <r:RibbonGroup Header="Print" GroupSizeDefinitions="{StaticResource RibbonLayout}">
+                    <r:RibbonButton Label="Quick Print" Command="{StaticResource QuickPrintCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintQuick.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintQuick_small.png" ToolTipTitle="Quick Print" ToolTipDescription="{StaticResource QuickPrintTip}"></r:RibbonButton>
+                    <r:RibbonButton Label="Print Preview" Command="{StaticResource PrintPreviewCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintPreview.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintPreview_small.png" ToolTipTitle="Print Preview" ToolTipDescription="{StaticResource PrintPreviewTip}"></r:RibbonButton>
+                    <r:RibbonButton Label="Print" Command="{StaticResource PrintCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FilePrint.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FilePrint_small.png" ToolTipTitle="Print" ToolTipDescription="{StaticResource PrintTip}"></r:RibbonButton>
                 </r:RibbonGroup>
                 <r:RibbonGroup Header="Node Filter">
                     <r:RibbonSplitButton Label="Node Fliter" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AutoFilterClassic.png">
@@ -125,65 +137,38 @@
             </r:RibbonTab>
         </r:Ribbon>
         <StatusBar Name="MainStatus" Grid.ColumnSpan="4" Grid.Row="2">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100*"/>
-                    <ColumnDefinition Width="100*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Slider  Width="150" HorizontalAlignment="Right" SmallChange="1" Grid.Column="2"></Slider>
-            </Grid>
+            <StatusBarItem>
+                <Label Name="StatusLabel">Ready</Label>
+            </StatusBarItem>
         </StatusBar>
-        <DockPanel MinWidth="150" Background="{Binding ElementName=MainRibbon, Path=Background}" Grid.Row="1">
+        <DockPanel MinWidth="200" Background="{Binding ElementName=MainRibbon, Path=Background}" Grid.Row="1">
             <Label DockPanel.Dock="Top">Node List:</Label>
             <ListBox Name="NodeListBox" Margin="3,3,3,3">
                 
             </ListBox>
         </DockPanel>
-        <Grid Background="{Binding ElementName=MainRibbon, Path=Background}" MinWidth="200" Grid.Column="3" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="150*"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="200*"/>
-            </Grid.RowDefinitions>
-            <GroupBox Header="Command Line:">
-                <RichTextBox Name="CommandBox"></RichTextBox>
-            </GroupBox>
-            <Button Name="ExecuteButton" Height="30" Width="100" Grid.Row="1" HorizontalAlignment="Right" Margin="3,3,5,3">Execute</Button>
-            <GroupBox Header="Result:" Grid.Row="2">
-                <RichTextBox Name="ResultBox"></RichTextBox>
-            </GroupBox>
-        </Grid>
-        <Image Grid.Column="1" Grid.Row="1">
-            <Image.Source>
-                <DrawingImage>
-                    <DrawingImage.Drawing>
-                        <GeometryDrawing Brush="Navy">
-                            <GeometryDrawing.Pen>
-                                <Pen Brush="Aqua" Thickness="3" DashStyle="{x:Static DashStyles.Dash}">
-                                </Pen>
-                            </GeometryDrawing.Pen>
-                            <GeometryDrawing.Geometry>
-                                <CombinedGeometry GeometryCombineMode="Xor">
-                                    <CombinedGeometry.Geometry1>
-                                        <PathGeometry >
-                                            <PathFigure>
-                                                <LineSegment Point="0,100" IsSmoothJoin="True"></LineSegment>
-                                                <LineSegment Point="100,100" IsSmoothJoin="True"></LineSegment>
-                                                <LineSegment Point="100,200" IsSmoothJoin="True"></LineSegment>
-                                            </PathFigure>
-                                        </PathGeometry>
-                                    </CombinedGeometry.Geometry1>
-                                    <CombinedGeometry.Geometry2>
-                                        <EllipseGeometry Center="50,100" RadiusX="50" RadiusY="50"/>
-                                    </CombinedGeometry.Geometry2>
-                                </CombinedGeometry>
-                            </GeometryDrawing.Geometry>
-                        </GeometryDrawing>
-                    </DrawingImage.Drawing>
-                </DrawingImage>
-            </Image.Source>
-        </Image>
+        <Border Grid.Column="3" Grid.Row="1" Margin="3" BorderBrush="SteelBlue" BorderThickness="1">
+            <Grid Background="{Binding ElementName=MainRibbon, Path=Background}" MinWidth="200" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="150*"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="200*"/>
+                </Grid.RowDefinitions>
+                <GroupBox Header="Command Line:">
+                    <TextBox Name="CommandBox" TextWrapping="Wrap" AcceptsReturn="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                             Text="START node('*-国家') MATCH (Kingdom)-[:统治]-&gt;(District)&lt;-[:连通 5..5]-(Neibhour) WHERE * RETURN Kingdom.Name, District.*">
+                    </TextBox>
+                </GroupBox>
+                <Button Name="ExecuteButton" Height="30" Width="100" Grid.Row="1" HorizontalAlignment="Right" Margin="3,3,5,3" Click="ExecuteButton_Click">Execute</Button>
+                <GroupBox Header="Result:" Grid.Row="2">
+                    <TextBox Name="ResultBox" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"></TextBox>
+                </GroupBox>
+            </Grid>
+        </Border>
+        <Border Grid.Row="1" Grid.Column="1" Margin="3" BorderBrush="SteelBlue" BorderThickness="1">
+            <local:DrawingCanvas x:Name="drawingSurface" Background="White" ClipToBounds="True" MouseLeftButtonDown="drawingSurface_MouseLeftButtonDown">
+            </local:DrawingCanvas>
+        </Border>
         <GridSplitter HorizontalAlignment="Center" Grid.Column="2" Grid.Row="1" Width="3"></GridSplitter>
     </Grid>
 </r:RibbonWindow>

@@ -132,6 +132,10 @@ namespace GraphDB.Parser
 	    public bool MatchCount(int iNodes)
 	    {
 		    //默认>0为true
+            if (iNodes <= 0)
+            {
+                return false;
+            }
             if (NumLimit == false)
             {
                 return true;

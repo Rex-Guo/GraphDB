@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="NewTip">Create a new graph database. It's a wisdom choose to save the original database at first.</sys:String>
+    <sys:String x:Key="OpenTip">Open an exsited graph database. The current one will be closed.</sys:String>
+    <sys:String x:Key="SaveTip">Save current graph database to file. If there is no file, it will create a new one.</sys:String>
+    <sys:String x:Key="SaveAsTip">Save current graph database to a new file. You can save the file to a new path or choose a new format.</sys:String>
+    <sys:String x:Key="CloseDbTip">Close current graph database. The modificaion without save will be discard.</sys:String>
+    <sys:String x:Key="QuickPrintTip">Print current graph database in XML format directly without configure.</sys:String>
+    <sys:String x:Key="PrintPreviewTip">Preview the document before print.</sys:String>
+    <sys:String x:Key="PrintTip">Print current graph database in XML format.</sys:String>
+    <sys:String x:Key="ExitTip">Exit this program.</sys:String>
+    <sys:String x:Key="ExecuteTip">Execute the command line in the graph database. The result will return in the text box below</sys:String>
+</ResourceDictionary>
