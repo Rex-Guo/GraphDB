@@ -6,6 +6,7 @@ using System.Xml;
 using GraphDB.Core;
 using GraphDB.IO;
 using GraphDB.Parser;
+using GraphDB.Layout;
 
 namespace GraphDB
 {
@@ -15,6 +16,7 @@ namespace GraphDB
         Graph graph;
         IfIOStrategy IOhandler;
         CypherParser parser;
+        CircleLayout circo;
 
         //属性
         //获取文件存放路径
@@ -22,6 +24,10 @@ namespace GraphDB
         {
             get
             {
+                if (IOhandler == null)
+                {
+                    return "";
+                }
                 return IOhandler.Path;
             }
         }
@@ -55,6 +61,12 @@ namespace GraphDB
         {
             graph = new Graph();
             parser = new CypherParser();
+        }
+
+        public GraphDataBase(int iNum, int iRadius)
+        {
+            graph = new Graph();
+            circo = new CircleLayout(iNum, iRadius);
         }
         //创建数据库，输入文件保存路径
         public void CreateDataBase(string sPath, ref ErrorCode err)
@@ -101,6 +113,12 @@ namespace GraphDB
         public void AddNodeData(string sName, string sType, ref ErrorCode err, string sProperities = "1")
         {
             graph.AddNode(sName, sType, ref err, sProperities);
+        }
+
+        //插入数据节点2
+        public void AddNodeData(Node oriNode, ref ErrorCode err)
+        {
+            graph.AddNode(oriNode, ref err);
         }
         //插入关系连边
         public void AddEdgeData(string sStartName, string sStartType,
@@ -151,5 +169,13 @@ namespace GraphDB
             return graph.GetNodesByNameAndType(sName, sType);
         }
         
+        //启动环形布局
+        public void StartCicro()
+        {
+            //初始化所有布局点
+            circo.LayoutInit(graph.NodeNum);
+            //进入退火循环
+        }
+
     }
 }

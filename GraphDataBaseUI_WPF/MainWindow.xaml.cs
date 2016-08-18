@@ -19,6 +19,10 @@ using Microsoft.Win32;
 //&amp; & 和 
 //&apos; ' 单引号 
 //&quot; " 双引号 
+//(&#x0020;)  空格 
+//(&#x0009;) Tab 
+//(&#x000D;) 回车 
+//(&#x000A;) 换行 
 
 namespace GraphDataBaseUI_WPF
 {
@@ -371,7 +375,7 @@ namespace GraphDataBaseUI_WPF
         }
         #endregion
 
-
+        private GraphDataBase SubGraph;
         private Brush drawingBrush = Brushes.AliceBlue;
         private Brush selectedDrawingBrush = Brushes.LightGoldenrodYellow;
         private Pen drawingPen = new Pen(Brushes.SteelBlue, 3);
@@ -380,7 +384,6 @@ namespace GraphDataBaseUI_WPF
         private void drawingSurface_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Point pointClicked = e.GetPosition(drawingSurface);
-
             
             DrawingVisual visual = new DrawingVisual();
             DrawEllipse(visual, pointClicked, false);
@@ -395,7 +398,69 @@ namespace GraphDataBaseUI_WPF
                 Brush brush = drawingBrush;
                 if (isSelected) brush = selectedDrawingBrush;
                 dc.DrawEllipse(brush, drawingPen, center, 20, 20);
+                FormattedText text = new FormattedText("Dainter", 
+                                                                                  System.Globalization.CultureInfo.CurrentCulture, 
+                                                                                  System.Windows.FlowDirection.LeftToRight, 
+                                                                                  new Typeface("Times New Roman"),
+                                                                                  12,
+                                                                                  Brushes.Black
+                                                                                  );
+                int Height = Convert.ToInt32(text.Height);
+                int Width = Convert.ToInt32(text.Width);
+                dc.DrawText(text, new Point(center.X-Width/2, center.Y - Height/2));
+                
+                //dc.DrawLine(drawingPen, new Point(100, 100), new Point(300, 300));
+                //dc.DrawText(text, new Point(200,200));
             }
+        }
+
+        private void NodeListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ErrorCode err = ErrorCode.NoError;
+            Node curSelNode;
+            string strDrawNodes;
+            List<Node> DrawNodes;
+            List<Node> NeibourNodes;
+            
+            curSelNode = gdb.GetNodeByIndex(NodeListBox.SelectedIndex);
+            if (curSelNode == null)
+            {
+                return;
+            }
+            DrawNodes = new List<Node>();
+            NeibourNodes = new List<Node>();
+            DrawNodes.Add(curSelNode);
+            SubGraph = new GraphDataBase(curSelNode.OutBound.Count, 30);
+            SubGraph.AddNodeData(curSelNode, ref err);
+            strDrawNodes = curSelNode.Number + "-" + curSelNode.Name + "\n";
+            foreach (Edge edge in curSelNode.OutBound)
+            {
+                NeibourNodes.Add(edge.End);
+                DrawNodes.Add(edge.End);
+                SubGraph.AddNodeData(edge.End, ref err);
+                SubGraph.AddEdgeData(curSelNode.Name, curSelNode.Type, edge.End.Name, edge.End.Type, edge.Type, ref err, edge.Value);
+                strDrawNodes +=edge.Type+ ":"+ edge.End.Number + "-" + edge.End.Name + "\n";
+            }
+            foreach (Node node in NeibourNodes)
+            {
+                foreach (Edge edge in node.InBound)
+                {
+                    if (DrawNodes.IndexOf(edge.Start) < 0)
+                    {
+                        DrawNodes.Add(edge.Start);
+                        SubGraph.AddNodeData(edge.Start, ref err);
+                        //strDrawNodes += "被" + edge.Type + ":" + edge.Start.Number + "-" + edge.Start.Name + "\n";
+                    }
+                    if ((edge.Start.Name != curSelNode.Name || edge.Start.Type != curSelNode.Type)
+                        && (NeibourNodes.IndexOf(edge.Start) < 0))
+                    {
+                        SubGraph.AddEdgeData(edge.Start.Name, edge.Start.Type, node.Name, node.Type, edge.Type, ref err, edge.Value);
+                        strDrawNodes += "被" + edge.Type + ":" + edge.Start.Number + "-" + edge.Start.Name + "\n";
+                    }
+                }
+            }
+            ResultBox.Text = strDrawNodes;
+            SubGraph.StartCicro();
         }
 
     }

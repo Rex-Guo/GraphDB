@@ -259,6 +259,10 @@ namespace GraphDB.Core
         //查询函数，返回指定索引处的节点
         public Node GetNodeByIndex(int index)
         {
+            if (index >= this.NodeNum)
+            {
+                return null;
+            }
             return NodeList.ElementAt(index);
         }
 
@@ -320,6 +324,29 @@ namespace GraphDB.Core
             }
             //构造新的节点
             newNode = new Node(sName, sType, sProperities);
+            if (newNode == null)
+            {
+                err = ErrorCode.CreateNodeFailed;
+                return;
+            }
+            AddNode(newNode);
+            err = ErrorCode.NoError;
+            return;
+        }
+
+        //加入节点（接口）
+        public void AddNode(Node oriNode, ref ErrorCode err)
+        {
+            Node newNode = null;
+
+            //检查节点是否已经存在“名称+类型一致”
+            if (GetNodesByNameAndType(oriNode.Name, oriNode.Type) != null)
+            {
+                err = ErrorCode.NodeExists;
+                return;
+            }
+            //构造新的节点
+            newNode = new Node(oriNode);
             if (newNode == null)
             {
                 err = ErrorCode.CreateNodeFailed;

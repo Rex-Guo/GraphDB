@@ -102,6 +102,22 @@ namespace GraphDB.Core
             }
             intMaxNodeNum++;
         }
+
+        public Node(Node oriNode)
+        {
+            this.intNodeNum = intMaxNodeNum;
+            this.nodeName = string.Copy(oriNode.Name);
+            this.nodeType = string.Copy(oriNode.Type);
+            this.intSaveIndex = this.intNodeNum;
+            Attribute = new List<NodeProperty>();
+            OutLink = new List<Edge>();
+            InLink = new List<Edge>();
+            foreach (NodeProperty np in oriNode.Attribute)
+            {
+                Attribute.Add(new NodeProperty(string.Copy(np.Key), string.Copy(np.Value)));
+            }
+            intMaxNodeNum++;
+        }
         //xml¹¹Ôìº¯Êý
         public Node(XmlElement xNode)
         {

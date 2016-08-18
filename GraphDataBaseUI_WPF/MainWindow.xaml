@@ -143,7 +143,7 @@
         </StatusBar>
         <DockPanel MinWidth="200" Background="{Binding ElementName=MainRibbon, Path=Background}" Grid.Row="1">
             <Label DockPanel.Dock="Top">Node List:</Label>
-            <ListBox Name="NodeListBox" Margin="3,3,3,3">
+            <ListBox Name="NodeListBox" Margin="3,3,3,3" SelectionChanged="NodeListBox_SelectionChanged">
                 
             </ListBox>
         </DockPanel>
@@ -156,7 +156,7 @@
                 </Grid.RowDefinitions>
                 <GroupBox Header="Command Line:">
                     <TextBox Name="CommandBox" TextWrapping="Wrap" AcceptsReturn="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                             Text="START node('*-国家') MATCH (Kingdom)-[:统治]-&gt;(District)&lt;-[:连通 5..5]-(Neibhour) WHERE * RETURN Kingdom.Name, District.*">
+                             Text="START node('*-君主') &#x000A;MATCH (King)-[:统治]-&gt;(Kingdom)-[:占有 4..10]-&gt;(District) &#x000A;WHERE * &#x000A;RETURN King.*, Kingdom.*, District.*">
                     </TextBox>
                 </GroupBox>
                 <Button Name="ExecuteButton" Height="30" Width="100" Grid.Row="1" HorizontalAlignment="Right" Margin="3,3,5,3" Click="ExecuteButton_Click">Execute</Button>
@@ -166,8 +166,11 @@
             </Grid>
         </Border>
         <Border Grid.Row="1" Grid.Column="1" Margin="3" BorderBrush="SteelBlue" BorderThickness="1">
-            <local:DrawingCanvas x:Name="drawingSurface" Background="White" ClipToBounds="True" MouseLeftButtonDown="drawingSurface_MouseLeftButtonDown">
-            </local:DrawingCanvas>
+            <ScrollViewer Name="MainScroll" CanContentScroll="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+            <local:DrawingCanvas Height="400" Width="600" x:Name="drawingSurface" Background="White" ClipToBounds="True" MouseLeftButtonDown="drawingSurface_MouseLeftButtonDown">
+                    
+                </local:DrawingCanvas>
+            </ScrollViewer>
         </Border>
         <GridSplitter HorizontalAlignment="Center" Grid.Column="2" Grid.Row="1" Width="3"></GridSplitter>
     </Grid>
