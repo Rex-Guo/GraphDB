@@ -523,6 +523,19 @@ namespace GraphDB.Core
             return strResult + "\n";
         }
 
+        public string DataOutput()
+        {
+            string strResult = "";
+
+            strResult +="Name:" + this.Name + "\n";
+            strResult +="Type:" + this.Type ;
+            foreach (NodeProperty sProperty in this.Attribute)
+            {
+                strResult +="\n" + sProperty.Key + ":" + sProperty.Value;
+            }
+            
+            return strResult;
+        }
 
         //≤È’“¡¨±ﬂ
         public Edge GetEdge(string sType, string opt)

@@ -55,7 +55,31 @@ namespace GraphDB
                 return graph.Nodes;
             }
         }
-        
+        //返回画布宽度
+        public int Width
+        {
+            get
+            {
+                if (circo == null)
+                {
+                    return 0;
+                }
+                return circo.Width;
+            }
+        }
+        //返回画布高度
+        public int Height
+        {
+            get
+            {
+                if (circo == null)
+                {
+                    return 0;
+                }
+                return circo.Height;
+            }
+        }
+
         //函数
         public GraphDataBase()
         {
@@ -173,8 +197,49 @@ namespace GraphDB
         public void StartCicro()
         {
             //初始化所有布局点
-            circo.LayoutInit(graph.NodeNum);
+            circo.LayoutInit(graph);
             //进入退火循环
+            circo.Float(graph);
+        }
+
+        public List<NodeDrawing> GetLayoutNodePoints()
+        {
+            List<NodeDrawing> nodeDrawing;
+            int index;
+
+            if(this.circo == null)
+            {
+                return null;
+            }
+            nodeDrawing = new List<NodeDrawing>();
+            index = 0;
+            foreach (Node node in graph.Nodes)
+            {
+                nodeDrawing.Add(new NodeDrawing(node.Name, circo.NodePoints[index]));
+                index++;
+            }
+
+            return nodeDrawing;
+        }
+
+        public List<EdgeDrawing> GetLayoutEdgePoints()
+        {
+            List<EdgeDrawing> edgeDrawing;
+            int intStart, intEnd;
+
+            if (this.circo == null)
+            {
+                return null;
+            }
+            edgeDrawing = new List<EdgeDrawing>();
+            foreach (Edge edge in graph.Edges)
+            {
+                intStart = graph.GetIndexByNameAndType(edge.Start.Name, edge.Start.Type);
+                intEnd = graph.GetIndexByNameAndType(edge.End.Name, edge.End.Type);
+                edgeDrawing.Add(new EdgeDrawing(circo.NodePoints[intStart], circo.NodePoints[intEnd],edge.Type));
+            }
+
+            return edgeDrawing;
         }
 
     }

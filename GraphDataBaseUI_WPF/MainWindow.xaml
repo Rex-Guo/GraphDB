@@ -118,14 +118,6 @@
                     <r:RibbonButton Label="Print Preview" Command="{StaticResource PrintPreviewCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintPreview.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintPreview_small.png" ToolTipTitle="Print Preview" ToolTipDescription="{StaticResource PrintPreviewTip}"></r:RibbonButton>
                     <r:RibbonButton Label="Print" Command="{StaticResource PrintCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FilePrint.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FilePrint_small.png" ToolTipTitle="Print" ToolTipDescription="{StaticResource PrintTip}"></r:RibbonButton>
                 </r:RibbonGroup>
-                <r:RibbonGroup Header="Node Filter">
-                    <r:RibbonSplitButton Label="Node Fliter" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AutoFilterClassic.png">
-                        
-                    </r:RibbonSplitButton>
-                    <r:RibbonSplitButton Label="Edge Fliter" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AutoFilterClassic.png">
-
-                    </r:RibbonSplitButton>
-                </r:RibbonGroup>
             </r:RibbonTab>
             <r:RibbonTab Name = "ribQueryTab" Header="Query">
             </r:RibbonTab>
@@ -166,10 +158,11 @@
             </Grid>
         </Border>
         <Border Grid.Row="1" Grid.Column="1" Margin="3" BorderBrush="SteelBlue" BorderThickness="1">
-            <ScrollViewer Name="MainScroll" CanContentScroll="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-            <local:DrawingCanvas Height="400" Width="600" x:Name="drawingSurface" Background="White" ClipToBounds="True" MouseLeftButtonDown="drawingSurface_MouseLeftButtonDown">
-                    
-                </local:DrawingCanvas>
+            <ScrollViewer Name="MainScroll" CanContentScroll="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ScrollChanged="MainScroll_ScrollChanged">
+                <Canvas x:Name="BackCanvas" Width="{Binding ElementName=drawingSurface, Path=Width}" Height="{Binding Path=Height, ElementName=drawingSurface}">
+                    <local:DrawingCanvas x:Name="drawingSurface" ClipToBounds="True" MouseMove="drawingSurface_MouseMove" ToolTipService.InitialShowDelay="1">
+                    </local:DrawingCanvas>
+                </Canvas>
             </ScrollViewer>
         </Border>
         <GridSplitter HorizontalAlignment="Center" Grid.Column="2" Grid.Row="1" Width="3"></GridSplitter>

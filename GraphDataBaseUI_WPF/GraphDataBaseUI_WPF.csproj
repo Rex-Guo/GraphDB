@@ -78,9 +78,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Drawing\Arrow.cs" />
     <Compile Include="Drawing\DrawingCanvas.cs" />
-    <Compile Include="Drawing\EdgeDrawing.cs" />
-    <Compile Include="Drawing\GraphDrawing.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -91,7 +90,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Drawing\NodeDrawing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

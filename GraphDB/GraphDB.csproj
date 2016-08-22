@@ -64,6 +64,8 @@
     <Compile Include="IO\IfIOStrategy.cs" />
     <Compile Include="IO\XMLStrategy.cs" />
     <Compile Include="Layout\CircleLayout.cs" />
+    <Compile Include="Layout\EdgeDrawing.cs" />
+    <Compile Include="Layout\NodeDrawing.cs" />
     <Compile Include="Parser\CypherParser.cs" />
     <Compile Include="Parser\FilterRule.cs" />
     <Compile Include="Parser\MatchRule.cs" />

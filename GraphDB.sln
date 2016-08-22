@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDB", "GraphDB\GraphDB.csproj", "{FE3FF803-3314-4205-B03C-3F31C187BCD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDataBaseUI", "GraphDataBaseUI\GraphDataBaseUI.csproj", "{BC6A2A85-382F-4155-A3D9-638CF8A7327D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDataBaseUI_WPF", "GraphDataBaseUI_WPF\GraphDataBaseUI_WPF.csproj", "{81540C27-BDDE-4A79-8CC1-11FFA778D901}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPF_3D", "WPF_3D\WPF_3D.csproj", "{8A229527-2E4D-414A-B310-DDBD6F336223}"
@@ -31,16 +29,6 @@ Global
 		{FE3FF803-3314-4205-B03C-3F31C187BCD6}.Release|Mixed Platforms.Build.0 = Release|x86
 		{FE3FF803-3314-4205-B03C-3F31C187BCD6}.Release|x86.ActiveCfg = Release|x86
 		{FE3FF803-3314-4205-B03C-3F31C187BCD6}.Release|x86.Build.0 = Release|x86
-		{BC6A2A85-382F-4155-A3D9-638CF8A7327D}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{BC6A2A85-382F-4155-A3D9-638CF8A7327D}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{BC6A2A85-382F-4155-A3D9-638CF8A7327D}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{BC6A2A85-382F-4155-A3D9-638CF8A7327D}.Debug|x86.ActiveCfg = Debug|x86
-		{BC6A2A85-382F-4155-A3D9-638CF8A7327D}.Debug|x86.Build.0 = Debug|x86
-		{BC6A2A85-382F-4155-A3D9-638CF8A7327D}.Release|Any CPU.ActiveCfg = Release|x86
-		{BC6A2A85-382F-4155-A3D9-638CF8A7327D}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{BC6A2A85-382F-4155-A3D9-638CF8A7327D}.Release|Mixed Platforms.Build.0 = Release|x86
-		{BC6A2A85-382F-4155-A3D9-638CF8A7327D}.Release|x86.ActiveCfg = Release|x86
-		{BC6A2A85-382F-4155-A3D9-638CF8A7327D}.Release|x86.Build.0 = Release|x86
 		{81540C27-BDDE-4A79-8CC1-11FFA778D901}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{81540C27-BDDE-4A79-8CC1-11FFA778D901}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{81540C27-BDDE-4A79-8CC1-11FFA778D901}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -53,7 +41,6 @@ Global
 		{81540C27-BDDE-4A79-8CC1-11FFA778D901}.Release|x86.Build.0 = Release|x86
 		{8A229527-2E4D-414A-B310-DDBD6F336223}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{8A229527-2E4D-414A-B310-DDBD6F336223}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{8A229527-2E4D-414A-B310-DDBD6F336223}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{8A229527-2E4D-414A-B310-DDBD6F336223}.Debug|x86.ActiveCfg = Debug|x86
 		{8A229527-2E4D-414A-B310-DDBD6F336223}.Debug|x86.Build.0 = Debug|x86
 		{8A229527-2E4D-414A-B310-DDBD6F336223}.Release|Any CPU.ActiveCfg = Release|x86
@@ -63,7 +50,6 @@ Global
 		{8A229527-2E4D-414A-B310-DDBD6F336223}.Release|x86.Build.0 = Release|x86
 		{9A2C2519-24DA-41D9-BC8B-D65D56F7A38E}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{9A2C2519-24DA-41D9-BC8B-D65D56F7A38E}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{9A2C2519-24DA-41D9-BC8B-D65D56F7A38E}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{9A2C2519-24DA-41D9-BC8B-D65D56F7A38E}.Debug|x86.ActiveCfg = Debug|x86
 		{9A2C2519-24DA-41D9-BC8B-D65D56F7A38E}.Debug|x86.Build.0 = Debug|x86
 		{9A2C2519-24DA-41D9-BC8B-D65D56F7A38E}.Release|Any CPU.ActiveCfg = Release|x86
