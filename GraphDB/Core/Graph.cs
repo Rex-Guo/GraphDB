@@ -281,13 +281,13 @@ namespace GraphDB.Core
         }
 
         //查询函数，返回指定名称和类型的节点的索引
-        public int GetIndexByNameAndType(string sName, string type)
+        public int GetIndexByNameAndType(string sName, string sType)
         {
             int index = 0;
             //遍历节点列表
             foreach (Node curNode in NodeList)
             {
-                if (curNode.Name == sName && curNode.Type == type)
+                if (curNode.Name == sName && curNode.Type == sType)
                 {//将符合Name和type要求的节点返回
                     return index;
                 }

@@ -192,10 +192,20 @@ namespace GraphDB
         {
             return graph.GetNodesByNameAndType(sName, sType);
         }
-        
+
+        //查询函数，返回指定名称和类型的节点的索引
+        public int GetIndexByNameAndType(string sName, string sType)
+        {
+            return graph.GetIndexByNameAndType(sName, sType);
+        }
+
         //启动环形布局
         public void StartCicro()
         {
+            if (this.circo == null)
+            {
+                return;
+            }
             //初始化所有布局点
             circo.LayoutInit(graph);
             //进入退火循环

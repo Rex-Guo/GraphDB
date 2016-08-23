@@ -160,7 +160,7 @@
         <Border Grid.Row="1" Grid.Column="1" Margin="3" BorderBrush="SteelBlue" BorderThickness="1">
             <ScrollViewer Name="MainScroll" CanContentScroll="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ScrollChanged="MainScroll_ScrollChanged">
                 <Canvas x:Name="BackCanvas" Width="{Binding ElementName=drawingSurface, Path=Width}" Height="{Binding Path=Height, ElementName=drawingSurface}">
-                    <local:DrawingCanvas x:Name="drawingSurface" ClipToBounds="True" MouseMove="drawingSurface_MouseMove" ToolTipService.InitialShowDelay="1">
+                    <local:DrawingCanvas x:Name="drawingSurface" ClipToBounds="True" MouseMove="drawingSurface_MouseMove" ToolTipService.InitialShowDelay="1" MouseLeftButtonDown="drawingSurface_MouseLeftButtonDown">
                     </local:DrawingCanvas>
                 </Canvas>
             </ScrollViewer>

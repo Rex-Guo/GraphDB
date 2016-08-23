@@ -638,5 +638,27 @@ namespace GraphDataBaseUI_WPF
 
             return NodeTip;
         }
+
+        private void drawingSurface_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int visualindex = GetVisualIndex(drawingSurface.GetVisual(e.GetPosition(drawingSurface)));
+            int intNode;
+            string strName, strType;
+            if (visualindex == -1 || visualindex >= SubGraph.NodeNum)
+            {
+                return;
+            }
+            else
+            {
+                strName = SubGraph.Nodes[visualindex].Name;
+                strType= SubGraph.Nodes[visualindex].Type;
+                intNode = gdb.GetIndexByNameAndType(strName, strType);
+                if(intNode == -1)
+                {
+                    return;
+                }
+                NodeListBox.SelectedIndex = intNode;
+            }
+        }
     }
 }
