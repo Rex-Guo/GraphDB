@@ -167,4 +167,12 @@
         </Border>
         <GridSplitter HorizontalAlignment="Center" Grid.Column="2" Grid.Row="1" Width="3"></GridSplitter>
     </Grid>
+    <!--<r:RibbonWindow.TaskbarItemInfo>
+        <TaskbarItemInfo x:Name="RibbonTaskBar" ThumbnailClipMargin="30,30,30,30" ProgressValue="0.5" ProgressState="Indeterminate" Overlay="/GraphDataBaseUI_WPF;component/images/CustomActionsMenu.png">
+            <TaskbarItemInfo.ThumbButtonInfos>
+                <ThumbButtonInfo ImageSource="/GraphDataBaseUI_WPF;component/images/EditUndo_16x16.png" Description="Undo"></ThumbButtonInfo>
+                <ThumbButtonInfo ImageSource="/GraphDataBaseUI_WPF;component/images/EditRedo_16x16.png" Description="Redo"></ThumbButtonInfo>
+            </TaskbarItemInfo.ThumbButtonInfos>
+        </TaskbarItemInfo>
+    </r:RibbonWindow.TaskbarItemInfo>-->
 </r:RibbonWindow>

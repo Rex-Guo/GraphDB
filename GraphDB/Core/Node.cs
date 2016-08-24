@@ -476,7 +476,7 @@ namespace GraphDB.Core
                 {
                     if (sProperty.Key != label)
                     {
-                        break;
+                        continue;
                     }
                     strResult += sProperty.Key + "\t";
                 }
@@ -515,7 +515,7 @@ namespace GraphDB.Core
                 {
                     if (sProperty.Key != label)
                     {
-                        break;
+                        continue;
                     }
                     strResult += sProperty.Value + "\t";
                 }
