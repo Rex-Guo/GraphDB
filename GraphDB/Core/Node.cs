@@ -46,6 +46,13 @@ namespace GraphDB.Core
                 return nodeType;
             }
         }
+        public List<NodeProperty> Properties
+        {
+            get
+            {
+                return Attribute;
+            }
+        }
         public int InDegree
         {
             get
@@ -590,7 +597,14 @@ namespace GraphDB.Core
 	        {
 		        if(mRule[level].MatchType(edge.Type) == true)
 		        {
-                    ChildTN = edge.End.Search(mRule, level+1);
+                    if (mRule[level].Direction == "IN")
+                    {
+                        ChildTN = edge.Start.Search(mRule, level + 1);
+                    }
+                    else
+                    {
+                        ChildTN = edge.End.Search(mRule, level + 1);
+                    }
 			        if(ChildTN != null)
 			        {
                         CurrentTN.Nodes.Add(ChildTN);

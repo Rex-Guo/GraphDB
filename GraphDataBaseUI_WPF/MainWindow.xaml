@@ -148,7 +148,7 @@
                 </Grid.RowDefinitions>
                 <GroupBox Header="Command Line:">
                     <TextBox Name="CommandBox" TextWrapping="Wrap" AcceptsReturn="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                             Text="START node('*-君主') &#x000A;MATCH (King)-[:统治]-&gt;(Kingdom)-[:占有 4..10]-&gt;(District) &#x000A;WHERE * &#x000A;RETURN King.*, Kingdom.*, District.*">
+                             Text="START node('嬴稷-君主') &#x000A;MATCH (King)-[:统治]-&gt;(Kingdom)-[:占有]-&gt;(District)&lt;-[:连通]-(Enemyland)&lt;-[:占有]-(Enemy) &#x000A;WHERE Enemy.Name != 秦国 &#x000A;RETURN King.*, Kingdom.*, District.*, Enemy.*">
                     </TextBox>
                 </GroupBox>
                 <Button Name="ExecuteButton" Height="30" Width="100" Grid.Row="1" HorizontalAlignment="Right" Margin="3,3,5,3" Click="ExecuteButton_Click">Execute</Button>

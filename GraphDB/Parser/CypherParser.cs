@@ -20,6 +20,7 @@ namespace GraphDB.Parser
     //Cypher语句解析器类
     public class CypherParser
     {
+        const bool bolDistinct = true;
         string strCypher;
         CypherOperation op;
         List<MidResult> midRes;
@@ -28,7 +29,7 @@ namespace GraphDB.Parser
         List<FilterRule> fRule;
         List<Node> Starter;
         List<TreeNode> ResultTree;
-
+        
         //构造函数
         public string QueryExecute(ref Graph graph, string sCypher, ref ErrorCode err)
         {
@@ -46,8 +47,8 @@ namespace GraphDB.Parser
             }
             //根据matchRule查找，将返回数据存入记录树
             Query();
-            //过滤记录树，依据FilterRule
-
+            //过滤结果树
+            FiltrateResult(graph);
             //返回结果。依据midResult中的标记
             strResult = ResultOutput(graph);
             return strResult;
@@ -247,7 +248,7 @@ namespace GraphDB.Parser
         //结果过滤条件初始化
         void FilterInit(string strSub)
         {
-            const string strConditionPattern = @"[\w]+\.[\w]+(==|!=|>=|>|<=|<)[\w]+";
+            const string strConditionPattern = @"[\w]+\.[\w]+[\s]*(==|!=|>=|>|<=|<)[\s]*[\w]+";
             MatchCollection matches;
             Regex regObj;
             FilterRule curRule;
@@ -368,6 +369,32 @@ namespace GraphDB.Parser
             }
         }
 
+        //过滤函数
+        void FiltrateResult(Graph graph)
+        {
+            List<Node> resList;
+            foreach (FilterRule fr in fRule)
+            {
+                foreach (MidResult mr in midRes)
+                {
+                    if (mr.Name != fr.Name)
+                    {
+                        continue;
+                    }
+                    resList = GetTreeNode(graph, mr.Level);
+                    foreach (Node curNode in resList)
+                    {
+                        if (fr.Filtrate(curNode) == true)
+                        {
+                            continue;
+                        }
+                        RemoveTreeNode(curNode.Number.ToString(), mr.Level);
+                    }
+                }
+            }
+            
+        }
+
         //结果输出函数
         string ResultOutput(Graph graph)
         {
@@ -378,7 +405,7 @@ namespace GraphDB.Parser
                 {
                     continue;
                 }
-                strResult += DataFormat(GetTreeNode(graph, mr.Level), mr);
+                strResult += DataFormat(GetTreeNode(graph, mr.Level, bolDistinct), mr);
             }
             return strResult;
         }
@@ -418,7 +445,7 @@ namespace GraphDB.Parser
         }
 
         //从图中获取结果树中指定的节点
-        List<Node> GetTreeNode(Graph graph, int iLevel)
+        List<Node> GetTreeNode(Graph graph, int iLevel, bool bDistinct = false)
         {
             List<Node> resList = new List<Node>();
             List<int> IndexList = new List<int>();
@@ -427,11 +454,29 @@ namespace GraphDB.Parser
             {
                 FindNodeByLevel(ctn, iLevel, ref IndexList);
             }
+            if (bDistinct == true)
+            {
+                IndexList = ClearRepeat(IndexList);
+            }
             foreach (int iNum in IndexList)
             {
                 resList.Add(graph.GetNodeByIndex(iNum));
             }
             return resList;
+        }
+
+        List<int> ClearRepeat(List<int> IndexList)
+        {
+            List<int> NewList = new List<int>();
+
+            foreach (int iNum in IndexList)
+            {
+                if (NewList.IndexOf(iNum) < 0)
+                {
+                    NewList.Add(iNum);
+                }
+            }
+            return NewList;
         }
 
         //获取结果树中某一层的所有节点
@@ -448,5 +493,58 @@ namespace GraphDB.Parser
             }
             return;
         }
+
+        //移除树节点
+        void RemoveTreeNode(string strText, int iLevel)
+        {
+            TreeNode tarNode = null, parNode;
+            foreach (TreeNode ctn in ResultTree)
+            {
+                tarNode = FindNodeByText(ctn, strText, 0, iLevel);
+                if (tarNode != null)
+                {
+                    break;
+                }
+            }
+            if (tarNode == null)
+            {
+                return;
+            }
+            do
+            {
+                if (tarNode.Parent == null)
+                {
+                    ResultTree.Remove(tarNode);
+                    return;
+                }
+                parNode = tarNode.Parent;
+                parNode.Nodes.Remove(tarNode);
+                tarNode = parNode;
+            } while (parNode.Nodes.Count == 0);
+            return;
+        }
+
+        //根据编号查找树中节点
+        TreeNode FindNodeByText(TreeNode ctn, string strText, int curLevel, int iLevel)
+        {
+            TreeNode tarNode;
+            if (curLevel == iLevel)
+            {
+                if (ctn.Text == strText)
+                {
+                    return ctn;
+                }
+            }
+            foreach (TreeNode chtn in ctn.Nodes)
+            {
+                tarNode = FindNodeByText(chtn, strText, curLevel+1, iLevel);
+                if (tarNode != null)
+                {
+                    return tarNode;
+                }
+            }
+            return null;
+        }
+
     }
 }

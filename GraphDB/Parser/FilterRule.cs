@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using GraphDB.Core;
 
 namespace GraphDB.Parser
 {
@@ -10,8 +11,40 @@ namespace GraphDB.Parser
     {
         string strName;
 	    string strProperty;
-	    string op;
+	    string strOp;
 	    string strValue;
+
+        public string Name
+        {
+            get
+            {
+                return strName;
+            }
+        }
+
+        public string Property
+        {
+            get
+            {
+                return strProperty;
+            }
+        }
+
+        public string Op
+        {
+            get
+            {
+                return strOp;
+            }
+        }
+        
+        public string Value
+        {
+            get
+            {
+                return strValue;
+            }
+        }
 
         public FilterRule(string strSub, ref ErrorCode err)
         {
@@ -38,9 +71,120 @@ namespace GraphDB.Parser
                 err = ErrorCode.WhereSegInvalid;
                 return;
             }
-            op = matches[0].Value.Trim();
+            strOp = matches[0].Value.Trim();
             err = ErrorCode.NoError;
             return;
         }
+
+        public bool Filtrate(Node curNode)
+        {
+            double dubRuleValue, dubNpValue;
+
+            if (strProperty == "Name")
+            {
+                switch (strOp)
+                {
+                    case "==":
+                        if (strValue == curNode.Name)
+                        {
+                            return true;
+                        }
+                        break;
+                    case "!=":
+                        if (strValue != curNode.Name)
+                        {
+                            return true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                return false;
+            }
+            if (strProperty == "Type")
+            {
+                switch (strOp)
+                {
+                    case "==":
+                        if (strValue == curNode.Type)
+                        {
+                            return true;
+                        }
+                        break;
+                    case "!=":
+                        if (strValue != curNode.Type)
+                        {
+                            return true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                return false;
+            }
+            foreach (NodeProperty np in curNode.Properties)
+            {
+                if (strProperty != np.Key)
+                {
+                    continue;
+                }
+                if (strOp == "==" || strOp == "!=")
+                {
+                    switch (strOp)
+                    {
+                        case "==":
+                            if (strValue == np.Value)
+                            {
+                                return true;
+                            }
+                            break;
+                        case "!=":
+                            if (strValue != np.Value)
+                            {
+                                return true;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    continue;
+                }
+                if ((double.TryParse(strValue, out dubRuleValue) == false) || (double.TryParse(np.Value, out dubNpValue) == false))
+                {
+                    return false;
+                }
+                switch (strOp)
+                {
+                    case ">=":
+                        if (dubNpValue >= dubRuleValue)
+                        {
+                            return true;
+                        }
+                        break;
+                    case ">":
+                        if (dubNpValue > dubRuleValue)
+                        {
+                            return true;
+                        }
+                        break;
+                    case "<=":
+                        if (dubNpValue <= dubRuleValue)
+                        {
+                            return true;
+                        }
+                        break;
+                    case "<":
+                        if (dubNpValue < dubRuleValue)
+                        {
+                            return true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return false;
+        }
+
     }
 }
