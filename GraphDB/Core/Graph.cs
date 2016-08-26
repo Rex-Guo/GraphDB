@@ -50,6 +50,7 @@ namespace GraphDB.Core
         {
             NodeList = new List<Node>();
             EdgeList = new List<Edge>();
+            ResetGraphID();
         }
         //将xml文件转化为网络（接口）
         public Graph(XmlDocument doc, ref ErrorCode err)
@@ -254,6 +255,13 @@ namespace GraphDB.Core
             //清空入参列表本身内容
             UnusedList.Clear();
             return true;
+        }
+
+        //重置节点和连边计数
+        public void ResetGraphID()
+        {
+            Node.ResetIndex();
+            Edge.ResetIndex();
         }
 
         //查询函数，返回指定索引处的节点
