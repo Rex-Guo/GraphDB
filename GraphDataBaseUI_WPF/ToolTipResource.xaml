@@ -9,6 +9,14 @@
     <sys:String x:Key="QuickPrintTip">Print current graph database in XML format directly without configure.</sys:String>
     <sys:String x:Key="PrintPreviewTip">Preview the document before print.</sys:String>
     <sys:String x:Key="PrintTip">Print current graph database in XML format.</sys:String>
+    <sys:String x:Key="OptionTip">Edit the configuration.</sys:String>
     <sys:String x:Key="ExitTip">Exit this program.</sys:String>
-    <sys:String x:Key="ExecuteTip">Execute the command line in the graph database. The result will return in the text box below</sys:String>
+    <sys:String x:Key="ExecuteTip">Execute the command line in the graph database. The result will return in the text box below.</sys:String>
+    <sys:String x:Key="ClearCommandTip">Clear the content of the Command Box.</sys:String>
+    <sys:String x:Key="ClearResultTip">Clear the content of the Result Box</sys:String>
+
+    <sys:String x:Key="DefaultStyleTip">默认节点样式.</sys:String>
+    <sys:String x:Key="PurpleStyleTip">“奇迹的不是那片星域如此辽阔，而是人类竟然成功测量了它。”-阿纳托尔·法郎士（法国小说家）</sys:String>
+    <sys:String x:Key="BlueStyleTip">“如果我的心像底比斯有一百座城门，我一定让快乐成打进来。”-苏格拉底</sys:String>
+    <sys:String x:Key="PinkStyleTip">“春樱秋枫留不住，人去关卡亦成空。”-岛津义弘辞世之章（日本战国萨摩岛津家当主）</sys:String>
 </ResourceDictionary>

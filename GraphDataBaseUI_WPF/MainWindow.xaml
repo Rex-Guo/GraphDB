@@ -11,6 +11,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ToolTipResource.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="CommandResource.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="StyleResource.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush x:Key="PreussenBlue" Color="{Binding RelativeSource={RelativeSource Self}, Path=Color}"/>
         </ResourceDictionary>
@@ -25,6 +26,8 @@
         <CommandBinding x:Name="PrintCommand" Command="{StaticResource PrintCommand}" Executed="PrintCommand_Executed" CanExecute="PrintCommand_CanExecute"></CommandBinding>
         <CommandBinding x:Name="CloseCommand" Command="{StaticResource CloseCommand}" Executed="CloseCommand_Executed" CanExecute="CloseCommand_CanExecute"></CommandBinding>
         <CommandBinding x:Name="ExitCommand" Command="{StaticResource ExitCommand}" Executed="ExitCommand_Executed"></CommandBinding>
+        <CommandBinding x:Name="ClearCommand" Command="{StaticResource ClearComCommand}" Executed="ClearCommand_Executed" CanExecute="ClearCommand_CanExecute"></CommandBinding>
+        <CommandBinding x:Name="ClearResultCommand" Command="{StaticResource ClearResultCommand}" Executed="ClearResultCommand_Executed" CanExecute="ClearResultCommand_CanExecute"></CommandBinding>
     </r:RibbonWindow.CommandBindings>
     <Grid Name="MainLayout" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window, AncestorLevel=1}}">
         <Grid.RowDefinitions>
@@ -91,9 +94,17 @@
                     </r:RibbonApplicationMenuItem>
                     <r:RibbonApplicationMenuItem Header="Close Database" Command="{StaticResource CloseCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FileClose.png" ToolTipTitle="Close Database" ToolTipDescription="{StaticResource CloseDbTip}">
                     </r:RibbonApplicationMenuItem>
-                    <r:RibbonSeparator></r:RibbonSeparator>
-                    <r:RibbonApplicationMenuItem Header="Exit" Command="{StaticResource ExitCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/Exit.png" ToolTipTitle="Exit" ToolTipDescription="{StaticResource ExitTip}">
-                    </r:RibbonApplicationMenuItem>
+                    <r:RibbonApplicationMenu.FooterPaneContent>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <r:RibbonButton Grid.Column="1" Label="Option"  SmallImageSource="/GraphDataBaseUI_WPF;component/images/Option_16x16.png" ToolTipTitle="Option" ToolTipDescription="{StaticResource OptionTip}"/>
+                            <r:RibbonButton Grid.Column="2" Label="Exit" Command="{StaticResource ExitCommand}" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Exit_16x16.png" ToolTipTitle="Exit" ToolTipDescription="{StaticResource ExitTip}"/>
+                        </Grid>
+                    </r:RibbonApplicationMenu.FooterPaneContent>
                 </r:RibbonApplicationMenu>
             </r:Ribbon.ApplicationMenu>
             <r:Ribbon.QuickAccessToolBar>
@@ -117,6 +128,26 @@
                     <r:RibbonButton Label="Quick Print" Command="{StaticResource QuickPrintCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintQuick.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintQuick_small.png" ToolTipTitle="Quick Print" ToolTipDescription="{StaticResource QuickPrintTip}"></r:RibbonButton>
                     <r:RibbonButton Label="Print Preview" Command="{StaticResource PrintPreviewCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintPreview.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintPreview_small.png" ToolTipTitle="Print Preview" ToolTipDescription="{StaticResource PrintPreviewTip}"></r:RibbonButton>
                     <r:RibbonButton Label="Print" Command="{StaticResource PrintCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FilePrint.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FilePrint_small.png" ToolTipTitle="Print" ToolTipDescription="{StaticResource PrintTip}"></r:RibbonButton>
+                </r:RibbonGroup>
+                <r:RibbonGroup Header="Clear" GroupSizeDefinitions="{StaticResource RibbonLayout}">
+                    <r:RibbonSplitButton Label="Clear" Command="{StaticResource ClearComCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/ClearText.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/ClearText_16x16.png" CanAddToQuickAccessToolBarDirectly="False">
+                        <r:RibbonSplitButton.Items>
+                            <r:RibbonButton Label="Clear Command" Command="{StaticResource ClearComCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/ClearText.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/ClearText_16x16.png" ToolTipTitle="Clear Command" ToolTipDescription="{StaticResource ClearCommandTip}"></r:RibbonButton>
+                            <r:RibbonButton Label="Clear Result" Command="{StaticResource ClearResultCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/ClearText.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/ClearText_16x16.png" ToolTipTitle="Clear Result" ToolTipDescription="{StaticResource ClearResultTip}"></r:RibbonButton>
+                        </r:RibbonSplitButton.Items>
+                    </r:RibbonSplitButton>
+                </r:RibbonGroup>
+                <r:RibbonGroup Header="Styles" GroupSizeDefinitions="{StaticResource RibbonLayout}">
+                    <r:RibbonSplitButton Label="Node Style" LargeImageSource="/GraphDataBaseUI_WPF;component/images/NodeStyles.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/NodeStyles_16x16.png" CanAddToQuickAccessToolBarDirectly="False">
+                        <r:RibbonGallery x:Name="NodeStyleSelection" MaxColumnCount="1" ColumnsStretchToFill="True" SelectionChanged="NodeStyleSelection_SelectionChanged">
+                            <r:RibbonGalleryCategory>
+                                <r:RibbonGalleryItem Template="{StaticResource DefaultNodeTemplate}" ToolTipTitle="默认样式" ToolTipDescription="{StaticResource DefaultStyleTip}">节点</r:RibbonGalleryItem>
+                                <r:RibbonGalleryItem Template="{StaticResource PurpleNodeTemplate}" ToolTipTitle="深邃星空" ToolTipDescription="{StaticResource PurpleStyleTip}">节点</r:RibbonGalleryItem>
+                                <r:RibbonGalleryItem Template="{StaticResource BlueNodeTemplate}" ToolTipTitle="底比斯之水" ToolTipDescription="{StaticResource BlueStyleTip}">节点</r:RibbonGalleryItem>
+                                <r:RibbonGalleryItem Template="{StaticResource PinkNodeTemplate}" ToolTipTitle="千本樱" ToolTipDescription="{StaticResource PinkStyleTip}">节点</r:RibbonGalleryItem>
+                            </r:RibbonGalleryCategory>
+                        </r:RibbonGallery>
+                    </r:RibbonSplitButton>
                 </r:RibbonGroup>
             </r:RibbonTab>
             <r:RibbonTab Name = "ribQueryTab" Header="Query">

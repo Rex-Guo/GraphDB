@@ -15,6 +15,7 @@ using GraphDB;
 using GraphDB.Core;
 using GraphDB.Layout;
 using Microsoft.Win32;
+using Microsoft.Windows.Controls.Ribbon;
 
 //&lt; < 小于号 
 //&gt; > 大于号 
@@ -45,6 +46,7 @@ namespace GraphDataBaseUI_WPF
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
             ErrorCode err = ErrorCode.NoError;
+            ChangeStyle("默认样式");
             StatusUpdateTimer_Init();
             gdb = new GraphDataBase();
             gdb.OpenDataBase("1.xml", ref err);
@@ -86,19 +88,9 @@ namespace GraphDataBaseUI_WPF
             ClearArrows(drawingSurface);
             drawingSurface.ClearVisuals();
         }
-
-        private void ExecuteButton_Click(object sender, RoutedEventArgs e)
-        {
-            ErrorCode err = ErrorCode.NoError;
-            string strResult, strCommand;
-
-            //START node('*-国家') MATCH (Kingdom)-[:统治]->(District)<-[:连通 5..5]-(Neibhour) WHERE * RETURN Kingdom.Name, District.*
-            strCommand = CommandBox.Text;
-            strResult = gdb.DataQueryExecute(strCommand, ref err);//
-            ResultBox.Text = strResult;
-        }
         
         #region FileCommand
+        //新建命令执行函数
         private void NewCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             MessageBoxResult choice;
@@ -156,7 +148,7 @@ namespace GraphDataBaseUI_WPF
             StatusUpadteTimer.Start();
             isDbAvailable = true;
         }
-
+        //打开文件命令执行函数
         private void OpenCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             MessageBoxResult choice;
@@ -214,7 +206,7 @@ namespace GraphDataBaseUI_WPF
             StatusUpadteTimer.Start();
             isDbAvailable = true;
         }
-
+        //保存命令执行函数
         private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             ErrorCode err = ErrorCode.NoError;
@@ -230,12 +222,12 @@ namespace GraphDataBaseUI_WPF
             StatusLabel.Content = "Save Success";
             StatusUpadteTimer.Start();
         }
-
+        //保存文件
         private void SaveFile(ref ErrorCode err)
         {
             gdb.DataExport(ref err);
         }
-
+        //另存为命令执行函数
         private void SaveAsCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             SaveFileDialog savedialog;
@@ -268,22 +260,22 @@ namespace GraphDataBaseUI_WPF
             StatusLabel.Content = "Save As Success";
             StatusUpadteTimer.Start();
         }
-
+        //快速打印命令执行函数
         private void QuickPrintCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
 
         }
-
+        //打印预览命令执行函数
         private void PrintPreviewCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
 
         }
-
+        //打印命令执行函数
         private void PrintCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
 
         }
-
+        //关闭数据库执行函数
         private void CloseCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             MessageBoxResult choice;
@@ -314,7 +306,7 @@ namespace GraphDataBaseUI_WPF
                 AllReset();
             }
         }
-
+        //退出程序执行函数
         private void ExitCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             MessageBoxResult choice;
@@ -345,32 +337,32 @@ namespace GraphDataBaseUI_WPF
             
             this.Close();
         }
-
+        //保存命令使能
         private void SaveCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = isDbAvailable;
         }
-
+        //另存为命令使能
         private void SaveAsCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = isDbAvailable;
         }
-
+        //快速打印命令使能
         private void QuickPrintCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = isDbAvailable;
         }
-
+        //打印预览命令使能
         private void PrintPreviewCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = isDbAvailable;
         }
-
+        //打印命令使能
         private void PrintCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = isDbAvailable;
         }
-
+        //关闭数据库命令使能
         private void CloseCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = isDbAvailable;
@@ -380,8 +372,8 @@ namespace GraphDataBaseUI_WPF
         #region Drawing
         private GraphDataBase SubGraph;
         private Brush drawingBrush = Brushes.AliceBlue;
-        private Brush selectedDrawingBrush = Brushes.LightGoldenrodYellow;
         private Pen drawingPen = new Pen(Brushes.SteelBlue, 3);
+        private Brush TextBrush = Brushes.Black;
         private Pen LinePen = new Pen(Brushes.Gray, 2);
         private Pen TextPen = new Pen(Brushes.White, 1);
         private List<Visual> visuals = new List<Visual>();
@@ -389,28 +381,27 @@ namespace GraphDataBaseUI_WPF
         private int intNodeIndex = -1;
         private bool bolScrolltoCenter = false;
 
-        // Rendering the Ellipse.
-        private void DrawEllipse(DrawingVisual visual, string sName, Point center, bool isSelected)
+        // 渲染原型.
+        private void DrawEllipse(DrawingVisual visual, string sName, Point center)
         {
             using (DrawingContext dc = visual.RenderOpen())
             {
                 Brush brush = drawingBrush;
-                if (isSelected) brush = selectedDrawingBrush;
+
                 dc.DrawEllipse(brush, drawingPen, center, radius, radius);
                 FormattedText text = new FormattedText(sName, 
                                                         System.Globalization.CultureInfo.CurrentCulture, 
                                                         System.Windows.FlowDirection.LeftToRight, 
                                                         new Typeface("Times New Roman"),
                                                         12,
-                                                        Brushes.Black
+                                                        TextBrush
                                                         );
                 int Height = Convert.ToInt32(text.Height);
                 int Width = Convert.ToInt32(text.Width);
                 dc.DrawText(text, new Point(center.X-Width/2, center.Y - Height/2));
             }
         }
-
-        // Rendering the Line
+        // 绘制连边文本
         private void DrawText(DrawingVisual visual, string sType, Point start, Point end)
         {
             using (DrawingContext dc = visual.RenderOpen())
@@ -430,15 +421,7 @@ namespace GraphDataBaseUI_WPF
                 dc.DrawText(text, new Point(center.X - Width / 2, center.Y - Height / 2));
             }
         }
-
-        private void NodeListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            SelectNodes(NodeListBox.SelectedIndex);
-            MainScroll.ScrollToBottom();
-            MainScroll.ScrollToRightEnd();
-            bolScrolltoCenter = true;
-        }
-
+        //绘制连边形状
         private void DrawLeaderLineArrow(Point startPt, Point endPt)
         {
             Arrow arrow = new Arrow();
@@ -452,7 +435,7 @@ namespace GraphDataBaseUI_WPF
             arrow.StrokeThickness = 2;
             BackCanvas.Children.Add(arrow);
         }
-
+        //选择节点
         private void SelectNodes(int index)
         {
             ErrorCode err = ErrorCode.NoError;
@@ -506,7 +489,7 @@ namespace GraphDataBaseUI_WPF
             SubGraph.StartCicro();
             DrawGarph();
         }
-
+        //绘制节点图
         private void DrawGarph()
         {
             List<NodeDrawing> NodeDrawings;
@@ -533,12 +516,12 @@ namespace GraphDataBaseUI_WPF
             foreach (NodeDrawing node in NodeDrawings)
             {
                 DrawingVisual visual = new DrawingVisual();
-                DrawEllipse(visual, node.Name, new Point(node.Position.X, node.Position.Y), false);
+                DrawEllipse(visual, node.Name, new Point(node.Position.X, node.Position.Y));
                 visuals.Add(visual);
                 drawingSurface.AddVisual(visual);
             }
         }
-
+        //位置修正
         private Point ModifyPositiion(Point startPt, Point endPt, int iRadius)
         {
             int x, y;
@@ -556,13 +539,13 @@ namespace GraphDataBaseUI_WPF
             y = Convert.ToInt32((deltaY * iRadius) / dubDistance);
             return new Point(endPt.X + x, endPt.Y + y);
         }
-
+        //清除连边形状
         private void ClearArrows(UIElement element)
         {
             BackCanvas.Children.Clear();
             BackCanvas.Children.Add(element);
         }
-
+        //将节点图置于顶层
         private void BringToFront(DrawingCanvas element)//图片置于最顶层显示
         {
             if (element == null)
@@ -580,39 +563,8 @@ namespace GraphDataBaseUI_WPF
               .Max();
             Canvas.SetZIndex(element, maxZ + 1);
         }
-       
-        private void MainScroll_ScrollChanged(object sender, ScrollChangedEventArgs e)
-        {
-            double dubBottom, dubRight;
-            if (bolScrolltoCenter == true)
-            {
-                dubBottom = MainScroll.VerticalOffset;
-                dubRight = MainScroll.HorizontalOffset;
-                MainScroll.ScrollToVerticalOffset(dubBottom / 2);
-                MainScroll.ScrollToHorizontalOffset(dubRight / 2);
-                bolScrolltoCenter = false;
-            }
-        }
-        #endregion
-
-        private void drawingSurface_MouseMove(object sender, MouseEventArgs e)
-        {
-            int visualindex = GetVisualIndex(drawingSurface.GetVisual(e.GetPosition(drawingSurface)));
-
-            if (visualindex == -1 || visualindex == intNodeIndex || visualindex >= SubGraph.NodeNum)
-            {
-                return;
-            }
-            else
-            {
-                ToolTip NodeTip = BuildNewTip(visualindex);
-                NodeTip.Placement = System.Windows.Controls.Primitives.PlacementMode.Mouse;
-                intNodeIndex = visualindex;
-                drawingSurface.ToolTip = NodeTip;
-            }
-        }
-
-        private  int GetVisualIndex(DrawingVisual visual)
+        //获取visual索引
+        private int GetVisualIndex(DrawingVisual visual)
         {
             int index = 0;
             if (visual == null)
@@ -629,7 +581,7 @@ namespace GraphDataBaseUI_WPF
             }
             return -1;
         }
-
+        //构造新的ToolTip
         private ToolTip BuildNewTip(int index)
         {
             ToolTip NodeTip = new ToolTip();
@@ -638,7 +590,59 @@ namespace GraphDataBaseUI_WPF
 
             return NodeTip;
         }
+        #endregion
 
+        #region UICommand
+        //查询按钮执行函数
+        private void ExecuteButton_Click(object sender, RoutedEventArgs e)
+        {
+            ErrorCode err = ErrorCode.NoError;
+            string strResult, strCommand;
+
+            //START node('*-国家') MATCH (Kingdom)-[:统治]->(District)<-[:连通 5..5]-(Neibhour) WHERE * RETURN Kingdom.Name, District.*
+            strCommand = CommandBox.Text;
+            strResult = gdb.DataQueryExecute(strCommand, ref err);//
+            ResultBox.Text = strResult;
+        }
+        //节点列表框选中事件处理函数
+        private void NodeListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SelectNodes(NodeListBox.SelectedIndex);
+            MainScroll.ScrollToBottom();
+            MainScroll.ScrollToRightEnd();
+            bolScrolltoCenter = true;
+        }
+        //主滚动框自动居中
+        private void MainScroll_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            double dubBottom, dubRight;
+            if (bolScrolltoCenter == true)
+            {
+                dubBottom = MainScroll.VerticalOffset;
+                dubRight = MainScroll.HorizontalOffset;
+                MainScroll.ScrollToVerticalOffset(dubBottom / 2);
+                MainScroll.ScrollToHorizontalOffset(dubRight / 2);
+                bolScrolltoCenter = false;
+            }
+        }
+        //画布鼠标移动事件-节点标签显示
+        private void drawingSurface_MouseMove(object sender, MouseEventArgs e)
+        {
+            int visualindex = GetVisualIndex(drawingSurface.GetVisual(e.GetPosition(drawingSurface)));
+
+            if (visualindex == -1 || visualindex == intNodeIndex || visualindex >= SubGraph.NodeNum)
+            {
+                return;
+            }
+            else
+            {
+                ToolTip NodeTip = BuildNewTip(visualindex);
+                NodeTip.Placement = System.Windows.Controls.Primitives.PlacementMode.Mouse;
+                intNodeIndex = visualindex;
+                drawingSurface.ToolTip = NodeTip;
+            }
+        }
+        //画布鼠标点击事件-切换选中节点并重新绘图
         private void drawingSurface_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             int visualindex = GetVisualIndex(drawingSurface.GetVisual(e.GetPosition(drawingSurface)));
@@ -651,14 +655,133 @@ namespace GraphDataBaseUI_WPF
             else
             {
                 strName = SubGraph.Nodes[visualindex].Name;
-                strType= SubGraph.Nodes[visualindex].Type;
+                strType = SubGraph.Nodes[visualindex].Type;
                 intNode = gdb.GetIndexByNameAndType(strName, strType);
-                if(intNode == -1)
+                if (intNode == -1)
                 {
                     return;
                 }
                 NodeListBox.SelectedIndex = intNode;
             }
         }
+        //清除命令框内容命令执行
+        private void ClearCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            CommandBox.Text = "";
+        }
+        //清除命令框按钮使能
+        private void ClearCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (CommandBox == null)
+            {
+                return;
+            }
+            if (e.CanExecute == false && CommandBox.Text != "")
+            {
+                e.CanExecute = true;
+                return;
+            }
+            e.CanExecute = false;
+            return;
+        }
+        //清除结果框内容命令执行
+        private void ClearResultCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            ResultBox.Text = "";
+        }
+        //清除结果框按钮使能
+        private void ClearResultCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (ResultBox == null)
+            {
+                return;
+            }
+            if (e.CanExecute == false && ResultBox.Text != "")
+            {
+                e.CanExecute = true;
+                return;
+            }
+            e.CanExecute = false;
+            return;
+        }
+
+        private void NodeStyleSelection_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            RibbonGalleryItem newItem;
+
+            newItem = (RibbonGalleryItem)e.NewValue;
+            ChangeStyle(newItem.ToolTipTitle);
+            if (intNodeIndex == -1)
+            {
+                return;
+            }
+            DrawGarph();
+        }
+
+        void ChangeStyle(string strStyle)
+        {
+            Style curStyle;
+            string strKey;
+            Brush bBack = Brushes.AliceBlue, bStroke = Brushes.SteelBlue, bFore = Brushes.Black;
+            double dubHeight = 40.0, dubWidth = 40.0, dubStrokeThickness = 3.0;
+
+            switch (strStyle)
+            {
+                case "默认样式":
+                    strKey = "DefaultNodeStyle";
+                    break;
+                case "深邃星空":
+                    strKey = "PurpleNodeStyle";
+                    break;
+                case "底比斯之水":
+                    strKey = "BlueNodeStyle";
+                    break;
+                case "千本樱":
+                    strKey = "PinkNodeStyle";
+                    break;
+                default:
+                    strKey = "DefaultNodeStyle";
+                    break;
+            }
+            curStyle = (Style)TryFindResource(strKey);
+            if (curStyle == null)
+            {
+                return;
+            }
+            foreach (Setter st in curStyle.Setters)
+            {
+                switch (st.Property.ToString())
+                {
+                    case "Fill":
+                        bBack = (Brush)st.Value;
+                        break;
+                    case "Stroke":
+                        bStroke = (Brush)st.Value;
+                        break;
+                    case "StrokeThickness":
+                        dubStrokeThickness = (double)st.Value;
+                        break;
+                    case "Height":
+                        dubHeight = (double)st.Value;
+                        break;
+                    case "Width":
+                        dubWidth = (double)st.Value;
+                        break;
+                    case "Foreground":
+                        bFore = (Brush)st.Value;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            drawingBrush = bBack;
+            drawingPen = new Pen(bStroke, dubStrokeThickness);
+            TextBrush = bFore;
+            radius = Convert.ToInt32(dubHeight / 2);
+        }
+
+        #endregion
+
+        
     }
 }

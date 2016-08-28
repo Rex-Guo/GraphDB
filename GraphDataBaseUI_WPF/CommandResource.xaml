@@ -9,4 +9,6 @@
     <RoutedUICommand x:Key="PrintCommand" Text="Print" />
     <RoutedUICommand x:Key="CloseCommand" Text="Close" />
     <RoutedUICommand x:Key="ExitCommand" Text="Exit" />
+    <RoutedUICommand x:Key="ClearComCommand" Text="ClearCommand" />
+    <RoutedUICommand x:Key="ClearResultCommand" Text="ClearResult" />
 </ResourceDictionary>

@@ -87,6 +87,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="StyleResource.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ToolTipResource.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -177,6 +181,19 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\CustomActionsMenu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClearText.png" />
+    <Resource Include="images\ClearText_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\Exit_16x16.png" />
+    <Resource Include="images\Option.png" />
+    <Resource Include="images\Option_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\NodeStyles.png" />
+    <Resource Include="images\NodeStyles_16x16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
