@@ -84,6 +84,7 @@ namespace GraphDataBaseUI_WPF
         {
             gdb = null;
             isDbAvailable = false;
+            intNodeIndex = -1;
             NodeListBox.Items.Clear();
             ClearArrows(drawingSurface);
             drawingSurface.ClearVisuals();
@@ -599,6 +600,10 @@ namespace GraphDataBaseUI_WPF
             ErrorCode err = ErrorCode.NoError;
             string strResult, strCommand;
 
+            if (isDbAvailable == false)
+            {
+                return;
+            }
             //START node('*-国家') MATCH (Kingdom)-[:统治]->(District)<-[:连通 5..5]-(Neibhour) WHERE * RETURN Kingdom.Name, District.*
             strCommand = CommandBox.Text;
             strResult = gdb.DataQueryExecute(strCommand, ref err);//
@@ -704,7 +709,7 @@ namespace GraphDataBaseUI_WPF
             e.CanExecute = false;
             return;
         }
-
+        //样式选择框
         private void NodeStyleSelection_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             RibbonGalleryItem newItem;
@@ -717,7 +722,7 @@ namespace GraphDataBaseUI_WPF
             }
             DrawGarph();
         }
-
+        //切换并读取样式
         void ChangeStyle(string strStyle)
         {
             Style curStyle;

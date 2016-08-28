@@ -19,4 +19,7 @@
     <sys:String x:Key="PurpleStyleTip">“奇迹的不是那片星域如此辽阔，而是人类竟然成功测量了它。”-阿纳托尔·法郎士（法国小说家）</sys:String>
     <sys:String x:Key="BlueStyleTip">“如果我的心像底比斯有一百座城门，我一定让快乐成打进来。”-苏格拉底</sys:String>
     <sys:String x:Key="PinkStyleTip">“春樱秋枫留不住，人去关卡亦成空。”-岛津义弘辞世之章（日本战国萨摩岛津家当主）</sys:String>
+
+    <sys:String x:Key="AddPropertyTip">Add the current property into new node.</sys:String>
+    <sys:String x:Key="AddNodeTip">Add new node into Database.</sys:String>
 </ResourceDictionary>

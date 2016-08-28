@@ -73,6 +73,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ConverterResource.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -194,6 +198,12 @@
   <ItemGroup>
     <Resource Include="images\NodeStyles.png" />
     <Resource Include="images\NodeStyles_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\AddProperty.png" />
+    <Resource Include="images\AddProperty_small.png" />
+    <Resource Include="images\AddNode.png" />
+    <Resource Include="images\AddNode_small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

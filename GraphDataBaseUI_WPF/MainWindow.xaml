@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="ToolTipResource.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="CommandResource.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="StyleResource.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="ConverterResource.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush x:Key="PreussenBlue" Color="{Binding RelativeSource={RelativeSource Self}, Path=Color}"/>
         </ResourceDictionary>
@@ -112,6 +113,65 @@
                     <r:RibbonButton Label="Save" Command="{StaticResource SaveCommand}" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png"></r:RibbonButton>
                 </r:RibbonQuickAccessToolBar>
             </r:Ribbon.QuickAccessToolBar>
+            <!--<r:RibbonTab Name = "ribQueryTab" Header="Query">
+                <r:RibbonGroup Header="START">
+                    <r:RibbonToggleButton Name="StartAnyButton" Label="Any" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Any_16x16.png" ToolTipTitle="New" ToolTipDescription="{StaticResource NewTip}"></r:RibbonToggleButton>
+                    <r:RibbonToggleButton Name="StartAnyNameButton" Label="Any Name" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Any_16x16.png" ToolTipTitle="New" ToolTipDescription="{StaticResource NewTip}"></r:RibbonToggleButton>
+                    <r:RibbonToggleButton Name="StartAnyTypeButton" Label="Any Type" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Any_16x16.png" ToolTipTitle="New" ToolTipDescription="{StaticResource NewTip}"></r:RibbonToggleButton>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Name:</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Type:</Label>
+                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+                    </Grid>
+                </r:RibbonGroup>
+                <r:RibbonGroup Header="MATCH" GroupSizeDefinitions="{StaticResource RibbonLayout}">
+                    
+                </r:RibbonGroup>
+                <r:RibbonGroup Header="WHERE" GroupSizeDefinitions="{StaticResource RibbonLayout}">
+
+                </r:RibbonGroup>
+                <r:RibbonGroup Header="RETURN" GroupSizeDefinitions="{StaticResource RibbonLayout}">
+
+                </r:RibbonGroup>
+            </r:RibbonTab>-->
+            <r:RibbonTab Name = "ribAddTab" Header="Add">
+                <r:RibbonGroup Header="Add Node">
+                    <r:RibbonButton Label="Add Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddNode.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddNode_small.png" ToolTipTitle="Add Node" ToolTipDescription="{StaticResource AddNodeTip}"></r:RibbonButton>
+                    <r:RibbonButton Label="Add Property" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddProperty.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddProperty_small.png" ToolTipTitle="Add Property" ToolTipDescription="{StaticResource AddPropertyTip}"></r:RibbonButton>
+                    <ListBox Name="NodePropertiesList" Height="64" MinWidth="60"></ListBox>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Key:</Label>
+                        <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" StaysOpenOnEdit="False" IsEditable="True">
+                            <ComboBox.Items>
+                                <ComboBoxItem IsSelected="True">Name</ComboBoxItem>
+                                <ComboBoxItem>Type</ComboBoxItem>
+                            </ComboBox.Items>
+                        </ComboBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
+                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+                    </Grid>
+                </r:RibbonGroup>
+                <r:RibbonGroup Header="Add Edge">
+                    
+                </r:RibbonGroup>
+            </r:RibbonTab>
             <r:RibbonTab Name = "ribHomeTab" Header="Home" >
                 <r:RibbonGroup Header="File" GroupSizeDefinitions="{StaticResource RibbonLayout}">
                     <r:RibbonButton Label="New" Command="{StaticResource NewCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileNew.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileNew_16x16.png" ToolTipTitle="New" ToolTipDescription="{StaticResource NewTip}"></r:RibbonButton>
@@ -150,10 +210,7 @@
                     </r:RibbonSplitButton>
                 </r:RibbonGroup>
             </r:RibbonTab>
-            <r:RibbonTab Name = "ribQueryTab" Header="Query">
-            </r:RibbonTab>
-            <r:RibbonTab Name = "ribAddTab" Header="Add">
-            </r:RibbonTab>
+            
             <r:RibbonTab Name = "ribDelTab" Header="Delete">
             </r:RibbonTab>
             <r:RibbonTab Name = "ribModTab" Header="Modify">
