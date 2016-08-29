@@ -11,4 +11,7 @@
     <RoutedUICommand x:Key="ExitCommand" Text="Exit" />
     <RoutedUICommand x:Key="ClearComCommand" Text="ClearCommand" />
     <RoutedUICommand x:Key="ClearResultCommand" Text="ClearResult" />
+
+    <RoutedUICommand x:Key="SearchNodeCommand" Text="SearchNode" />
+
 </ResourceDictionary>

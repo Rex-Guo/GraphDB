@@ -37,6 +37,11 @@ namespace GraphDataBaseUI_WPF
         GraphDataBase gdb;
         bool isDbAvailable = false;
         DispatcherTimer StatusUpadteTimer;
+        int intNodeIndex = -1;
+        int intPointNodeIndex = -1;
+        Node curModifyNode;
+        Edge curModifyEdge;
+        NodeInfo curSelectNode;
 
         public MainWindow()
         {
@@ -46,6 +51,7 @@ namespace GraphDataBaseUI_WPF
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
             ErrorCode err = ErrorCode.NoError;
+            AllReset();
             ChangeStyle("默认样式");
             StatusUpdateTimer_Init();
             gdb = new GraphDataBase();
@@ -84,10 +90,14 @@ namespace GraphDataBaseUI_WPF
         {
             gdb = null;
             isDbAvailable = false;
-            intNodeIndex = -1;
+            SetCurrentNodeInfo(-1);
             NodeListBox.Items.Clear();
             ClearArrows(drawingSurface);
             drawingSurface.ClearVisuals();
+            ModifyNameList.Items.Clear();
+            ModifyTypeList.Items.Clear();
+            RemoveNameList.Items.Clear();
+            RemoveTypeList.Items.Clear();
         }
         
         #region FileCommand
@@ -379,7 +389,6 @@ namespace GraphDataBaseUI_WPF
         private Pen TextPen = new Pen(Brushes.White, 1);
         private List<Visual> visuals = new List<Visual>();
         private int radius = 20;
-        private int intNodeIndex = -1;
         private bool bolScrolltoCenter = false;
 
         // 渲染原型.
@@ -454,6 +463,7 @@ namespace GraphDataBaseUI_WPF
             {
                 return;
             }
+            SetCurrentNodeInfo(index);
             DrawNodes = new List<Node>();
             NeibourNodes = new List<Node>();
             DrawNodes.Add(curSelNode);
@@ -635,17 +645,14 @@ namespace GraphDataBaseUI_WPF
         {
             int visualindex = GetVisualIndex(drawingSurface.GetVisual(e.GetPosition(drawingSurface)));
 
-            if (visualindex == -1 || visualindex == intNodeIndex || visualindex >= SubGraph.NodeNum)
+            if (visualindex == -1 || visualindex == intPointNodeIndex || visualindex >= SubGraph.NodeNum)
             {
                 return;
             }
-            else
-            {
-                ToolTip NodeTip = BuildNewTip(visualindex);
-                NodeTip.Placement = System.Windows.Controls.Primitives.PlacementMode.Mouse;
-                intNodeIndex = visualindex;
-                drawingSurface.ToolTip = NodeTip;
-            }
+            ToolTip NodeTip = BuildNewTip(visualindex);
+            intPointNodeIndex = visualindex;
+            NodeTip.Placement = System.Windows.Controls.Primitives.PlacementMode.Mouse;
+            drawingSurface.ToolTip = NodeTip;
         }
         //画布鼠标点击事件-切换选中节点并重新绘图
         private void drawingSurface_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -787,6 +794,191 @@ namespace GraphDataBaseUI_WPF
 
         #endregion
 
-        
+        #region DATA
+        string curNodeName = "";
+        string curNodeType = "";
+        //设置当前选中节点信息
+        void SetCurrentNodeInfo(int index)
+        {
+            intNodeIndex = index;
+            if (index < 0)
+            {
+                curSelectNode = new NodeInfo();
+            }
+            else
+            {
+                curSelectNode = new NodeInfo(gdb.GetNodeByIndex(intNodeIndex));
+            }
+            StatusNameBox.Text = curSelectNode.Name;
+            StatusTypeBox.Text = curSelectNode.Type;
+            UpdateProperties();
+        }
+        //更新属性列表
+        void UpdateProperties()
+        {
+            ModifyPropertyComboBox.Items.Clear();
+            ModifyPropertyTextBox.Text = "";
+            foreach (NodeProperty np in curSelectNode.Properties)
+            {
+                ModifyPropertyComboBox.Items.Add(np.Key);
+            }
+        }
+        //更新属性值
+        private void ModifyPropertyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (intNodeIndex < 0 || ModifyPropertyComboBox.SelectedIndex <0)
+            {
+                return;
+            }
+            foreach (NodeProperty np in curSelectNode.Properties)
+            {
+                if (np.Key == ModifyPropertyComboBox.SelectedItem.ToString())
+                {
+                    ModifyPropertyTextBox.Text = np.Value;
+                }
+            }
+        }
+        //名称文本框值改变
+        private void NameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            curNodeName = ((TextBox)sender).Text;
+            if (curSelectNode == null )
+            {
+                return;
+            }
+            FindCustomNode(curNodeName, curNodeType);
+        }
+        //类型文本框值改变
+        private void TypeTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            curNodeType = ((TextBox)sender).Text;
+            if (curSelectNode == null)
+            {
+                return;
+            }
+            FindCustomNode(curNodeName, curNodeType);
+        }
+        //查找用户指定节点
+        private void FindCustomNode(string sName, string sType)
+        {
+            
+            if(gdb == null)
+            {
+                return;
+            }
+            int index = gdb.GetIndexByNameAndType(sName, sType);
+            if (index < 0)
+            {
+                return;
+            }
+            NodeListBox.SelectedIndex = index;
+            curModifyNode = gdb.GetNodeByName(sName, sType);
+            ModifyNameList.Items.Clear();
+            RemoveNameList.Items.Clear();
+            foreach (Edge edge in curModifyNode.OutBound)
+            {
+                if (ModifyNameList.Items.IndexOf(edge.End.Name) > 0)
+                {
+                    continue;
+                }
+                ModifyNameList.Items.Add(edge.End.Name);
+                RemoveNameList.Items.Add(edge.End.Name);
+            }
+            ModifyNameList.SelectedIndex = 0;
+            FillModifyTypeList((string)ModifyNameList.SelectedItem);
+            RemoveNameList.SelectedIndex = 0;
+            FillRemoveTypeList((string)RemoveNameList.SelectedItem);
+            FindCustomEdge();
+            return;
+        }
+        //修改节点名称改变
+        private void ModifyNameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (((ComboBox)sender).Text == "")
+            {
+                return;
+            }
+            FillModifyTypeList(((ComboBox)sender).Text);
+        }
+        //填充修改类型列表内容
+        private void FillModifyTypeList(string sName)
+        {
+            ModifyTypeList.Items.Clear();
+            foreach (Edge edge in curModifyNode.OutBound)
+            {
+                if (ModifyTypeList.Items.IndexOf(edge.End.Name) > 0)
+                {
+                    continue;
+                }
+                if (sName != edge.End.Name)
+                {
+                    continue;
+                }
+                ModifyTypeList.Items.Add(edge.End.Type);
+            }
+            ModifyTypeList.SelectedIndex = 0;
+        }
+        //修改节点类型改变
+        private void ModifyTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (((ComboBox)sender).Text == "")
+            {
+                return;
+            }
+            FindCustomEdge();
+        }
+        //查找目标连边
+        private void FindCustomEdge()
+        {
+            if (gdb == null)
+            {
+                return;
+            }
+            ModifyStartName.Text = StatusNameBox.Text;
+            ModifyStartType.Text = StatusTypeBox.Text;
+            if (ModifyStartName.Text == ""
+                || ModifyStartType.Text == ""
+                || ModifyNameList.Text == ""
+                || ModifyTypeList.Text == "")
+            {
+                return;
+            }
+            curModifyEdge = gdb.GetEdgeByNameAndType(ModifyStartName.Text, ModifyStartType.Text, ModifyNameList.Text, ModifyTypeList.Text);
+            if (curModifyEdge == null)
+            {
+                return;
+            }
+            EdgeKeyBox.Text = curModifyEdge.Type;
+            EdgeValueBox.Text = curModifyEdge.Value;
+        }
+        //删除节点名称改变
+        private void RemoveNameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (((ComboBox)sender).Text == "")
+            {
+                return;
+            }
+            FillRemoveTypeList(((ComboBox)sender).Text);
+        }
+        //填充删除节点两类型列表
+        private void FillRemoveTypeList(string sName)
+        {
+            RemoveTypeList.Items.Clear();
+            foreach (Edge edge in curModifyNode.OutBound)
+            {
+                if (RemoveTypeList.Items.IndexOf(edge.End.Name) > 0)
+                {
+                    continue;
+                }
+                if (sName != edge.End.Name)
+                {
+                    continue;
+                }
+                RemoveTypeList.Items.Add(edge.End.Type);
+            }
+            RemoveTypeList.SelectedIndex = 0;
+        }
+        #endregion
+
     }
 }

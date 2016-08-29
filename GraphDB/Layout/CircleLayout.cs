@@ -166,15 +166,15 @@ namespace GraphDB.Layout
             dubDistance = Math.Pow(curPos.X - intWidth / 2, 2)  + Math.Pow(curPos.Y - intHeight / 2, 2);
             if (dubDistance < Math.Pow(intMaskRadius, 2))
             {//距离中心坐标小于intMaskRadius范围的节点向外推
-                deltaX = Convert.ToInt32(Math.Ceiling((intMaskRadius / Math.Sqrt(dubDistance) - 1) * (curPos.X - intWidth / 2)));
-                deltaY = Convert.ToInt32(Math.Ceiling((intMaskRadius / Math.Sqrt(dubDistance) - 1) * (curPos.Y - intHeight / 2)));
+                deltaX = Convert.ToInt32(Math.Ceiling((intMaskRadius / Math.Sqrt(dubDistance) - 1) * (curPos.X - intWidth / 2 +0.0000001)));
+                deltaY = Convert.ToInt32(Math.Ceiling((intMaskRadius / Math.Sqrt(dubDistance) - 1) * (curPos.Y - intHeight / 2 + 0.0000001)));
                 curPos.X += deltaX;
                 curPos.Y += deltaY;
             }
             else if (dubDistance > Math.Pow(intOuterMaskRadius, 2))
             {//距离中心坐标大于intOuterMaskRadius范围的节点向里拉
-                deltaX = Convert.ToInt32(Math.Ceiling((intOuterMaskRadius / Math.Sqrt(dubDistance) - 1) * (curPos.X - intWidth / 2)));
-                deltaY = Convert.ToInt32(Math.Ceiling((intOuterMaskRadius / Math.Sqrt(dubDistance) - 1) * (curPos.Y - intHeight / 2)));
+                deltaX = Convert.ToInt32(Math.Ceiling((intOuterMaskRadius / Math.Sqrt(dubDistance) - 1) * (curPos.X - intWidth / 2 + 0.0000001)));
+                deltaY = Convert.ToInt32(Math.Ceiling((intOuterMaskRadius / Math.Sqrt(dubDistance) - 1) * (curPos.Y - intHeight / 2 + 0.0000001)));
                 curPos.X += deltaX;
                 curPos.Y += deltaY;
             }

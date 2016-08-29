@@ -267,7 +267,7 @@ namespace GraphDB.Core
         //查询函数，返回指定索引处的节点
         public Node GetNodeByIndex(int index)
         {
-            if (index >= this.NodeNum)
+            if (index >= this.NodeNum || index < 0)
             {
                 return null;
             }
@@ -319,20 +319,43 @@ namespace GraphDB.Core
             return ResultList;
         }
 
+        //查询函数，返回指定名称和类型的节点间的连边
+        public Edge GetEdgeByNameAndType(string sName, string sType, string eName, string eType)
+        {
+            Node startNode = null, endNode = null;
+
+            startNode = GetNodesByNameAndType(sName, sType);
+            if (startNode == null)
+            {
+                return null;
+            }
+            endNode = GetNodesByNameAndType(eName, eType);
+            if (endNode == null)
+            {
+                return null;
+            }
+            return GetEdgeByType(startNode, endNode);
+        }
+
         //查找两点之间指定Type的连边
-        Edge GetEdgeByType(Node start, Node end, string sType)
+        Edge GetEdgeByType(Node start, Node end, string sType = "")
         {
             Edge res;
 
-            res = start.GetEdge(sType, "Out");
-            if (res != null)
+            res = start.GetEdge(end.Name, end.Type, "Out");
+            if (res == null)
             {
-                if (res.End == end)
-                {
-                    return res;
-                }
+                return null;
             }
-            return null;
+            if (sType == "")
+            {
+                return res;
+            }
+            if (res.Type != sType)
+            {
+                return null;
+            }
+            return res;
         }
 
         //加入节点（接口）

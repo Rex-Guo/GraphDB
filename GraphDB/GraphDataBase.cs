@@ -199,6 +199,12 @@ namespace GraphDB
             return graph.GetIndexByNameAndType(sName, sType);
         }
 
+        //查询函数，返回指定名称和类型的节点间的连边
+        public Edge GetEdgeByNameAndType(string sName, string sType, string eName, string eType)
+        {
+            return graph.GetEdgeByNameAndType(sName, sType, eName, eType);
+        }
+
         //启动环形布局
         public void StartCicro()
         {

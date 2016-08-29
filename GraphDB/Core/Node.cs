@@ -545,13 +545,13 @@ namespace GraphDB.Core
         }
 
         //≤È’“¡¨±ﬂ
-        public Edge GetEdge(string sType, string opt)
+        public Edge GetEdge(string sName, string sType, string opt)
         {
             if (opt == "In")
             {
                 foreach (Edge edge in InBound)
                 {
-                    if (edge.Type == sType)
+                    if (edge.Start.Name == sName && edge.Start.Type == sType)
                     {
                         return edge;
                     }
@@ -562,7 +562,7 @@ namespace GraphDB.Core
             {
                 foreach (Edge edge in OutBound)
                 {
-                    if (edge.Type == sType)
+                    if (edge.End.Name == sName && edge.End.Type == sType)
                     {
                         return edge;
                     }

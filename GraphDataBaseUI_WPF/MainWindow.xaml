@@ -3,16 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:r="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary"
         xmlns:local="clr-namespace:GraphDataBaseUI_WPF"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="Graph Database" Height="550" Width="850"
         WindowStyle="ThreeDBorderWindow"
         Icon="/GraphDataBaseUI_WPF;component/images/Network.ico" Loaded="RibbonWindow_Loaded">
     <r:RibbonWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="ToolTipResource.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="CommandResource.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="StyleResource.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="ConverterResource.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="UI_Resources/ToolTipResource.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="UI_Resources/CommandResource.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="UI_Resources/StyleResource.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="UI_Resources/ConverterResource.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush x:Key="PreussenBlue" Color="{Binding RelativeSource={RelativeSource Self}, Path=Color}"/>
         </ResourceDictionary>
@@ -113,6 +114,90 @@
                     <r:RibbonButton Label="Save" Command="{StaticResource SaveCommand}" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png"></r:RibbonButton>
                 </r:RibbonQuickAccessToolBar>
             </r:Ribbon.QuickAccessToolBar>
+            <r:RibbonTab Name = "ribModTab" Header="Modify">
+                <r:RibbonGroup Header="Modify Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Name:</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ElementName=StatusNameBox, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Type:</Label>
+                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ElementName=StatusTypeBox, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Key:</Label>
+                        <ComboBox Name="ModifyPropertyComboBox" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" StaysOpenOnEdit="False" IsEditable="True" SelectionChanged="ModifyPropertyComboBox_SelectionChanged">
+                        </ComboBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
+                        <TextBox Name="ModifyPropertyTextBox" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+                    </Grid>
+                    <r:RibbonButton Label="Modify Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Modify_small.png" ToolTipTitle="Modify Node" ToolTipDescription="{StaticResource ModifyNodeTip}"></r:RibbonButton>
+                </r:RibbonGroup>
+                <r:RibbonGroup Header="Modify Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Name:</Label>
+                        <TextBox Name="ModifyStartName" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ElementName=StatusNameBox, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Type:</Label>
+                        <TextBox Name="ModifyStartType" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ElementName=StatusTypeBox, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Name:</Label>
+                        <ComboBox Name="ModifyNameList" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" SelectionChanged="ModifyNameComboBox_SelectionChanged"></ComboBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Type:</Label>
+                        <ComboBox Name="ModifyTypeList" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" SelectionChanged="ModifyTypeComboBox_SelectionChanged"></ComboBox>
+                    </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Key:</Label>
+                        <TextBox Name="EdgeKeyBox" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
+                        <TextBox Name="EdgeValueBox" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+                    </Grid>
+                    <r:RibbonButton Label="Modify Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Modify_small.png" ToolTipTitle="Modify Edge" ToolTipDescription="{StaticResource ModifyEdgeTip}"></r:RibbonButton>
+                </r:RibbonGroup>
+            </r:RibbonTab>
             <r:RibbonTab Name = "ribHomeTab" Header="Home" >
                 <r:RibbonGroup Header="File" GroupSizeDefinitions="{StaticResource RibbonLayout}">
                     <r:RibbonButton Label="New" Command="{StaticResource NewCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileNew.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileNew_16x16.png" ToolTipTitle="New" ToolTipDescription="{StaticResource NewTip}"></r:RibbonButton>
@@ -189,9 +274,24 @@
                             <ColumnDefinition Width="5"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Name:</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ElementName=StatusNameBox, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                         <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Type:</Label>
-                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
+                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ElementName=StatusTypeBox, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Name:</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Type:</Label>
+                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
                     </Grid>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -207,109 +307,11 @@
                         <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
                         <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
                         <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
-                    </Grid>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="32"/>
-                            <RowDefinition Height="32"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="5"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Name:</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
-                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Type:</Label>
-                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
                     </Grid>
                     <r:RibbonButton Label="Add Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddEdge.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddEdge_small.png" ToolTipTitle="Add Edge" ToolTipDescription="{StaticResource AddEdgeTip}"></r:RibbonButton>
                 </r:RibbonGroup>
             </r:RibbonTab>
-            <r:RibbonTab Name = "ribModTab" Header="Modify">
-                <r:RibbonGroup Header="Modify Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="32"/>
-                            <RowDefinition Height="32"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="5"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Name:</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
-                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Type:</Label>
-                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
-                    </Grid>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="32"/>
-                            <RowDefinition Height="32"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="5"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Key:</Label>
-                        <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" StaysOpenOnEdit="False" IsEditable="True">
-                        </ComboBox>
-                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
-                    </Grid>
-                    <r:RibbonButton Label="Modify Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Modify_small.png" ToolTipTitle="Modify Node" ToolTipDescription="{StaticResource ModifyNodeTip}"></r:RibbonButton>
-                </r:RibbonGroup>
-                <r:RibbonGroup Header="Modify Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="32"/>
-                            <RowDefinition Height="32"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="5"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Name:</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
-                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Type:</Label>
-                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
-                    </Grid>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="32"/>
-                            <RowDefinition Height="32"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="5"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Name:</Label>
-                        <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></ComboBox>
-                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Type:</Label>
-                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
-                    </Grid>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="32"/>
-                            <RowDefinition Height="32"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="5"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Key:</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
-                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
-                    </Grid>
-                    <r:RibbonButton Label="Modify Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Modify_small.png" ToolTipTitle="Modify Edge" ToolTipDescription="{StaticResource ModifyEdgeTip}"></r:RibbonButton>
-                </r:RibbonGroup>
-            </r:RibbonTab>
+            
             <r:RibbonTab Name = "ribDelTab" Header="Delete">
                 <r:RibbonGroup Header="Remove Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/RemoveNode.png">
                     <Grid>
@@ -323,9 +325,9 @@
                             <ColumnDefinition Width="5"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Name:</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ElementName=StatusNameBox, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                         <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Type:</Label>
-                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
+                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ElementName=StatusTypeBox, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     </Grid>
                     <r:RibbonButton Label="Remove Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/RemoveNode.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/RemoveNode_small.png" ToolTipTitle="Remove Node" ToolTipDescription="{StaticResource RemoveNodeTip}"></r:RibbonButton>
                 </r:RibbonGroup>
@@ -341,9 +343,9 @@
                             <ColumnDefinition Width="5"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Name:</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+                        <TextBox Name="RemoveStartName" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ElementName=StatusNameBox, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                         <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Type:</Label>
-                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
+                        <TextBox Name="RemoveStartType" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ElementName=StatusTypeBox, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     </Grid>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -356,9 +358,9 @@
                             <ColumnDefinition Width="5"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Name:</Label>
-                        <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></ComboBox>
+                        <ComboBox Name="RemoveNameList" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" SelectionChanged="RemoveNameComboBox_SelectionChanged"></ComboBox>
                         <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Type:</Label>
-                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
+                        <ComboBox Name="RemoveTypeList" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" ></ComboBox>
                     </Grid>
                     <r:RibbonButton Label="Remove Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/RemoveEdge.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/RemoveEdge_small.png" ToolTipTitle="Remove Edge" ToolTipDescription="{StaticResource RemoveEdgeTip}"></r:RibbonButton>
                 </r:RibbonGroup>
@@ -367,6 +369,12 @@
         <StatusBar Name="MainStatus" Grid.ColumnSpan="4" Grid.Row="2">
             <StatusBarItem>
                 <Label Name="StatusLabel">Ready</Label>
+            </StatusBarItem>
+            <StatusBarItem Visibility="Visible">
+                <TextBox Name="StatusNameBox" TextChanged="NameTextBox_TextChanged"></TextBox>
+            </StatusBarItem>
+            <StatusBarItem Visibility="Visible">
+                <TextBox Name="StatusTypeBox" TextChanged="TypeTextBox_TextChanged"></TextBox>
             </StatusBarItem>
         </StatusBar>
         <DockPanel MinWidth="200" Background="{Binding ElementName=MainRibbon, Path=Background}" Grid.Row="1">
