@@ -132,9 +132,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Network.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="images\window.png" />
   </ItemGroup>
   <ItemGroup>
@@ -204,6 +201,20 @@
     <Resource Include="images\AddProperty_small.png" />
     <Resource Include="images\AddNode.png" />
     <Resource Include="images\AddNode_small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\AddEdge.png" />
+    <Resource Include="images\AddEdge_small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\RemoveEdge.png" />
+    <Resource Include="images\RemoveEdge_small.png" />
+    <Resource Include="images\RemoveNode.png" />
+    <Resource Include="images\RemoveNode_small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\Modify.png" />
+    <Resource Include="images\Modify_small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -22,4 +22,9 @@
 
     <sys:String x:Key="AddPropertyTip">Add the current property into new node.</sys:String>
     <sys:String x:Key="AddNodeTip">Add new node into Database.</sys:String>
+    <sys:String x:Key="AddEdgeTip">Add new edge between two nodes.</sys:String>
+    <sys:String x:Key="RemoveNodeTip">Remove current node from Database.</sys:String>
+    <sys:String x:Key="RemoveEdgeTip">Remove the edge between this two nodes from Database.</sys:String>
+    <sys:String x:Key="ModifyNodeTip">Modify the properities of current node.</sys:String>
+    <sys:String x:Key="ModifyEdgeTip">Modify the key or value of current edge.</sys:String>
 </ResourceDictionary>

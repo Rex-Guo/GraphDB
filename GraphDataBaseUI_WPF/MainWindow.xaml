@@ -113,65 +113,6 @@
                     <r:RibbonButton Label="Save" Command="{StaticResource SaveCommand}" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png"></r:RibbonButton>
                 </r:RibbonQuickAccessToolBar>
             </r:Ribbon.QuickAccessToolBar>
-            <!--<r:RibbonTab Name = "ribQueryTab" Header="Query">
-                <r:RibbonGroup Header="START">
-                    <r:RibbonToggleButton Name="StartAnyButton" Label="Any" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Any_16x16.png" ToolTipTitle="New" ToolTipDescription="{StaticResource NewTip}"></r:RibbonToggleButton>
-                    <r:RibbonToggleButton Name="StartAnyNameButton" Label="Any Name" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Any_16x16.png" ToolTipTitle="New" ToolTipDescription="{StaticResource NewTip}"></r:RibbonToggleButton>
-                    <r:RibbonToggleButton Name="StartAnyTypeButton" Label="Any Type" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Any_16x16.png" ToolTipTitle="New" ToolTipDescription="{StaticResource NewTip}"></r:RibbonToggleButton>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="32"/>
-                            <RowDefinition Height="32"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="50"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Name:</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"></TextBox>
-                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Type:</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
-                    </Grid>
-                </r:RibbonGroup>
-                <r:RibbonGroup Header="MATCH" GroupSizeDefinitions="{StaticResource RibbonLayout}">
-                    
-                </r:RibbonGroup>
-                <r:RibbonGroup Header="WHERE" GroupSizeDefinitions="{StaticResource RibbonLayout}">
-
-                </r:RibbonGroup>
-                <r:RibbonGroup Header="RETURN" GroupSizeDefinitions="{StaticResource RibbonLayout}">
-
-                </r:RibbonGroup>
-            </r:RibbonTab>-->
-            <r:RibbonTab Name = "ribAddTab" Header="Add">
-                <r:RibbonGroup Header="Add Node">
-                    <r:RibbonButton Label="Add Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddNode.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddNode_small.png" ToolTipTitle="Add Node" ToolTipDescription="{StaticResource AddNodeTip}"></r:RibbonButton>
-                    <r:RibbonButton Label="Add Property" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddProperty.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddProperty_small.png" ToolTipTitle="Add Property" ToolTipDescription="{StaticResource AddPropertyTip}"></r:RibbonButton>
-                    <ListBox Name="NodePropertiesList" Height="64" MinWidth="60"></ListBox>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="32"/>
-                            <RowDefinition Height="32"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="60"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Key:</Label>
-                        <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" StaysOpenOnEdit="False" IsEditable="True">
-                            <ComboBox.Items>
-                                <ComboBoxItem IsSelected="True">Name</ComboBoxItem>
-                                <ComboBoxItem>Type</ComboBoxItem>
-                            </ComboBox.Items>
-                        </ComboBox>
-                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
-                    </Grid>
-                </r:RibbonGroup>
-                <r:RibbonGroup Header="Add Edge">
-                    
-                </r:RibbonGroup>
-            </r:RibbonTab>
             <r:RibbonTab Name = "ribHomeTab" Header="Home" >
                 <r:RibbonGroup Header="File" GroupSizeDefinitions="{StaticResource RibbonLayout}">
                     <r:RibbonButton Label="New" Command="{StaticResource NewCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileNew.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileNew_16x16.png" ToolTipTitle="New" ToolTipDescription="{StaticResource NewTip}"></r:RibbonButton>
@@ -184,12 +125,12 @@
                         </r:RibbonSplitButton.Items>
                     </r:RibbonSplitButton>
                 </r:RibbonGroup>
-                <r:RibbonGroup Header="Print" GroupSizeDefinitions="{StaticResource RibbonLayout}">
+                <r:RibbonGroup Header="Print" GroupSizeDefinitions="{StaticResource RibbonLayout}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FilePrint.png">
                     <r:RibbonButton Label="Quick Print" Command="{StaticResource QuickPrintCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintQuick.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintQuick_small.png" ToolTipTitle="Quick Print" ToolTipDescription="{StaticResource QuickPrintTip}"></r:RibbonButton>
                     <r:RibbonButton Label="Print Preview" Command="{StaticResource PrintPreviewCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintPreview.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FilePrintPreview_small.png" ToolTipTitle="Print Preview" ToolTipDescription="{StaticResource PrintPreviewTip}"></r:RibbonButton>
                     <r:RibbonButton Label="Print" Command="{StaticResource PrintCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FilePrint.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FilePrint_small.png" ToolTipTitle="Print" ToolTipDescription="{StaticResource PrintTip}"></r:RibbonButton>
                 </r:RibbonGroup>
-                <r:RibbonGroup Header="Clear" GroupSizeDefinitions="{StaticResource RibbonLayout}">
+                <r:RibbonGroup Header="Clear" LargeImageSource="/GraphDataBaseUI_WPF;component/images/ClearText.png">
                     <r:RibbonSplitButton Label="Clear" Command="{StaticResource ClearComCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/ClearText.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/ClearText_16x16.png" CanAddToQuickAccessToolBarDirectly="False">
                         <r:RibbonSplitButton.Items>
                             <r:RibbonButton Label="Clear Command" Command="{StaticResource ClearComCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/ClearText.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/ClearText_16x16.png" ToolTipTitle="Clear Command" ToolTipDescription="{StaticResource ClearCommandTip}"></r:RibbonButton>
@@ -197,7 +138,7 @@
                         </r:RibbonSplitButton.Items>
                     </r:RibbonSplitButton>
                 </r:RibbonGroup>
-                <r:RibbonGroup Header="Styles" GroupSizeDefinitions="{StaticResource RibbonLayout}">
+                <r:RibbonGroup Header="Styles" LargeImageSource="/GraphDataBaseUI_WPF;component/images/NodeStyles.png">
                     <r:RibbonSplitButton Label="Node Style" LargeImageSource="/GraphDataBaseUI_WPF;component/images/NodeStyles.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/NodeStyles_16x16.png" CanAddToQuickAccessToolBarDirectly="False">
                         <r:RibbonGallery x:Name="NodeStyleSelection" MaxColumnCount="1" ColumnsStretchToFill="True" SelectionChanged="NodeStyleSelection_SelectionChanged">
                             <r:RibbonGalleryCategory>
@@ -210,10 +151,217 @@
                     </r:RibbonSplitButton>
                 </r:RibbonGroup>
             </r:RibbonTab>
-            
-            <r:RibbonTab Name = "ribDelTab" Header="Delete">
+            <r:RibbonTab Name = "ribAddTab" Header="Add">
+                <r:RibbonGroup Header="Add Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddNode.png">
+                    <ListBox Name="NodePropertiesList" Height="64" MinWidth="60"></ListBox>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Key:</Label>
+                        <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" StaysOpenOnEdit="False" IsEditable="True">
+                            <ComboBox.Items>
+                                <ComboBoxItem IsSelected="True">Name</ComboBoxItem>
+                                <ComboBoxItem>Type</ComboBoxItem>
+                            </ComboBox.Items>
+                        </ComboBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
+                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+                    </Grid>
+                    <r:RibbonButton Label="Add Property" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddProperty.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddProperty_small.png" ToolTipTitle="Add Property" ToolTipDescription="{StaticResource AddPropertyTip}"></r:RibbonButton>
+                    <r:RibbonButton Label="Add Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddNode.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddNode_small.png" ToolTipTitle="Add Node" ToolTipDescription="{StaticResource AddNodeTip}"></r:RibbonButton>
+                </r:RibbonGroup>
+                <r:RibbonGroup Header="Add Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddEdge.png">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Name:</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Type:</Label>
+                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
+                    </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Key:</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
+                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+                    </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Name:</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Type:</Label>
+                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
+                    </Grid>
+                    <r:RibbonButton Label="Add Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddEdge.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddEdge_small.png" ToolTipTitle="Add Edge" ToolTipDescription="{StaticResource AddEdgeTip}"></r:RibbonButton>
+                </r:RibbonGroup>
             </r:RibbonTab>
             <r:RibbonTab Name = "ribModTab" Header="Modify">
+                <r:RibbonGroup Header="Modify Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Name:</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Type:</Label>
+                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
+                    </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Key:</Label>
+                        <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" StaysOpenOnEdit="False" IsEditable="True">
+                        </ComboBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
+                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+                    </Grid>
+                    <r:RibbonButton Label="Modify Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Modify_small.png" ToolTipTitle="Modify Node" ToolTipDescription="{StaticResource ModifyNodeTip}"></r:RibbonButton>
+                </r:RibbonGroup>
+                <r:RibbonGroup Header="Modify Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Name:</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Type:</Label>
+                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
+                    </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Name:</Label>
+                        <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></ComboBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Type:</Label>
+                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
+                    </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Key:</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
+                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+                    </Grid>
+                    <r:RibbonButton Label="Modify Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Modify_small.png" ToolTipTitle="Modify Edge" ToolTipDescription="{StaticResource ModifyEdgeTip}"></r:RibbonButton>
+                </r:RibbonGroup>
+            </r:RibbonTab>
+            <r:RibbonTab Name = "ribDelTab" Header="Delete">
+                <r:RibbonGroup Header="Remove Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/RemoveNode.png">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Name:</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Type:</Label>
+                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
+                    </Grid>
+                    <r:RibbonButton Label="Remove Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/RemoveNode.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/RemoveNode_small.png" ToolTipTitle="Remove Node" ToolTipDescription="{StaticResource RemoveNodeTip}"></r:RibbonButton>
+                </r:RibbonGroup>
+                <r:RibbonGroup Header="Remove Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/RemoveEdge.png">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Name:</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Type:</Label>
+                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
+                    </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Name:</Label>
+                        <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></ComboBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Type:</Label>
+                        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
+                    </Grid>
+                    <r:RibbonButton Label="Remove Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/RemoveEdge.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/RemoveEdge_small.png" ToolTipTitle="Remove Edge" ToolTipDescription="{StaticResource RemoveEdgeTip}"></r:RibbonButton>
+                </r:RibbonGroup>
             </r:RibbonTab>
         </r:Ribbon>
         <StatusBar Name="MainStatus" Grid.ColumnSpan="4" Grid.Row="2">
@@ -223,9 +371,7 @@
         </StatusBar>
         <DockPanel MinWidth="200" Background="{Binding ElementName=MainRibbon, Path=Background}" Grid.Row="1">
             <Label DockPanel.Dock="Top">Node List:</Label>
-            <ListBox Name="NodeListBox" Margin="3,3,3,3" SelectionChanged="NodeListBox_SelectionChanged">
-                
-            </ListBox>
+            <ListBox Name="NodeListBox" Margin="3,3,3,3" SelectionChanged="NodeListBox_SelectionChanged"></ListBox>
         </DockPanel>
         <Border Grid.Column="3" Grid.Row="1" Margin="3" BorderBrush="SteelBlue" BorderThickness="1">
             <Grid Background="{Binding ElementName=MainRibbon, Path=Background}" MinWidth="200" >
