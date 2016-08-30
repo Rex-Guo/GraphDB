@@ -1020,6 +1020,46 @@ namespace GraphDataBaseUI_WPF
         {
 
         }
+        //加入属性命令执行函数
+        private void AddPropertyCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            string strKey, strValue;
+
+            strKey = RemoveNodeName.Text;
+            strValue = RemoveNodeType.Text;
+            if (strKey == "" || strValue == "")
+            {
+                ShowStatus("Key or Value can't be empty.");
+                return;
+            }
+            //将键值对校验后加入列表
+            AddPropertyIntoList(strKey ,strValue);
+
+        }
+
+        private void AddPropertyIntoList(string sKey, string sValue)
+        {
+            bool isExist = false;
+            foreach (string strItem in AddNodeProperties.Items)
+            {
+                if (strItem == sKey + ":" + sValue)
+                {
+                    isExist = true;
+                    break;
+                }
+            }
+            switch (sKey)
+            {
+                case "Name":
+
+                    break;
+                case "Type":
+                    break;
+                default:
+                    break;
+            }
+        }
+
         //加入连边命令执行函数
         private void AddEdgeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -1167,6 +1207,11 @@ namespace GraphDataBaseUI_WPF
             e.CanExecute = isDbAvailable;
         }
 
+        private void AddPropertyCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = isDbAvailable;
+        }
+
         private void AddEdgeCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = isDbAvailable;
@@ -1193,6 +1238,7 @@ namespace GraphDataBaseUI_WPF
         }
 
         #endregion
+
         
 
         

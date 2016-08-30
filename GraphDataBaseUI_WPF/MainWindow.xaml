@@ -32,6 +32,7 @@
         <CommandBinding x:Name="ClearResultCommand" Command="{StaticResource ClearResultCommand}" Executed="ClearResultCommand_Executed" CanExecute="ClearResultCommand_CanExecute"></CommandBinding>
 
         <CommandBinding x:Name="AddNodeCommand" Command="{StaticResource AddNodeCommand}" Executed="AddNodeCommand_Executed" CanExecute="AddNodeCommand_CanExecute"></CommandBinding>
+        <CommandBinding x:Name="AddPropertyCommand" Command="{StaticResource AddPropertyCommand}" Executed="AddPropertyCommand_Executed" CanExecute="AddPropertyCommand_CanExecute"></CommandBinding>
         <CommandBinding x:Name="AddEdgeCommand" Command="{StaticResource AddEdgeCommand}" Executed="AddEdgeCommand_Executed" CanExecute="AddEdgeCommand_CanExecute"></CommandBinding>
         <CommandBinding x:Name="ModifyNodeCommand" Command="{StaticResource ModifyNodeCommand}" Executed="ModifyNodeCommand_Executed" CanExecute="ModifyNodeCommand_CanExecute"></CommandBinding>
         <CommandBinding x:Name="ModifyEdgeCommand" Command="{StaticResource ModifyEdgeCommand}" Executed="ModifyEdgeCommand_Executed" CanExecute="ModifyEdgeCommand_CanExecute"></CommandBinding>
@@ -123,7 +124,7 @@
             </r:Ribbon.QuickAccessToolBar>
             <r:RibbonTab Name = "ribAddTab" Header="Add">
                 <r:RibbonGroup Header="Add Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddNode.png">
-                    <ListBox Name="NodePropertiesList" Height="64" MinWidth="60"></ListBox>
+                    <ListBox Name="AddNodeProperties" Height="64" MinWidth="60"></ListBox>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="32"/>
@@ -135,16 +136,16 @@
                             <ColumnDefinition Width="5"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Key:</Label>
-                        <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" StaysOpenOnEdit="False" IsEditable="True">
+                        <ComboBox Name="AddNodeKey" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" StaysOpenOnEdit="False" IsEditable="True">
                             <ComboBox.Items>
                                 <ComboBoxItem IsSelected="True">Name</ComboBoxItem>
                                 <ComboBoxItem>Type</ComboBoxItem>
                             </ComboBox.Items>
                         </ComboBox>
                         <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+                        <TextBox Name="AddNodeValue" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
                     </Grid>
-                    <r:RibbonButton Label="Add Property" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddProperty.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddProperty_small.png" ToolTipTitle="Add Property" ToolTipDescription="{StaticResource AddPropertyTip}"></r:RibbonButton>
+                    <r:RibbonButton Label="Add Property" Command="{StaticResource AddPropertyCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddProperty.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddProperty_small.png" ToolTipTitle="Add Property" ToolTipDescription="{StaticResource AddPropertyTip}"></r:RibbonButton>
                     <r:RibbonButton Label="Add Node" Command="{StaticResource AddNodeCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddNode.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddNode_small.png" ToolTipTitle="Add Node" ToolTipDescription="{StaticResource AddNodeTip}"></r:RibbonButton>
                 </r:RibbonGroup>
                 <r:RibbonGroup Header="Add Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddEdge.png">
@@ -234,7 +235,6 @@
                     </r:RibbonSplitButton>
                 </r:RibbonGroup>
             </r:RibbonTab>
-            
             <r:RibbonTab Name = "ribModTab" Header="Modify">
                 <r:RibbonGroup Header="Modify Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png">
                     <Grid>

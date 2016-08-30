@@ -13,6 +13,7 @@
     <RoutedUICommand x:Key="ClearResultCommand" Text="ClearResult" />
 
     <RoutedUICommand x:Key="AddNodeCommand" Text="AddNode" />
+    <RoutedUICommand x:Key="AddPropertyCommand" Text="AddNode" />
     <RoutedUICommand x:Key="AddEdgeCommand" Text="AddEdge" />
     <RoutedUICommand x:Key="ModifyNodeCommand" Text="ModifyNode" />
     <RoutedUICommand x:Key="ModifyEdgeCommand" Text="ModifyEdge" />
