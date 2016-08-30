@@ -63,6 +63,7 @@ namespace GraphDataBaseUI_WPF
         private void FillNodeList()
         {
             string strItem;
+            NodeListBox.Items.Clear();
             foreach (Node curNode in gdb.Nodes)
             {
                 strItem = curNode.Number + " 名称:" + curNode.Name + " 类型:" + curNode.Type;
@@ -84,6 +85,12 @@ namespace GraphDataBaseUI_WPF
             StatusLabel.Content = "Ready";
             StatusUpadteTimer.IsEnabled = false;
         }
+
+        public void ShowStatus(string sStatus)
+        {
+            StatusLabel.Content = sStatus;
+            StatusUpadteTimer.Start();
+        }
         #endregion
 
         private void AllReset()
@@ -98,12 +105,28 @@ namespace GraphDataBaseUI_WPF
             NodeListBox.Items.Clear();
             ClearArrows(drawingSurface);
             drawingSurface.ClearVisuals();
-            ModifyNameList.Items.Clear();
-            ModifyTypeList.Items.Clear();
-            RemoveNameList.Items.Clear();
-            RemoveTypeList.Items.Clear();
+            ModifyEndName.Items.Clear();
+            ModifyEndType.Items.Clear();
+            RemoveEndName.Items.Clear();
+            RemoveEndType.Items.Clear();
         }
-        
+
+        private void GraphUpdate()
+        {
+            curModifyNode = null;
+            curModifyEdge = null;
+            intNodeIndex = -1;
+            SetCurrentNodeInfo(-1);
+            NodeListBox.Items.Clear();
+            ClearArrows(drawingSurface);
+            drawingSurface.ClearVisuals();
+            ModifyEndName.Items.Clear();
+            ModifyEndType.Items.Clear();
+            RemoveEndName.Items.Clear();
+            RemoveEndType.Items.Clear();
+            FillNodeList();
+        }
+
         #region FileCommand
         //新建命令执行函数
         private void NewCommand_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -122,8 +145,7 @@ namespace GraphDataBaseUI_WPF
                     SaveFile(ref err);
                     if (err != ErrorCode.NoError)
                     {
-                        StatusLabel.Content = "Save Failed";
-                        StatusUpadteTimer.Start();
+                        ShowStatus("Save Failed");
                         return;
                     }
                 }
@@ -155,12 +177,10 @@ namespace GraphDataBaseUI_WPF
             if (err != ErrorCode.NoError)
             {
                 MessageBox.Show("Can not open file.", "警告", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                StatusLabel.Content = "Create Failed";
-                StatusUpadteTimer.Start();
+                ShowStatus("Create Failed.");
                 return;
             }
-            StatusLabel.Content = "Create Success";
-            StatusUpadteTimer.Start();
+            ShowStatus("Create Success.");
             isDbAvailable = true;
         }
         //打开文件命令执行函数
@@ -180,8 +200,7 @@ namespace GraphDataBaseUI_WPF
                     SaveFile(ref err);
                     if (err != ErrorCode.NoError)
                     {
-                        StatusLabel.Content = "Save Failed";
-                        StatusUpadteTimer.Start();
+                        ShowStatus("Save Failed.");
                         return;
                     }
                 }
@@ -212,13 +231,11 @@ namespace GraphDataBaseUI_WPF
             if (err != ErrorCode.NoError)
             {
                 MessageBox.Show("Can not open file.", "警告", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                StatusLabel.Content = "Open Failed";
-                StatusUpadteTimer.Start();
+                ShowStatus("Open Failed.");
                 return;
             }
             FillNodeList();
-            StatusLabel.Content = "Open Success";
-            StatusUpadteTimer.Start();
+            ShowStatus("Open Success.");
             isDbAvailable = true;
         }
         //保存命令执行函数
@@ -230,12 +247,10 @@ namespace GraphDataBaseUI_WPF
             SaveFile(ref err);
             if (err != ErrorCode.NoError)
             {
-                StatusLabel.Content = "Save Failed";
-                StatusUpadteTimer.Start();
+                ShowStatus("Save Failed.");
                 return;
             }
-            StatusLabel.Content = "Save Success";
-            StatusUpadteTimer.Start();
+            ShowStatus("Save Success.");
         }
         //保存文件
         private void SaveFile(ref ErrorCode err)
@@ -268,12 +283,10 @@ namespace GraphDataBaseUI_WPF
             if (err != ErrorCode.NoError)
             {
                 MessageBox.Show("Can not save file.", "警告", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                StatusLabel.Content = "Save As Failed";
-                StatusUpadteTimer.Start();
+                ShowStatus("Save As Failed.");
                 return;
             }
-            StatusLabel.Content = "Save As Success";
-            StatusUpadteTimer.Start();
+            ShowStatus("Save As Success.");
         }
         //快速打印命令执行函数
         private void QuickPrintCommand_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -304,8 +317,7 @@ namespace GraphDataBaseUI_WPF
                     SaveFile(ref err);
                     if (err != ErrorCode.NoError)
                     {
-                        StatusLabel.Content = "Save Failed";
-                        StatusUpadteTimer.Start();
+                        ShowStatus("Save Failed.");
                         return;
                     }
                 }
@@ -316,8 +328,7 @@ namespace GraphDataBaseUI_WPF
                 {
                     return;
                 }
-                StatusLabel.Content = "Database Closed";
-                StatusUpadteTimer.Start();
+                ShowStatus("Database Closed.");
                 AllReset();
             }
         }
@@ -335,8 +346,7 @@ namespace GraphDataBaseUI_WPF
                     SaveFile(ref err);
                     if (err != ErrorCode.NoError)
                     {
-                        StatusLabel.Content = "Save Failed";
-                        StatusUpadteTimer.Start();
+                        ShowStatus("Save Failed.");
                         return;
                     }
                 }
@@ -569,6 +579,10 @@ namespace GraphDataBaseUI_WPF
             }
             Canvas parent = element.Parent as Canvas;
             if (parent == null)
+            {
+                return;
+            }
+            if (SubGraph.NodeNum == 1)
             {
                 return;
             }
@@ -877,21 +891,21 @@ namespace GraphDataBaseUI_WPF
             }
             NodeListBox.SelectedIndex = index;
             curModifyNode = gdb.GetNodeByName(sName, sType);
-            ModifyNameList.Items.Clear();
-            RemoveNameList.Items.Clear();
+            ModifyEndName.Items.Clear();
+            RemoveEndName.Items.Clear();
             foreach (Edge edge in curModifyNode.OutBound)
             {
-                if (ModifyNameList.Items.IndexOf(edge.End.Name) > 0)
+                if (ModifyEndName.Items.IndexOf(edge.End.Name) > 0)
                 {
                     continue;
                 }
-                ModifyNameList.Items.Add(edge.End.Name);
-                RemoveNameList.Items.Add(edge.End.Name);
+                ModifyEndName.Items.Add(edge.End.Name);
+                RemoveEndName.Items.Add(edge.End.Name);
             }
-            ModifyNameList.SelectedIndex = 0;
-            FillModifyTypeList((string)ModifyNameList.SelectedItem);
-            RemoveNameList.SelectedIndex = 0;
-            FillRemoveTypeList((string)RemoveNameList.SelectedItem);
+            ModifyEndName.SelectedIndex = 0;
+            FillModifyEndType((string)ModifyEndName.SelectedItem);
+            RemoveEndName.SelectedIndex = 0;
+            FillRemoveEndType((string)RemoveEndName.SelectedItem);
             FindCustomEdge();
             return;
         }
@@ -902,15 +916,19 @@ namespace GraphDataBaseUI_WPF
             {
                 return;
             }
-            FillModifyTypeList(((ComboBox)sender).Text);
+            FillModifyEndType(((ComboBox)sender).Text);
         }
         //填充修改类型列表内容
-        private void FillModifyTypeList(string sName)
+        private void FillModifyEndType(string sName)
         {
-            ModifyTypeList.Items.Clear();
+            ModifyEndType.Items.Clear();
+            if (curModifyNode == null)
+            {
+                return;
+            }
             foreach (Edge edge in curModifyNode.OutBound)
             {
-                if (ModifyTypeList.Items.IndexOf(edge.End.Name) > 0)
+                if (ModifyEndType.Items.IndexOf(edge.End.Name) > 0)
                 {
                     continue;
                 }
@@ -918,9 +936,9 @@ namespace GraphDataBaseUI_WPF
                 {
                     continue;
                 }
-                ModifyTypeList.Items.Add(edge.End.Type);
+                ModifyEndType.Items.Add(edge.End.Type);
             }
-            ModifyTypeList.SelectedIndex = 0;
+            ModifyEndType.SelectedIndex = 0;
         }
         //修改节点类型改变
         private void ModifyTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -942,12 +960,12 @@ namespace GraphDataBaseUI_WPF
             ModifyStartType.Text = StatusTypeBox.Text;
             if (ModifyStartName.Text == ""
                 || ModifyStartType.Text == ""
-                || ModifyNameList.Text == ""
-                || ModifyTypeList.Text == "")
+                || ModifyEndName.Text == ""
+                || ModifyEndType.Text == "")
             {
                 return;
             }
-            curModifyEdge = gdb.GetEdgeByNameAndType(ModifyStartName.Text, ModifyStartType.Text, ModifyNameList.Text, ModifyTypeList.Text);
+            curModifyEdge = gdb.GetEdgeByNameAndType(ModifyStartName.Text, ModifyStartType.Text, ModifyEndName.Text, ModifyEndType.Text);
             if (curModifyEdge == null)
             {
                 return;
@@ -962,15 +980,19 @@ namespace GraphDataBaseUI_WPF
             {
                 return;
             }
-            FillRemoveTypeList(((ComboBox)sender).Text);
+            FillRemoveEndType(((ComboBox)sender).Text);
         }
         //填充删除节点两类型列表
-        private void FillRemoveTypeList(string sName)
+        private void FillRemoveEndType(string sName)
         {
-            RemoveTypeList.Items.Clear();
+            RemoveEndType.Items.Clear();
+            if (curModifyNode == null)
+            {
+                return;
+            }
             foreach (Edge edge in curModifyNode.OutBound)
             {
-                if (RemoveTypeList.Items.IndexOf(edge.End.Name) > 0)
+                if (RemoveEndType.Items.IndexOf(edge.End.Name) > 0)
                 {
                     continue;
                 }
@@ -978,9 +1000,9 @@ namespace GraphDataBaseUI_WPF
                 {
                     continue;
                 }
-                RemoveTypeList.Items.Add(edge.End.Type);
+                RemoveEndType.Items.Add(edge.End.Type);
             }
-            RemoveTypeList.SelectedIndex = 0;
+            RemoveEndType.SelectedIndex = 0;
         }
         //节点修改按钮响应函数
         private void ModifyNodeButton_Click(object sender, RoutedEventArgs e)
@@ -993,14 +1015,12 @@ namespace GraphDataBaseUI_WPF
             strValue = ModifyPropertyTextBox.Text;
             if (strKey == "")
             {
-                StatusLabel.Content = "Modify Property Failed, Key field can't be empty.";
-                StatusUpadteTimer.Start();
+                ShowStatus("Modify Property Failed, Key field can't be empty.");
                 return;
             }
             if (curModifyNode == null)
             {
-                StatusLabel.Content = "Modify Property Failed, no node be selected.";
-                StatusUpadteTimer.Start();
+                ShowStatus("Modify Property Failed, no node be selected.");
                 return;
             }
             //如果存在该key则修改
@@ -1016,28 +1036,24 @@ namespace GraphDataBaseUI_WPF
                     break;
                 }
                 np.Value = strValue;
-                StatusLabel.Content = "Modify Property Success.";
-                StatusUpadteTimer.Start();
+                ShowStatus("Modify Property Success.");
                 return;
             }
             //如果value为空则删除该属性
             if (npDel != null)
             {
                 curModifyNode.Properties.Remove(npDel);
-                StatusLabel.Content = "Delete Property Success.";
-                StatusUpadteTimer.Start();
+                ShowStatus("Delete Property Success.");
                 return;
             }
             if (strValue == "")
             {
-                StatusLabel.Content = "Add Property Failed, Value field can't be empty.";
-                StatusUpadteTimer.Start();
+                ShowStatus("Add Property Failed, Value field can't be empty.");
                 return;
             }
             //如果不存在则插入新属性
             curModifyNode.Properties.Add(new NodeProperty(strKey, strValue));
-            StatusLabel.Content = "Add Property Success.";
-            StatusUpadteTimer.Start();
+            ShowStatus("Add Property Success.");
             return;
         }
         //连边修改响应函数
@@ -1049,25 +1065,50 @@ namespace GraphDataBaseUI_WPF
             strValue = EdgeValueBox.Text;
             if (strKey == "" || strValue == "")
             {
-                StatusLabel.Content = "Modify Edge Failed, Key or Value field can't be empty.";
-                StatusUpadteTimer.Start();
+                ShowStatus("Modify Edge Failed, Key or Value field can't be empty.");
                 return;
             }
             if (curModifyEdge == null)
             {
-                StatusLabel.Content = "Modify Edge Failed, no edge be selected.";
-                StatusUpadteTimer.Start();
+                ShowStatus("Modify Edge Failed, no edge be selected.");
                 return;
             }
             curModifyEdge.Type = strKey;
             curModifyEdge.Value = strValue;
-            StatusLabel.Content = "Modify Edge Success.";
-            StatusUpadteTimer.Start();
+            ShowStatus("Modify Edge Success.");
             return;
         }
 
         
         #endregion
+        //删除节点响应函数
+        private void RemoveNodeButton_Click(object sender, RoutedEventArgs e)
+        {
+            ErrorCode err = ErrorCode.NoError;
+            string strName, strType;
+
+            strName = RemoveNodeName.Text;
+            strType = RemoveNodeType.Text;
+            if (strName == "" || strType == "")
+            {
+                ShowStatus("Name or Type of Node can't be empty.");
+                return;
+            }
+            gdb.RemoveNodeData(strName, strType, ref err);
+            if (err != ErrorCode.NoError)
+            {
+                ShowStatus("Node not exists.");
+                return;
+            }
+            ShowStatus("Remove Node Success.");
+            GraphUpdate();
+            return;
+        }
+        //删除连边响应函数
+        private void RemoveEdgeName_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
 
         
     }
