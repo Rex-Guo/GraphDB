@@ -16,15 +16,21 @@
     <sys:String x:Key="ClearResultTip">Clear the content of the Result Box</sys:String>
 
     <sys:String x:Key="DefaultStyleTip">默认节点样式.</sys:String>
-    <sys:String x:Key="PurpleStyleTip">“奇迹的不是那片星域如此辽阔，而是人类竟然成功测量了它。”-阿纳托尔·法郎士（法国小说家）</sys:String>
-    <sys:String x:Key="BlueStyleTip">“如果我的心像底比斯有一百座城门，我一定让快乐成打进来。”-苏格拉底</sys:String>
-    <sys:String x:Key="PinkStyleTip">“春樱秋枫留不住，人去关卡亦成空。”-岛津义弘辞世之章（日本战国萨摩岛津家当主）</sys:String>
+    <sys:String x:Key="PurpleStyleTip" xml:space="preserve">“奇迹的不是那片星域如此辽阔，而是人类竟然成功测量了它。”&#x0a;-阿纳托尔·法郎士（法国小说家）</sys:String>
+    <sys:String x:Key="BlueStyleTip" xml:space="preserve">“如果我的心像底比斯有一百座城门，我一定让快乐成打进来。”&#x0a;-苏格拉底</sys:String>
+    <sys:String x:Key="PinkStyleTip" xml:space="preserve">“春樱秋枫留不住，人去关卡亦成空。”&#x0a;-岛津义弘辞世之章（日本战国萨摩岛津家当主）</sys:String>
 
     <sys:String x:Key="AddPropertyTip">Add the current property into new node.</sys:String>
     <sys:String x:Key="AddNodeTip">Add new node into Database.</sys:String>
     <sys:String x:Key="AddEdgeTip">Add new edge between two nodes.</sys:String>
     <sys:String x:Key="RemoveNodeTip">Remove current node from Database.</sys:String>
     <sys:String x:Key="RemoveEdgeTip">Remove the edge between this two nodes from Database.</sys:String>
-    <sys:String x:Key="ModifyNodeTip">Modify the properities of current node.</sys:String>
-    <sys:String x:Key="ModifyEdgeTip">Modify the key or value of current edge.</sys:String>
+    <sys:String x:Key="ModifyNodeTip" xml:space="preserve">Modify the properities of current node.
+Modify Property - Select a key and Change the value of Value field, then click the button.
+Add Property - Input a new key and its value, then click the button.
+Remove Property - Select a exist key and empty its value, then click the button.
+    </sys:String>
+    <sys:String x:Key="ModifyEdgeTip" xml:space="preserve">Modify the key or value of current edge.
+Modify Edge - Change the value of Key or Value field, then click the button.    
+    </sys:String>
 </ResourceDictionary>

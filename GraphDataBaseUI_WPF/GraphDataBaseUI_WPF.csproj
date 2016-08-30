@@ -133,9 +133,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\window.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="images\Network.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -216,6 +213,10 @@
   <ItemGroup>
     <Resource Include="images\Modify.png" />
     <Resource Include="images\Modify_small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\IronCross.png" />
+    <Resource Include="images\IronCross_small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

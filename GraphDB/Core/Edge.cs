@@ -53,6 +53,10 @@ namespace GraphDB.Core
             {
                 return edgeType;
             }
+            set
+            {
+                edgeType = value;
+            }
         }
         public string Value
         {

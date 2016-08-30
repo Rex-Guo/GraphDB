@@ -6,7 +6,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="Graph Database" Height="550" Width="850"
         WindowStyle="ThreeDBorderWindow"
-        Icon="/GraphDataBaseUI_WPF;component/images/Network.ico" Loaded="RibbonWindow_Loaded">
+        Icon="/GraphDataBaseUI_WPF;component/images/IronCross.png" Loaded="RibbonWindow_Loaded">
     <r:RibbonWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -80,7 +80,7 @@
                 </r:RibbonGroupSizeDefinitionBaseCollection>
             </r:Ribbon.Resources>
             <r:Ribbon.ApplicationMenu>
-                <r:RibbonApplicationMenu SmallImageSource="/GraphDataBaseUI_WPF;component/images/window.png">
+                <r:RibbonApplicationMenu SmallImageSource="/GraphDataBaseUI_WPF;component/images/IronCross_small.png">
                     <r:RibbonApplicationMenuItem Header="New" Command="{StaticResource NewCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FileNew.png" ToolTipTitle="New" ToolTipDescription="{StaticResource NewTip}">
                     </r:RibbonApplicationMenuItem>
                     <r:RibbonApplicationMenuItem Header="Open" Command="{StaticResource OpenCommand}" ImageSource="/GraphDataBaseUI_WPF;component/images/FileOpen.png" ToolTipTitle="Open" ToolTipDescription="{StaticResource OpenTip}">
@@ -147,7 +147,7 @@
                         <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
                         <TextBox Name="ModifyPropertyTextBox" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
                     </Grid>
-                    <r:RibbonButton Label="Modify Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Modify_small.png" ToolTipTitle="Modify Node" ToolTipDescription="{StaticResource ModifyNodeTip}"></r:RibbonButton>
+                    <r:RibbonButton Name="ModifyNodeButton" Label="Modify Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Modify_small.png" ToolTipTitle="Modify Node" ToolTipDescription="{StaticResource ModifyNodeTip}" Click="ModifyNodeButton_Click"></r:RibbonButton>
                 </r:RibbonGroup>
                 <r:RibbonGroup Header="Modify Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png">
                     <Grid>
@@ -195,7 +195,7 @@
                         <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
                         <TextBox Name="EdgeValueBox" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
                     </Grid>
-                    <r:RibbonButton Label="Modify Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Modify_small.png" ToolTipTitle="Modify Edge" ToolTipDescription="{StaticResource ModifyEdgeTip}"></r:RibbonButton>
+                    <r:RibbonButton Name="ModifyEdgeButton" Label="Modify Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/Modify.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/Modify_small.png" ToolTipTitle="Modify Edge" ToolTipDescription="{StaticResource ModifyEdgeTip}" Click="ModifyEdgeButton_Click"></r:RibbonButton>
                 </r:RibbonGroup>
             </r:RibbonTab>
             <r:RibbonTab Name = "ribHomeTab" Header="Home" >

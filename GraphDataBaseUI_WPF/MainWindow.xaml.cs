@@ -89,7 +89,11 @@ namespace GraphDataBaseUI_WPF
         private void AllReset()
         {
             gdb = null;
+            curModifyNode = null;
+            curModifyEdge = null;
             isDbAvailable = false;
+            intNodeIndex = -1;
+            intPointNodeIndex = -1;
             SetCurrentNodeInfo(-1);
             NodeListBox.Items.Clear();
             ClearArrows(drawingSurface);
@@ -978,7 +982,93 @@ namespace GraphDataBaseUI_WPF
             }
             RemoveTypeList.SelectedIndex = 0;
         }
+        //节点修改按钮响应函数
+        private void ModifyNodeButton_Click(object sender, RoutedEventArgs e)
+        {
+            //获取值
+            string strKey, strValue;
+            NodeProperty npDel = null;
+
+            strKey = ModifyPropertyComboBox.Text;
+            strValue = ModifyPropertyTextBox.Text;
+            if (strKey == "")
+            {
+                StatusLabel.Content = "Modify Property Failed, Key field can't be empty.";
+                StatusUpadteTimer.Start();
+                return;
+            }
+            if (curModifyNode == null)
+            {
+                StatusLabel.Content = "Modify Property Failed, no node be selected.";
+                StatusUpadteTimer.Start();
+                return;
+            }
+            //如果存在该key则修改
+            foreach (NodeProperty np in curModifyNode.Properties)
+            {
+                if (strKey != np.Key)
+                {
+                    continue;
+                }
+                if (strValue == "")
+                {
+                    npDel = np;
+                    break;
+                }
+                np.Value = strValue;
+                StatusLabel.Content = "Modify Property Success.";
+                StatusUpadteTimer.Start();
+                return;
+            }
+            //如果value为空则删除该属性
+            if (npDel != null)
+            {
+                curModifyNode.Properties.Remove(npDel);
+                StatusLabel.Content = "Delete Property Success.";
+                StatusUpadteTimer.Start();
+                return;
+            }
+            if (strValue == "")
+            {
+                StatusLabel.Content = "Add Property Failed, Value field can't be empty.";
+                StatusUpadteTimer.Start();
+                return;
+            }
+            //如果不存在则插入新属性
+            curModifyNode.Properties.Add(new NodeProperty(strKey, strValue));
+            StatusLabel.Content = "Add Property Success.";
+            StatusUpadteTimer.Start();
+            return;
+        }
+        //连边修改响应函数
+        private void ModifyEdgeButton_Click(object sender, RoutedEventArgs e)
+        {
+            string strKey, strValue;
+
+            strKey = EdgeKeyBox.Text;
+            strValue = EdgeValueBox.Text;
+            if (strKey == "" || strValue == "")
+            {
+                StatusLabel.Content = "Modify Edge Failed, Key or Value field can't be empty.";
+                StatusUpadteTimer.Start();
+                return;
+            }
+            if (curModifyEdge == null)
+            {
+                StatusLabel.Content = "Modify Edge Failed, no edge be selected.";
+                StatusUpadteTimer.Start();
+                return;
+            }
+            curModifyEdge.Type = strKey;
+            curModifyEdge.Value = strValue;
+            StatusLabel.Content = "Modify Edge Success.";
+            StatusUpadteTimer.Start();
+            return;
+        }
+
+        
         #endregion
 
+        
     }
 }

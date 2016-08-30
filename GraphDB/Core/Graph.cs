@@ -490,7 +490,7 @@ namespace GraphDB.Core
                 err = ErrorCode.NodeNotExists;
                 return;
             }
-            //查找两点间是否存在相同类型关系，存在报错
+            //查找两点间是否存在相同类型关系，不存在报错
             tarEdge = GetEdgeByType(startNode, endNode, sType);
             if (tarEdge == null)
             {
