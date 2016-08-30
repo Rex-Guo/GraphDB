@@ -71,6 +71,51 @@ namespace GraphDataBaseUI_WPF
             }
         }
 
+        //完全重置
+        private void AllReset()
+        {
+            gdb = null;
+            curModifyNode = null;
+            curModifyEdge = null;
+            isDbAvailable = false;
+            intNodeIndex = -1;
+            intPointNodeIndex = -1;
+            SetCurrentNodeInfo(-1);
+            NodeListBox.Items.Clear();
+            ClearArrows(drawingSurface);
+            drawingSurface.ClearVisuals();
+            ModifyEndName.Items.Clear();
+            ModifyEndType.Items.Clear();
+            RemoveEndName.Items.Clear();
+            RemoveEndType.Items.Clear();
+        }
+        //节点更新
+        private void GraphNodeUpdate()
+        {
+            curModifyNode = null;
+            curModifyEdge = null;
+            intNodeIndex = -1;
+            SetCurrentNodeInfo(-1);
+            NodeListBox.Items.Clear();
+            ClearArrows(drawingSurface);
+            drawingSurface.ClearVisuals();
+            ModifyEndName.Items.Clear();
+            ModifyEndType.Items.Clear();
+            RemoveEndName.Items.Clear();
+            RemoveEndType.Items.Clear();
+            FillNodeList();
+        }
+        //连边更新
+        private void GraphEdgeUpdate()
+        {
+            curModifyEdge = null;
+            ClearArrows(drawingSurface);
+            drawingSurface.ClearVisuals();
+            SelectNodes(intNodeIndex);
+            FindCustomNode(curNodeName, curNodeType);
+        }
+
+
         #region StatusTimer
         private void StatusUpdateTimer_Init()
         {
@@ -92,41 +137,7 @@ namespace GraphDataBaseUI_WPF
             StatusUpadteTimer.Start();
         }
         #endregion
-
-        private void AllReset()
-        {
-            gdb = null;
-            curModifyNode = null;
-            curModifyEdge = null;
-            isDbAvailable = false;
-            intNodeIndex = -1;
-            intPointNodeIndex = -1;
-            SetCurrentNodeInfo(-1);
-            NodeListBox.Items.Clear();
-            ClearArrows(drawingSurface);
-            drawingSurface.ClearVisuals();
-            ModifyEndName.Items.Clear();
-            ModifyEndType.Items.Clear();
-            RemoveEndName.Items.Clear();
-            RemoveEndType.Items.Clear();
-        }
-
-        private void GraphUpdate()
-        {
-            curModifyNode = null;
-            curModifyEdge = null;
-            intNodeIndex = -1;
-            SetCurrentNodeInfo(-1);
-            NodeListBox.Items.Clear();
-            ClearArrows(drawingSurface);
-            drawingSurface.ClearVisuals();
-            ModifyEndName.Items.Clear();
-            ModifyEndType.Items.Clear();
-            RemoveEndName.Items.Clear();
-            RemoveEndType.Items.Clear();
-            FillNodeList();
-        }
-
+        
         #region FileCommand
         //新建命令执行函数
         private void NewCommand_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -1004,8 +1015,18 @@ namespace GraphDataBaseUI_WPF
             }
             RemoveEndType.SelectedIndex = 0;
         }
-        //节点修改按钮响应函数
-        private void ModifyNodeButton_Click(object sender, RoutedEventArgs e)
+        //加入节点命令执行函数
+        private void AddNodeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+        //加入连边命令执行函数
+        private void AddEdgeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+        //修改节点命令执行函数
+        private void ModifyNodeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             //获取值
             string strKey, strValue;
@@ -1056,8 +1077,8 @@ namespace GraphDataBaseUI_WPF
             ShowStatus("Add Property Success.");
             return;
         }
-        //连边修改响应函数
-        private void ModifyEdgeButton_Click(object sender, RoutedEventArgs e)
+        //修改连边命令执行函数
+        private void ModifyEdgeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             string strKey, strValue;
 
@@ -1078,11 +1099,8 @@ namespace GraphDataBaseUI_WPF
             ShowStatus("Modify Edge Success.");
             return;
         }
-
-        
-        #endregion
-        //删除节点响应函数
-        private void RemoveNodeButton_Click(object sender, RoutedEventArgs e)
+        //移除节点命令执行函数
+        private void RemoveNodeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             ErrorCode err = ErrorCode.NoError;
             string strName, strType;
@@ -1097,19 +1115,87 @@ namespace GraphDataBaseUI_WPF
             gdb.RemoveNodeData(strName, strType, ref err);
             if (err != ErrorCode.NoError)
             {
-                ShowStatus("Node not exists.");
+                ShowStatus("Remove Node failed, Node not exists.");
                 return;
             }
             ShowStatus("Remove Node Success.");
-            GraphUpdate();
+            GraphNodeUpdate();
             return;
         }
-        //删除连边响应函数
-        private void RemoveEdgeName_Click(object sender, RoutedEventArgs e)
+        //移除连边命令执行函数
+        private void RemoveEdgeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            ErrorCode err = ErrorCode.NoError;
+            string strStartName, strStartType, strEndName, strEndType;
 
+            strStartName = RemoveStartName.Text;
+            strStartType = RemoveStartType.Text;
+            strEndName = RemoveEndName.Text;
+            strEndType = RemoveEndType.Text;
+            if (strStartName == "" ||
+                strStartType == "" ||
+                strEndName == "" ||
+                strEndType == "")
+            {
+                ShowStatus("Name or Type of Nodes can't be empty.");
+                return;
+            }
+            gdb.RemoveEdgeData(strStartName, strStartType, strEndName, strEndType, "", ref err);
+            if (err != ErrorCode.NoError)
+            {
+                switch (err)
+                {
+                    case ErrorCode.NodeNotExists:
+                        ShowStatus("Remove Edge failed, Start Node or End Node not exists.");
+                        break;
+                    case ErrorCode.EdgeNotExists:
+                        ShowStatus("Remove Edge failed, Edge not exists.");
+                        break;
+                    default:
+                        ShowStatus("Remove Edge failed, error code:" + err.ToString());
+                        break;
+                }
+                return;
+            }
+            ShowStatus("Remove Edge Success.");
+            GraphEdgeUpdate();
+            return;
         }
 
+        private void AddNodeCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = isDbAvailable;
+        }
+
+        private void AddEdgeCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = isDbAvailable;
+        }
+
+        private void ModifyNodeCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = isDbAvailable;
+        }
+
+        private void ModifyEdgeCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = isDbAvailable;
+        }
+
+        private void RemoveNodeCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = isDbAvailable;
+        }
+
+        private void RemoveEdgeCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = isDbAvailable;
+        }
+
+        #endregion
+        
+
+        
         
     }
 }

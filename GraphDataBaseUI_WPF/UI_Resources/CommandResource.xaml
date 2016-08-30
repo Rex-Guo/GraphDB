@@ -12,6 +12,11 @@
     <RoutedUICommand x:Key="ClearComCommand" Text="ClearCommand" />
     <RoutedUICommand x:Key="ClearResultCommand" Text="ClearResult" />
 
-    <RoutedUICommand x:Key="SearchNodeCommand" Text="SearchNode" />
+    <RoutedUICommand x:Key="AddNodeCommand" Text="AddNode" />
+    <RoutedUICommand x:Key="AddEdgeCommand" Text="AddEdge" />
+    <RoutedUICommand x:Key="ModifyNodeCommand" Text="ModifyNode" />
+    <RoutedUICommand x:Key="ModifyEdgeCommand" Text="ModifyEdge" />
+    <RoutedUICommand x:Key="RemoveNodeCommand" Text="RemoveNode" />
+    <RoutedUICommand x:Key="RemoveEdgeCommand" Text="RemoveEdge" />
 
 </ResourceDictionary>
