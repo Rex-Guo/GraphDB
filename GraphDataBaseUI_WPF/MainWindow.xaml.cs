@@ -115,7 +115,6 @@ namespace GraphDataBaseUI_WPF
             FindCustomNode(curNodeName, curNodeType);
         }
 
-
         #region StatusTimer
         private void StatusUpdateTimer_Init()
         {
@@ -346,6 +345,11 @@ namespace GraphDataBaseUI_WPF
         //退出程序执行函数
         private void ExitCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            this.Close();
+        }
+        //关闭窗体前检查
+        private void RibbonWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
             MessageBoxResult choice;
             ErrorCode err = ErrorCode.NoError;
             if (isDbAvailable == true)
@@ -370,8 +374,6 @@ namespace GraphDataBaseUI_WPF
                 }
                 AllReset();
             }
-            
-            this.Close();
         }
         //保存命令使能
         private void SaveCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -403,6 +405,8 @@ namespace GraphDataBaseUI_WPF
         {
             e.CanExecute = isDbAvailable;
         }
+
+        
         #endregion
 
         #region Drawing
@@ -1438,5 +1442,6 @@ namespace GraphDataBaseUI_WPF
         }
 
         #endregion
+
     }
 }

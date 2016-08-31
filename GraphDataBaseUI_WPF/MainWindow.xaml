@@ -6,7 +6,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="Graph Database" Height="550" Width="850"
         WindowStyle="ThreeDBorderWindow"
-        Icon="/GraphDataBaseUI_WPF;component/images/IronCross.png" Loaded="RibbonWindow_Loaded">
+        Icon="/GraphDataBaseUI_WPF;component/images/IronCross.png" Loaded="RibbonWindow_Loaded" Closing="RibbonWindow_Closing">
     <r:RibbonWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
