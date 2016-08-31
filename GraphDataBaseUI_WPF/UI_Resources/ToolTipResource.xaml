@@ -21,6 +21,7 @@
     <sys:String x:Key="PinkStyleTip" xml:space="preserve">“春樱秋枫留不住，人去关卡亦成空。”&#x0a;-岛津义弘辞世之章（日本战国萨摩岛津家当主）</sys:String>
 
     <sys:String x:Key="AddPropertyTip">Add the current property into new node.</sys:String>
+    <sys:String x:Key="RemovePropertyTip">Remove a select property from list.</sys:String>
     <sys:String x:Key="AddNodeTip">Add new node into Database.</sys:String>
     <sys:String x:Key="AddEdgeTip">Add new edge between two nodes.</sys:String>
     <sys:String x:Key="RemoveNodeTip">Remove current node from Database.</sys:String>

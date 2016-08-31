@@ -204,7 +204,7 @@ namespace GraphDB.Core
         //增加自定义属性对
         public void AddProperty(string sProperities, ModifyOperation opt = ModifyOperation.Append)
         {
-            const string strKeyPairPattern = @"[\w]+=[\w]+";  //匹配目标"名称+取值"组合
+            const string strKeyPairPattern = @"[\w]+:[\w]+";  //匹配目标"名称+取值"组合
             MatchCollection matches;
             Regex regObj;
             NodeProperty newProperty;
@@ -249,7 +249,7 @@ namespace GraphDB.Core
             string[] strSeg;
             NodeProperty newProperty = null;
 
-            strSeg = sProperty.Split(new char[]{'='});
+            strSeg = sProperty.Split(new char[]{':'});
             newProperty = new NodeProperty(strSeg[0], strSeg[1]);
             return newProperty;
         }

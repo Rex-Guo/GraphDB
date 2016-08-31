@@ -1018,15 +1018,76 @@ namespace GraphDataBaseUI_WPF
         //加入节点命令执行函数
         private void AddNodeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            string strName, strType, strProperty;
+            ErrorCode err = ErrorCode.NoError;
+            if (IsContentLegal(out strName,out strType,out strProperty) == false)
+            {
+                ShowStatus("Name and Type are necessary.");
+                return;
+            }
+            gdb.AddNodeData(strName, strType, ref err, strProperty);
+            if (err != ErrorCode.NoError)
+            {
+                switch (err)
+                {
+                    case ErrorCode.NodeExists:
+                        ShowStatus("Add Node failed, Node already exists.");
+                        break;
+                    case ErrorCode.CreateNodeFailed:
+                        ShowStatus("Create Node failed.");
+                        break;
+                    default:
+                        ShowStatus("Add Node failed, error code:" + err.ToString());
+                        break;
+                }
+                return;
+            }
+            AddNodeProperties.Items.Clear();
+            AddNodeKey.SelectedIndex = 0;
+            AddNodeValue.Text = "";
+            FillNodeList();
+            ShowStatus("Add Node Success.");
+            return;
+        }
+        //校验节点创建入参
+        private bool IsContentLegal(out string sName, out string sType, out string sProperty)
+        {
+            string strName = null, strType = null, strProperty = "";
 
+            foreach (string strItem in AddNodeProperties.Items)
+            {
+                switch (GetKeyFromItem(strItem))
+                {
+                    case "Name":
+                        strName = GetValueFromItem(strItem);
+                        break;
+                    case "Type":
+                        strType = GetValueFromItem(strItem);
+                        break;
+                    default:
+                        strProperty += strItem + ",";
+                        break;
+                }
+            }
+            if (strName == null || strType == null)
+            {
+                sName = "";
+                sType = "";
+                sProperty = "";
+                return false;
+            }
+            sName = strName;
+            sType = strType;
+            sProperty = strProperty;
+            return true;
         }
         //加入属性命令执行函数
         private void AddPropertyCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             string strKey, strValue;
 
-            strKey = RemoveNodeName.Text;
-            strValue = RemoveNodeType.Text;
+            strKey = AddNodeKey.Text;
+            strValue = AddNodeValue.Text;
             if (strKey == "" || strValue == "")
             {
                 ShowStatus("Key or Value can't be empty.");
@@ -1034,36 +1095,164 @@ namespace GraphDataBaseUI_WPF
             }
             //将键值对校验后加入列表
             AddPropertyIntoList(strKey ,strValue);
-
+            SortList();
         }
-
+        //在属性列表中加入新属性
         private void AddPropertyIntoList(string sKey, string sValue)
         {
-            bool isExist = false;
+            int index = 0;
+            string strTar = null;
+
             foreach (string strItem in AddNodeProperties.Items)
             {
-                if (strItem == sKey + ":" + sValue)
+                if (GetKeyFromItem(strItem) == sKey)
                 {
-                    isExist = true;
+                    strTar= strItem;
+                    break;
+                }
+                index++;
+            }
+            if (strTar != null)
+            {
+                AddNodeProperties.Items.Insert(index, sKey + ":" + sValue);
+                AddNodeProperties.Items.Remove(strTar);
+            }
+            else
+            {
+                AddNodeProperties.Items.Add(sKey + ":" + sValue);
+            }
+        }
+        //获取当前列表项中的key字段
+        private string GetKeyFromItem(string sItem)
+        {
+            int index = sItem.IndexOf(':');
+            string strResult;
+
+            if (index < 0)
+            {
+                return sItem;
+            }
+            strResult = sItem.Substring(0, index);
+            return strResult;
+        }
+        //获取当前列表项中的Value字段
+        private string GetValueFromItem(string sItem)
+        {
+            int index = sItem.IndexOf(':');
+            string strResult;
+
+            if (index < 0)
+            {
+                return "";
+            }
+            strResult = sItem.Substring(index+1);
+            return strResult;
+        }
+        //对当前属性列表进行排序
+        private void SortList()
+        {
+            string strName = null, strType = null;
+            int index = -1;
+
+            foreach (string strItem in AddNodeProperties.Items)
+            {
+                if (GetKeyFromItem(strItem) == "Name")
+                {
+                    strName = strItem;
+                    index++;
                     break;
                 }
             }
-            switch (sKey)
+            if (strName != null)
             {
-                case "Name":
-
+                AddNodeProperties.Items.Remove(strName);
+                AddNodeProperties.Items.Insert(index, strName);
+            }
+            foreach (string strItem in AddNodeProperties.Items)
+            {
+                if (GetKeyFromItem(strItem) == "Type")
+                {
+                    strType = strItem;
+                    index++;
                     break;
-                case "Type":
-                    break;
-                default:
-                    break;
+                }
+            }
+            if (strType != null)
+            {
+                AddNodeProperties.Items.Remove(strType);
+                AddNodeProperties.Items.Insert(index, strType);
             }
         }
-
+        //属性列表选择项改变响应函数
+        private void AddNodeProperties_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string strItem;
+            if (AddNodeProperties.SelectedIndex < 0)
+            {
+                return;
+            }
+            strItem = AddNodeProperties.SelectedItem.ToString();
+            AddNodeKey.Text = GetKeyFromItem(strItem);
+            AddNodeValue.Text = GetValueFromItem(strItem);
+        }
+        //移除属性命令执行函数
+        private void RemovePropertyCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (AddNodeProperties.SelectedIndex < 0)
+            {
+                return;
+            }
+            AddNodeProperties.Items.RemoveAt(AddNodeProperties.SelectedIndex);
+        }
         //加入连边命令执行函数
         private void AddEdgeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            ErrorCode err = ErrorCode.NoError;
+            string strStartName, strStartType, strEndName, strEndType, strEdgeKey, strEdgeValue;
 
+            if (AddStartName.Text == "" ||
+                AddStartType.Text == "" ||
+                AddEndName.Text == "" ||
+                AddEndType.Text == "" ||
+                AddEdgeKey.Text == "" ||
+                AddEdgeValue.Text == "" )
+            {
+                ShowStatus("All fields of edge can't be empty.");
+                return;
+            }
+            strStartName = AddStartName.Text;
+            strStartType = AddStartType.Text;
+            strEndName = AddEndName.Text;
+            strEndType = AddEndType.Text;
+            strEdgeKey = AddEdgeKey.Text;
+            strEdgeValue = AddEdgeValue.Text;
+            gdb.AddEdgeData(strStartName, strStartType, strEndName, strEndType, strEdgeKey, ref err, strEdgeValue);
+            if (err != ErrorCode.NoError)
+            {
+                switch (err)
+                {
+                    case ErrorCode.NodeNotExists:
+                        ShowStatus("Add Edge failed, End Node not exists.");
+                        break;
+                    case ErrorCode.EdgeExists:
+                        ShowStatus("Add Edge failed, Edge already exists.");
+                        break;
+                    case ErrorCode.CreateEdgeFailed:
+                        ShowStatus("Create Edge failed.");
+                        break;
+                    default:
+                        ShowStatus("Add Edge failed, error code:" + err.ToString());
+                        break;
+                }
+                return;
+            }
+            GraphEdgeUpdate();
+            AddEndName.Text = "";
+            AddEndType.Text = "";
+            AddEdgeKey.Text = "";
+            AddEdgeValue.Text = "";
+            ShowStatus("Add Edge Success.");
+            return;
         }
         //修改节点命令执行函数
         private void ModifyNodeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -1212,6 +1401,17 @@ namespace GraphDataBaseUI_WPF
             e.CanExecute = isDbAvailable;
         }
 
+        private void RemovePropertyCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (AddNodeProperties.SelectedIndex < 0)
+            {
+                e.CanExecute = false;
+                return;
+            }
+            e.CanExecute = true;
+            return;
+        }
+
         private void AddEdgeCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = isDbAvailable;
@@ -1238,10 +1438,5 @@ namespace GraphDataBaseUI_WPF
         }
 
         #endregion
-
-        
-
-        
-        
     }
 }

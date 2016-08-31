@@ -33,6 +33,7 @@
 
         <CommandBinding x:Name="AddNodeCommand" Command="{StaticResource AddNodeCommand}" Executed="AddNodeCommand_Executed" CanExecute="AddNodeCommand_CanExecute"></CommandBinding>
         <CommandBinding x:Name="AddPropertyCommand" Command="{StaticResource AddPropertyCommand}" Executed="AddPropertyCommand_Executed" CanExecute="AddPropertyCommand_CanExecute"></CommandBinding>
+        <CommandBinding x:Name="RemovePropertyCommand" Command="{StaticResource RemovePropertyCommand}" Executed="RemovePropertyCommand_Executed" CanExecute="RemovePropertyCommand_CanExecute"></CommandBinding>
         <CommandBinding x:Name="AddEdgeCommand" Command="{StaticResource AddEdgeCommand}" Executed="AddEdgeCommand_Executed" CanExecute="AddEdgeCommand_CanExecute"></CommandBinding>
         <CommandBinding x:Name="ModifyNodeCommand" Command="{StaticResource ModifyNodeCommand}" Executed="ModifyNodeCommand_Executed" CanExecute="ModifyNodeCommand_CanExecute"></CommandBinding>
         <CommandBinding x:Name="ModifyEdgeCommand" Command="{StaticResource ModifyEdgeCommand}" Executed="ModifyEdgeCommand_Executed" CanExecute="ModifyEdgeCommand_CanExecute"></CommandBinding>
@@ -122,81 +123,6 @@
                     <r:RibbonButton Label="Save" Command="{StaticResource SaveCommand}" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileSave_16x16.png"></r:RibbonButton>
                 </r:RibbonQuickAccessToolBar>
             </r:Ribbon.QuickAccessToolBar>
-            <r:RibbonTab Name = "ribAddTab" Header="Add">
-                <r:RibbonGroup Header="Add Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddNode.png">
-                    <ListBox Name="AddNodeProperties" Height="64" MinWidth="60"></ListBox>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="32"/>
-                            <RowDefinition Height="32"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="5"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Key:</Label>
-                        <ComboBox Name="AddNodeKey" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" StaysOpenOnEdit="False" IsEditable="True">
-                            <ComboBox.Items>
-                                <ComboBoxItem IsSelected="True">Name</ComboBoxItem>
-                                <ComboBoxItem>Type</ComboBoxItem>
-                            </ComboBox.Items>
-                        </ComboBox>
-                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
-                        <TextBox Name="AddNodeValue" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
-                    </Grid>
-                    <r:RibbonButton Label="Add Property" Command="{StaticResource AddPropertyCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddProperty.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddProperty_small.png" ToolTipTitle="Add Property" ToolTipDescription="{StaticResource AddPropertyTip}"></r:RibbonButton>
-                    <r:RibbonButton Label="Add Node" Command="{StaticResource AddNodeCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddNode.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddNode_small.png" ToolTipTitle="Add Node" ToolTipDescription="{StaticResource AddNodeTip}"></r:RibbonButton>
-                </r:RibbonGroup>
-                <r:RibbonGroup Header="Add Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddEdge.png">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="32"/>
-                            <RowDefinition Height="32"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="5"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Name:</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ElementName=StatusNameBox, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Type:</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ElementName=StatusTypeBox, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                    </Grid>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="32"/>
-                            <RowDefinition Height="32"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="5"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Name:</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
-                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Type:</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
-                    </Grid>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="32"/>
-                            <RowDefinition Height="32"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="5"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Key:</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
-                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
-                    </Grid>
-                    <r:RibbonButton Label="Add Edge" Command="{StaticResource AddEdgeCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddEdge.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddEdge_small.png" ToolTipTitle="Add Edge" ToolTipDescription="{StaticResource AddEdgeTip}"></r:RibbonButton>
-                </r:RibbonGroup>
-            </r:RibbonTab>
             <r:RibbonTab Name = "ribHomeTab" Header="Home" >
                 <r:RibbonGroup Header="File" GroupSizeDefinitions="{StaticResource RibbonLayout}">
                     <r:RibbonButton Label="New" Command="{StaticResource NewCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/FileNew.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/FileNew_16x16.png" ToolTipTitle="New" ToolTipDescription="{StaticResource NewTip}"></r:RibbonButton>
@@ -233,6 +159,82 @@
                             </r:RibbonGalleryCategory>
                         </r:RibbonGallery>
                     </r:RibbonSplitButton>
+                </r:RibbonGroup>
+            </r:RibbonTab>
+            <r:RibbonTab Name = "ribAddTab" Header="Add">
+                <r:RibbonGroup Header="Add Node" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddNode.png">
+                    <ListBox Name="AddNodeProperties" Height="64" MinWidth="60" SelectionChanged="AddNodeProperties_SelectionChanged"></ListBox>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Key:</Label>
+                        <ComboBox Name="AddNodeKey" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" StaysOpenOnEdit="False" IsEditable="True">
+                            <ComboBox.Items>
+                                <ComboBoxItem IsSelected="True">Name</ComboBoxItem>
+                                <ComboBoxItem>Type</ComboBoxItem>
+                            </ComboBox.Items>
+                        </ComboBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
+                        <TextBox Name="AddNodeValue" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+                    </Grid>
+                    <r:RibbonButton Label="Add Property" Command="{StaticResource AddPropertyCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddProperty.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddProperty_small.png" ToolTipTitle="Add Property" ToolTipDescription="{StaticResource AddPropertyTip}"></r:RibbonButton>
+                    <r:RibbonButton Label="Remove Property" Command="{StaticResource RemovePropertyCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/RemoveProperty.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/RemoveProperty_small.png" ToolTipTitle="Remove Property" ToolTipDescription="{StaticResource RemovePropertyTip}"></r:RibbonButton>
+                    <r:RibbonButton Label="Add Node" Command="{StaticResource AddNodeCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddNode.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddNode_small.png" ToolTipTitle="Add Node" ToolTipDescription="{StaticResource AddNodeTip}"></r:RibbonButton>
+                </r:RibbonGroup>
+                <r:RibbonGroup Header="Add Edge" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddEdge.png">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Name:</Label>
+                        <TextBox Name="AddStartName"  Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ElementName=StatusNameBox, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Type:</Label>
+                        <TextBox Name="AddStartType" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding ElementName=StatusTypeBox, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Name:</Label>
+                        <TextBox Name="AddEndName" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">End Type:</Label>
+                        <TextBox Name="AddEndType" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+                    </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Key:</Label>
+                        <TextBox Name="AddEdgeKey" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Value:</Label>
+                        <TextBox Name="AddEdgeValue" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+                    </Grid>
+                    <r:RibbonButton Label="Add Edge" Command="{StaticResource AddEdgeCommand}" LargeImageSource="/GraphDataBaseUI_WPF;component/images/AddEdge.png" SmallImageSource="/GraphDataBaseUI_WPF;component/images/AddEdge_small.png" ToolTipTitle="Add Edge" ToolTipDescription="{StaticResource AddEdgeTip}"></r:RibbonButton>
                 </r:RibbonGroup>
             </r:RibbonTab>
             <r:RibbonTab Name = "ribModTab" Header="Modify">
@@ -377,10 +379,10 @@
             <StatusBarItem>
                 <Label Name="StatusLabel">Ready</Label>
             </StatusBarItem>
-            <StatusBarItem Visibility="Visible">
+            <StatusBarItem Visibility="Hidden">
                 <TextBox Name="StatusNameBox" TextChanged="NameTextBox_TextChanged"></TextBox>
             </StatusBarItem>
-            <StatusBarItem Visibility="Visible">
+            <StatusBarItem Visibility="Hidden">
                 <TextBox Name="StatusTypeBox" TextChanged="TypeTextBox_TextChanged"></TextBox>
             </StatusBarItem>
         </StatusBar>
