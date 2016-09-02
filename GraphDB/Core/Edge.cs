@@ -8,8 +8,6 @@ namespace GraphDB.Core
 {
     public class Edge//图数据库连边类：负责存储网络连边信息
     {
-        //共享变量
-        static int intMaxEdgeNum = 0;
         //成员变量
         int intEdgeNum;
         Node nodeStart;//连边起点
@@ -71,15 +69,14 @@ namespace GraphDB.Core
         }
         //方法/////////////////////////
         //连边类Edge构造函数
-        public Edge(string newType, string value = "1")//构造函数 对三个变量进行赋值
+        public Edge(int intMaxEdgeNum, string newType, string value = "1")//构造函数 对三个变量进行赋值
         {
             this.intEdgeNum = intMaxEdgeNum;
             this.edgeType = newType;
             this.edgeValue = value;
-            intMaxEdgeNum++;
         }
         //连边类Edge构造函数
-        public Edge(XmlElement xNode)//构造函数 对三个变量进行赋值
+        public Edge(int intMaxEdgeNum, XmlElement xNode)//构造函数 对三个变量进行赋值
         {
             string newType, newValue;
 
@@ -99,7 +96,6 @@ namespace GraphDB.Core
             this.intEdgeNum = intMaxEdgeNum;
             this.edgeType = newType;
             this.edgeValue = newValue;
-            intMaxEdgeNum++;
         }
 
         //工具函数，从xml节点中读取某个标签的InnerText
@@ -118,11 +114,6 @@ namespace GraphDB.Core
                 }
             }
             return "";
-        }
-        //工具函数，重置节点计数
-        public static void ResetIndex()
-        {
-            intMaxEdgeNum = 0;
         }
 
         //将连边数据保存为xml格式

@@ -354,7 +354,7 @@ namespace GraphDataBaseUI_WPF
             ErrorCode err = ErrorCode.NoError;
             if (isDbAvailable == true)
             {
-                choice = MessageBox.Show("Save current graph database to file？", "警告", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                choice = MessageBox.Show("Save current graph database to file？", "警告", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
                 if (choice == MessageBoxResult.Yes)
                 {
                     //保存网络
@@ -367,10 +367,6 @@ namespace GraphDataBaseUI_WPF
                 }
                 else if (choice == MessageBoxResult.No)
                 {
-                }
-                else if (choice == MessageBoxResult.Cancel)
-                {
-                    return;
                 }
                 AllReset();
             }
@@ -678,7 +674,8 @@ namespace GraphDataBaseUI_WPF
         {
             int visualindex = GetVisualIndex(drawingSurface.GetVisual(e.GetPosition(drawingSurface)));
 
-            if (visualindex == -1 || visualindex == intPointNodeIndex || visualindex >= SubGraph.NodeNum)
+            PointLabel.Content = visualindex.ToString();
+            if (visualindex == -1 ||  visualindex >= SubGraph.NodeNum)
             {
                 return;
             }
@@ -1100,6 +1097,8 @@ namespace GraphDataBaseUI_WPF
             //将键值对校验后加入列表
             AddPropertyIntoList(strKey ,strValue);
             SortList();
+            AddNodeKey.Text = "";
+            AddNodeValue.Text = "";
         }
         //在属性列表中加入新属性
         private void AddPropertyIntoList(string sKey, string sValue)

@@ -6,7 +6,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="Graph Database" Height="550" Width="850"
         WindowStyle="ThreeDBorderWindow"
-        Icon="/GraphDataBaseUI_WPF;component/images/IronCross.png" Loaded="RibbonWindow_Loaded" Closing="RibbonWindow_Closing">
+        Icon="/GraphDataBaseUI_WPF;component/images/Network.ico" Loaded="RibbonWindow_Loaded" Closing="RibbonWindow_Closing">
     <r:RibbonWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -384,6 +384,9 @@
             </StatusBarItem>
             <StatusBarItem Visibility="Hidden">
                 <TextBox Name="StatusTypeBox" TextChanged="TypeTextBox_TextChanged"></TextBox>
+            </StatusBarItem>
+            <StatusBarItem>
+                <Label Name="PointLabel"></Label>
             </StatusBarItem>
         </StatusBar>
         <DockPanel MinWidth="200" Background="{Binding ElementName=MainRibbon, Path=Background}" Grid.Row="1">

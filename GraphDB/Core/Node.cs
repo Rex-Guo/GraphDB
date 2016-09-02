@@ -14,8 +14,6 @@ namespace GraphDB.Core
 {
     public class Node//图数据库节点类：负责存储单一网络节点的信息，并向上层类提供功能接口函数
     {
-        //共享变量
-        static int intMaxNodeNum = 0;
         //成员变量
         int intNodeNum;                           //节点编号
         string nodeName;
@@ -94,7 +92,7 @@ namespace GraphDB.Core
         }
         //方法///////////////////////////////
         //节点类Node构造函数
-        public Node(string newName, string newType, string sProperities = "")    
+        public Node(int intMaxNodeNum, string newName, string newType, string sProperities = "")    
         {
             this.intNodeNum = intMaxNodeNum;
             this.nodeName = newName;
@@ -110,7 +108,7 @@ namespace GraphDB.Core
             intMaxNodeNum++;
         }
 
-        public Node(Node oriNode)
+        public Node(int intMaxNodeNum, Node oriNode)
         {
             this.intNodeNum = intMaxNodeNum;
             this.nodeName = string.Copy(oriNode.Name);
@@ -123,10 +121,9 @@ namespace GraphDB.Core
             {
                 Attribute.Add(new NodeProperty(string.Copy(np.Key), string.Copy(np.Value)));
             }
-            intMaxNodeNum++;
         }
         //xml构造函数
-        public Node(XmlElement xNode)
+        public Node(int intMaxNodeNum, XmlElement xNode)
         {
             string newType, newName;
             XmlNode xmlProperties;
@@ -143,7 +140,6 @@ namespace GraphDB.Core
             Attribute = new List<NodeProperty>();
             OutLink = new List<Edge>();
             InLink = new List<Edge>();
-            intMaxNodeNum++;
             //加入用户自定义属性
             foreach(XmlElement curNode in xmlProperties.ChildNodes)
             {
@@ -194,11 +190,6 @@ namespace GraphDB.Core
             curNode.AppendChild(type_xml);
             curNode.AppendChild(curProperties);
             return curNode;
-        }
-        //工具函数，重置节点计数
-        public static void ResetIndex()
-        {
-            intMaxNodeNum = 0;
         }
 
         //增加自定义属性对

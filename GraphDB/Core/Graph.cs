@@ -12,6 +12,8 @@ namespace GraphDB.Core
     {
         List<Node> NodeList;
         List<Edge> EdgeList;
+        int intMaxNodeNum;
+        int intMaxEdgeNum;
         //属性///////////////////////
         public int NodeNum
         {
@@ -50,7 +52,8 @@ namespace GraphDB.Core
         {
             NodeList = new List<Node>();
             EdgeList = new List<Edge>();
-            ResetGraphID();
+            intMaxNodeNum = 0;
+            intMaxEdgeNum = 0;
         }
         //将xml文件转化为网络（接口）
         public Graph(XmlDocument doc, ref ErrorCode err)
@@ -87,7 +90,8 @@ namespace GraphDB.Core
             foreach (XmlElement xNode in xmlNodes.ChildNodes)                                      //遍历节点列表
             {
                 //生成新节点
-                newNode = new Node(xNode);
+                newNode = new Node(intMaxNodeNum, xNode);
+                intMaxNodeNum++;
                 //加入图
                 this.AddNode(newNode);
             }
@@ -103,7 +107,7 @@ namespace GraphDB.Core
             foreach (XmlElement xNode in xmlEdges.ChildNodes)                                      //遍历连边列表
             {
                 //生成新连边
-                newEdge = new Edge(xNode);
+                newEdge = new Edge(intMaxEdgeNum, xNode);
                 //获取连边的起始和终止节点编号
                 strStart = GetText(xNode, "Start");
                 strEnd = GetText(xNode, "End");
@@ -115,6 +119,7 @@ namespace GraphDB.Core
                     err = ErrorCode.InvaildIndex;
                     continue;
                 }
+                intMaxEdgeNum++;
                 //加入图
                 if (this.AddEdge(nodeStart, nodeEnd, newEdge) == false)
                 {
@@ -257,13 +262,6 @@ namespace GraphDB.Core
             return true;
         }
 
-        //重置节点和连边计数
-        public void ResetGraphID()
-        {
-            Node.ResetIndex();
-            Edge.ResetIndex();
-        }
-
         //查询函数，返回指定索引处的节点
         public Node GetNodeByIndex(int index)
         {
@@ -370,12 +368,13 @@ namespace GraphDB.Core
                 return;
             }
             //构造新的节点
-            newNode = new Node(sName, sType, sProperities);
+            newNode = new Node(intMaxNodeNum,sName, sType, sProperities);
             if (newNode == null)
             {
                 err = ErrorCode.CreateNodeFailed;
                 return;
             }
+            intMaxNodeNum++;
             AddNode(newNode);
             err = ErrorCode.NoError;
             return;
@@ -393,12 +392,13 @@ namespace GraphDB.Core
                 return;
             }
             //构造新的节点
-            newNode = new Node(oriNode);
+            newNode = new Node(intMaxNodeNum, oriNode);
             if (newNode == null)
             {
                 err = ErrorCode.CreateNodeFailed;
                 return;
             }
+            intMaxNodeNum++;
             AddNode(newNode);
             err = ErrorCode.NoError;
             return;
@@ -432,12 +432,13 @@ namespace GraphDB.Core
                 return;
             }
             //创建新连边
-            newEdge = new Edge(sType, sValue);
+            newEdge = new Edge(intMaxEdgeNum, sType, sValue);
             if (newEdge == null)
             {
                 err = ErrorCode.CreateEdgeFailed;
                 return;
             }
+            intMaxEdgeNum++;
             //在两点间加入新边
             AddEdge(startNode, endNode, newEdge);
             err = ErrorCode.NoError;
