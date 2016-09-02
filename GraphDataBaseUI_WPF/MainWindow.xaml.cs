@@ -928,7 +928,11 @@ namespace GraphDataBaseUI_WPF
             {
                 return;
             }
-            FillModifyEndType(((ComboBox)sender).Text);
+            if (e.AddedItems.Count <= 0)
+            {
+                return;
+            }
+            FillModifyEndType(e.AddedItems[0].ToString());
         }
         //填充修改类型列表内容
         private void FillModifyEndType(string sName)
@@ -992,7 +996,11 @@ namespace GraphDataBaseUI_WPF
             {
                 return;
             }
-            FillRemoveEndType(((ComboBox)sender).Text);
+            if (e.AddedItems.Count <= 0)
+            {
+                return;
+            }
+            FillRemoveEndType(e.AddedItems[0].ToString());
         }
         //填充删除节点两类型列表
         private void FillRemoveEndType(string sName)
